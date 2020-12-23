@@ -1,0 +1,13 @@
+﻿@{
+    Page.Title = "中継ゲートウェイ一覧";
+}
+
+@{
+    var view = Controller.GetAdminView();
+
+    SimpleTableView<ThinGate> gatesTable = new SimpleTableView<ThinGate>(view.GatesList, new SimpleTableDynamicColumn<ThinGate>("PreferredGroups", 17.8, (g) => Controller.GetGatePreferredIpRangeGroup(g.IpAddress)._Combine(", ")));
+
+    <h2>ゲートウェイ数: @view.NumGates._ToString3(), サーバーセッション数: @view.NumTotalSessions._ToString3(), クライアントセッション数: @view.NumTotalClients._ToString3(), ユニーククライアントセッション数: @view.NumTotalClientsUnique._ToString3()</h2>
+
+    <text>@Html.Raw(gatesTable.GenerateHtml())</text>
+}

@@ -1,0 +1,20 @@
+﻿@{
+    Page.Title = "登録済みサーバー一覧";
+}
+
+@{
+    var view = Controller.GetAdminView();
+
+    SimpleTableView<ThinDbMachine> machinesTable = new SimpleTableView<ThinDbMachine>(view.MachinesList);
+
+    if (view.MachinesList == null)
+    {
+        <h2>データベースの読み込みが完了していません。しばらく待ってから更新してください。</h2>
+    }
+    else
+    {
+        <h2>登録済みサーバーの総数: @view.NumMachines._ToString3()</h2>
+    }
+
+    <text>@Html.Raw(machinesTable.GenerateHtml())</text>
+}

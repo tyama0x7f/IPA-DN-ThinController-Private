@@ -1,0 +1,20 @@
+﻿@{
+    Page.Title = "設定変数一覧";
+}
+
+@{
+    var view = Controller.GetAdminView();
+
+    SimpleTableView<ThinDbVar> varsTable = new SimpleTableView<ThinDbVar>(view.VarsList);
+
+    if (view.VarsList == null)
+    {
+        <h2>データベースの読み込みが完了していません。しばらく待ってから更新してください。</h2>
+    }
+    else
+    {
+        <h2>設定変数の総数: @view.NumVars</h2>
+    }
+
+    <text>@Html.Raw(varsTable.GenerateHtml())</text>
+}

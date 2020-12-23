@@ -1,0 +1,33 @@
+﻿@{
+    Page.Title = "セッション一覧";
+}
+
+@{
+    var view = Controller.GetAdminView();
+
+    int index = 0;
+
+    foreach (var gate in view.GatesList)
+    {
+        <hr>
+
+        index++;
+
+        <h2>ゲートウェイ #@index (@gate.HostName, @gate.IpAddress): @gate.SessionTable.Count()._ToString3() サーバーセッション, @gate.NumClients._ToString3() クライアントセッション (@gate.NumClientsUnique._ToString3() ユニーククライアント) が接続中</h2>
+
+        <p><b>ゲートウェイ #@index</b></p>
+
+        SimpleTableView<ThinGate> singleGateTable = new SimpleTableView<ThinGate>(gate._SingleArray());
+        <text>@Html.Raw(singleGateTable.GenerateHtml())</text>
+
+        <p><b>このゲートウェイが処理中のサーバーセッション一覧: @gate.SessionTable.Count()._ToString3() セッション, @gate.NumClients._ToString3() クライアントセッション (@gate.NumClientsUnique._ToString3() ユニーククライアント)</b></p>
+
+        SimpleTableView<ThinSession> sessionsTable = new SimpleTableView<ThinSession>(gate.SessionTable.Values.OrderBy(x => x.EstablishedDateTime),
+            new SimpleTableDynamicColumn<ThinSession>("Pcid", 2.5, sess => Controller.Db.MemDb?.MachineByMsid._GetOrDefault(sess.Msid)?.PCID));
+        <text>@Html.Raw(sessionsTable.GenerateHtml())</text>
+
+        <p>　</p>
+        <p>　</p>
+    }
+
+}

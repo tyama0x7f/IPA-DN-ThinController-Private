@@ -1,0 +1,22 @@
+﻿@{
+    Page.Title = "稼働ステータス";
+}
+
+@{
+    IEnumerable<Pair2<string, IEnumerable<StrKeyValueItem>>> status = Controller.GetAdminStatus(true);
+
+    foreach (var table in status)
+    {
+        string title = table.A;
+        var data = table.B;
+
+        <h2>@title</h2>
+
+        SimpleTableView<StrKeyValueItem> view = new SimpleTableView<StrKeyValueItem>(data);
+
+        @Html.Raw(view.GenerateHtml())
+
+        <p>　</p>
+        <p>　</p>
+    }
+}
