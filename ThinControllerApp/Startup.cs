@@ -31,18 +31,6 @@ namespace IPA.App.ThinControllerApp
 {
     public class MyThinControllerHook : ThinControllerHookBase
     {
-        public override async Task<string?> DetermineMachineGroupNameAsync(ThinControllerSession session, CancellationToken cancel = default)
-        {
-            string flag = session.ClientInfo.HttpQueryStringList._GetStrFirst("flag");
-
-            if (flag._InStr("limited", true))
-            {
-                return "LimitedMode";
-            }
-
-            return null;
-        }
-
         public override async Task<bool> SendOtpEmailAsync(ThinController controller, string otp, string emailTo, string emailFrom, string clientIp, string clientFqdn, string pcidMasked, string pcid,
             string smtpServerHostname, int smtpServerPort, string smtpUsername, string smtpPassword, CancellationToken cancel = default)
         {
