@@ -81,6 +81,9 @@ namespace IPA.App.ThinControllerApp
     {
         public static int Main(string[] args)
         {
+            // ログファイルが何 GB を超えたら自動的に古いものを削除するかの設定
+            CoresConfig.Logger.DefaultAutoDeleteTotalMinSize.Value = 4_000_000_000; // 4GB
+
             CoresConfig.HttpServerSimpleBasicAuthDatabaseConfig.InitAuthDatabaseUsernameAndPasswordCallback.Set(db =>
             {
                 db.UsernameAndPassword.Add(ThinControllerConsts.ControllerDefaultAdminUsername, ThinControllerConsts.ControllerDefaultAdminPassword);
