@@ -1,6 +1,6 @@
 USE [master]
 GO
-USE [test1]
+USE [THINDB]
 GO
 INSERT [dbo].[SVC] ([SVC_NAME], [SVC_TITLE]) VALUES (N'DESK', N'DESK')
 
