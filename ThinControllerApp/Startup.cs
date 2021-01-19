@@ -34,13 +34,37 @@ namespace IPA.App.ThinControllerApp
         public override async Task<bool> SendOtpEmailAsync(ThinController controller, string otp, string emailTo, string emailFrom, string clientIp, string clientFqdn, string pcidMasked, string pcid,
             string smtpServerHostname, int smtpServerPort, string smtpUsername, string smtpPassword, CancellationToken cancel = default)
         {
-            string subject = string.Format("ワンタイムパスワード (OTP): {0}  (サーバー: '{1}')", otp, pcidMasked);
+            if (emailFrom._IsSamei("sms") == false)
+            {
+                string subject = string.Format("ワンタイムパスワード (OTP): {0}  (サーバー: '{1}')", otp, pcidMasked);
 
-            string body = string.Format("OTP: {0}\r\n\r\n「シン・テレワークシステム サーバー」にログイン要求が\r\nありましたので、予め設定されている本メールアドレスに上記の OTP\r\n(ワンタイムパスワード) をご通知いたします。\r\n\r\n[参考情報]\r\nアクセス日時: {1}\r\nアクセス先コンピュータ ID: '{2}'  (一部を伏せ字としている場合があります)\r\nアクセス元 IP アドレス: {3}\r\nアクセス元ホスト名: {4}\r\n\r\n\r\nこのメールには返信できません。\r\n\r\nメールアドレスを登録した覚えがない場合は、あなたのメールアドレスを\r\n第三者が誤って「シン・テレワークシステム サーバー」の OTP 送付先\r\nとして登録している可能性があります。その場合、本メールに応答する\r\n必要はありません。\r\n\r\n",
-                otp, DateTime.Now.ToString(), pcidMasked, clientIp, clientFqdn);
-            
-            return await SmtpUtil.SendAsync(new SmtpConfig(smtpServerHostname, smtpServerPort, false, smtpUsername, smtpPassword),
-                emailFrom, emailTo, subject, body, true, cancel);
+                string body = string.Format("OTP: {0}\r\n\r\n「シン・テレワークシステム サーバー」にログイン要求が\r\nありましたので、予め設定されている本メールアドレスに上記の OTP\r\n(ワンタイムパスワード) をご通知いたします。\r\n\r\n[参考情報]\r\nアクセス日時: {1}\r\nアクセス先コンピュータ ID: '{2}'  (一部を伏せ字としている場合があります)\r\nアクセス元 IP アドレス: {3}\r\nアクセス元ホスト名: {4}\r\n\r\n\r\nこのメールには返信できません。\r\n\r\nメールアドレスを登録した覚えがない場合は、あなたのメールアドレスを\r\n第三者が誤って「シン・テレワークシステム サーバー」の OTP 送付先\r\nとして登録している可能性があります。その場合、本メールに応答する\r\n必要はありません。\r\n\r\n",
+                    otp, DateTime.Now.ToString(), pcidMasked, clientIp, clientFqdn);
+
+                return await SmtpUtil.SendAsync(new SmtpConfig(smtpServerHostname, smtpServerPort, false, smtpUsername, smtpPassword),
+                    emailFrom, emailTo, subject, body, true, cancel);
+            }
+            else
+            {
+                // SMS
+                await using AwsSns sns = new AwsSns(new AwsSnsSettings(smtpServerHostname, smtpUsername, smtpPassword));
+
+                string body = string.Format("OTP: {0}\r\n\r\nシンテレ SMS\r\n日時: {1}\r\nID: '{2}' (一部伏字)\r\nアクセス元: {3} ({4})\r\n",
+                    otp, DateTime.Now.ToString(), pcidMasked, clientIp, clientFqdn);
+
+                try
+                {
+                    await sns.SendAsync(body, emailTo, cancel);
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    ex._Error();
+
+                    return false;
+                }
+            }
         }
     }
 
