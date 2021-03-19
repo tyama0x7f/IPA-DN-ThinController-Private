@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@Page.FullTitle</title>
+    <meta http-equiv="content-script-type" content="text/javascript" />
+    <meta http-equiv="content-style-type" content="text/css" />
+    <link rel="stylesheet" href="/style.css" type="text/css" />
+</head>
+<body>
+    <div align="left">
+        <table border="0" width="100%" id="table1" height="684" cellspacing="0" cellpadding="10" style="border-width: 0">
+            <tr>
+                <td align="left" valign="top">
+                    <p>
+                        <b>
+                            <a href="/admin/">ゲートウェイ一覧</a>
+                            | <a href="/admin/vars/">設定変数一覧</a>
+                            | <a href="/admin/stat/">稼働ステータス</a>
+                            | <a href="/admin/sessions/">セッション一覧</a>
+                            | <a href="/admin/servers/">登録済みサーバー一覧</a>
+                            | <a href="/LogBrowser/">システム管理者用 仮想ファイルブラウザ</a>
+                        </b>
+                    </p>
+                    <hr>
+                    <p><strong>いけー</strong></p>
+
+                    @RenderBody()
+                    <hr>
+                    <p>秘密情報 - Confidential Information</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
