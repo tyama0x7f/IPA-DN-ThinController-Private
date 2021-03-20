@@ -53,9 +53,9 @@ namespace IPA.App.ThinWebClientApp
     {
         readonly HttpServerStartupHelper StartupHelper;
         readonly AspNetLib AspNetLib;
-        readonly SharedObjectHolder<ThinWebClient> ThinWebClientHolder;
+        readonly SharedObjectHolder<ThinWebClient> ClientHolder;
 
-        public ThinWebClient ThinWebClient => ThinWebClientHolder.Object;
+        public ThinWebClient Client => ClientHolder.Object;
 
         public Startup(IConfiguration configuration)
         {
@@ -68,7 +68,7 @@ namespace IPA.App.ThinWebClientApp
             AspNetLib = new AspNetLib(configuration, AspNetLibFeatures.None);
 
             // ThinWebClient インスタンスを作成 (Http サーバーのインスタンスが複数存在することを想定しているため、共有させる)
-            this.ThinWebClientHolder = MyThinWebClientFactory.Factory.CreateOrGet();
+            this.ClientHolder = MyThinWebClientFactory.Factory.CreateOrGet();
         }
 
         public IConfiguration Configuration { get; }
@@ -90,7 +90,7 @@ namespace IPA.App.ThinWebClientApp
                 .ConfigureMvcWithAspNetLib(AspNetLib);
 
             // シングルトンサービスの注入
-            services.AddSingleton(ThinWebClient);
+            services.AddSingleton(Client);
 
             // 全ページ共通コンテキストの注入
             services.AddScoped<PageContext>();
@@ -136,7 +136,7 @@ namespace IPA.App.ThinWebClientApp
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=ThinWebClient}/{action=Start}/{id?}");
             });
 
             // クリーンアップ動作を定義
@@ -145,7 +145,7 @@ namespace IPA.App.ThinWebClientApp
                 AspNetLib._DisposeSafe();
                 StartupHelper._DisposeSafe();
 
-                ThinWebClientHolder._DisposeSafe();
+                ClientHolder._DisposeSafe();
             });
         }
     }

@@ -1,0 +1,15 @@
+﻿@model ThinWebClientModelStartPage
+@{
+    ViewData["Title"] = "Start";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>&nbsp;コンピュータ ID:</p>
+<p>
+<form method="post">
+	<input autocomplete="on" name="Pcid" type="text" value="@Model.Pcid">
+&nbsp;
+	<input name="Submit1" type="submit" value="接続"></form>
+</p>
+<p>&nbsp;</p>
+<p>Use this page to detail your site's privacy policy.</p>
