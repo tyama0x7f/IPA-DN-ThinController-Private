@@ -36,9 +36,9 @@
     display.appendChild(guac.getDisplay().getElement());
 
     // Error handler
-    guac.onerror = function (error) {
-        console.log(error);
-        alert(error);
+    guac.onerror = function (status) {
+        console.log(status);
+        alert("Remote Desktop Error Code: " + status.code);
     };
 
     // Connect
@@ -48,6 +48,27 @@
     window.onunload = function () {
         guac.disconnect();
     }
+
+    // Mouse
+    var mouse = new Guacamole.Mouse(guac.getDisplay().getElement());
+
+    mouse.onmousedown =
+        mouse.onmouseup =
+        mouse.onmousemove = function (mouseState) {
+            guac.sendMouseState(mouseState);
+        };
+
+    // Keyboard
+    var keyboard = new Guacamole.Keyboard(document);
+
+    keyboard.onkeydown = function (keysym) {
+        console.log(keysym);
+        guac.sendKeyEvent(1, keysym);
+    };
+
+    keyboard.onkeyup = function (keysym) {
+        guac.sendKeyEvent(0, keysym);
+    };
 
     /* ]]> */</script>
 <p>　</p>
