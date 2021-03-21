@@ -124,6 +124,12 @@ namespace IPA.App.ThinWebClientApp
             // Static ファイルを追加
             app.UseStaticFiles();
 
+            // WebSocket を追加
+            app.UseWebSockets(new Microsoft.AspNetCore.Builder.WebSocketOptions
+            {
+                KeepAliveInterval = 5000._ToTimeSpanMSecs(),
+            });
+
             // ルーティングを有効可
             app.UseRouting();
 
