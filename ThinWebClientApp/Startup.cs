@@ -115,7 +115,7 @@ namespace IPA.App.ThinWebClientApp
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/ThinWebClient/Error");
             }
 
             // エラーログを追加
