@@ -16,8 +16,8 @@ import "buefy";
 import { TestClass } from "./submodules/IPA-DN-WebNeko/Scripts/WebNeko";
 
 // Guacamole Library
-import { default as Guacamole } from "guacamole-common-js";
-
+import { default as GuacamoleImpl } from "guacamole-common-js";
+import { default as GuacamoleType } from "./guacamole-common-js.d";
 
 export function TestFunc(): void
 {
@@ -38,26 +38,28 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     // Get display div from document
     const display = document.getElementById("display")!;
 
-    const tunnel = new Guacamole.WebSocketTunnel(webSocketUrl);
+    const tunnel: GuacamoleType.Guacamole.Tunnel = new GuacamoleImpl.WebSocketTunnel(webSocketUrl);
 
-    tunnel.onerror = function (status: any): void
+    // @ts-ignore
+    tunnel.onerror = function (status: GuacamoleType.Guacamole.Status): void
     {
-        const str = `Tunnel Error Code: ${status.code}`;
+        const str = `Tunnel Error Code: ${status.code}, Message: "${status.message}"`;
 
         console.log(str);
         alert(str);
     };
 
     // Instantiate client, using a WebSocket tunnel for communications.
-    const guac = new Guacamole.Client(tunnel);
+    const guac: GuacamoleType.Guacamole.Client = new GuacamoleImpl.Client(tunnel);
 
     // Add client to display div
     display.appendChild(guac.getDisplay().getElement());
 
     // Error handler
-    guac.onerror = function (status: any): void
+    // @ts-ignore
+    guac.onerror = function (status: GuacamoleType.Guacamole.Status): void
     {
-        const str = `Remote Desktop Error Code: ${status.code}`;
+        const str = `Remote Desktop Error Code: ${status.code}, Message: "${status.message}"`;
 
         console.log(str);
         alert(str);
@@ -73,30 +75,31 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     }
 
     // Mouse
-    const mouse = new Guacamole.Mouse(guac.getDisplay().getElement());
+    const mouse: GuacamoleType.Guacamole.Mouse = new GuacamoleImpl.Mouse(guac.getDisplay().getElement());
 
-    mouse.onmousedown =
-        mouse.onmouseup =
-        mouse.onmousemove = function (mouseState: any): void
-        {
-            guac.sendMouseState(mouseState);
-        };
+    // @ts-ignore
+    mouse.onmousedown = mouse.onmouseup = mouse.onmousemove = function (mouseState: GuacamoleType.Guacamole.Mouse.State): void
+    {
+        guac.sendMouseState(mouseState);
+    };
 
     // Keyboard
-    const keyboard = new Guacamole.Keyboard(document);
+    const keyboard: GuacamoleType.Guacamole.Keyboard = new GuacamoleImpl.Keyboard(document);
 
-    keyboard.onkeydown = function (keysym: any): void
+    // @ts-ignore
+    keyboard.onkeydown = function (keysym: number): void
     {
         //console.log("Down: " + DN.toHex(keysym));
         if (keysym === 65511) keysym = 65515;
-        guac.sendKeyEvent(1, keysym);
+        guac.sendKeyEvent(true, keysym);
     };
 
-    keyboard.onkeyup = function (keysym: any): void
+    // @ts-ignore
+    keyboard.onkeyup = function (keysym: number): void
     {
         //console.log("Up: " + DN.toHex(keysym));
         if (keysym === 65511) keysym = 65515;
-        guac.sendKeyEvent(0, keysym);
+        guac.sendKeyEvent(false, keysym);
     };
 }
 

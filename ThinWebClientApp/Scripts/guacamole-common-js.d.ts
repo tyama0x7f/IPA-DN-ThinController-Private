@@ -2,7 +2,7 @@
  * The namespace used by the Guacamole JavaScript API. Absolutely all classes
 defined by the Guacamole JavaScript API will be within this namespace.
  */
-declare namespace Guacamole {
+export declare namespace Guacamole {
     /**
      * A reader which automatically handles the given input stream, returning
     strictly received packets as array buffers. Note that this object will
