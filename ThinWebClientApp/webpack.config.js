@@ -10,13 +10,13 @@ module.exports = {
     mode: "development",
     //mode: "production",
     devtool: "inline-source-map",
-    entry: path.resolve(__dirname, "Scripts/Main.ts"),
+    entry: path.resolve(__dirname, "./Scripts/Main.ts"),
     optimization: {
         moduleIds: 'deterministic',
     },
     output: {
         filename: "bundle.js",
-        path: path.resolve(__dirname, "wwwroot/js"),
+        path: path.resolve(__dirname, "wwwroot/js/"),
         library: {
             name: "Main",
             type: "umd",
@@ -28,7 +28,7 @@ module.exports = {
             {
                 test: /\.ts$/,
                 loader: "ts-loader",
-                include: path.join(__dirname, "Scripts"),
+                include: path.join(__dirname, "./Scripts/"),
             },
             {
                 test: /\.scss$/,
@@ -51,7 +51,7 @@ module.exports = {
         extensions: [".ts", ".js"],
         modules: [
             "node_modules",
-            path.resolve(__dirname, "Scripts")
+            path.resolve(__dirname, "./Scripts/")
         ]
     },
     plugins: [

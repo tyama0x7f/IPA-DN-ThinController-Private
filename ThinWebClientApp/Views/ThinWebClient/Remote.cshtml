@@ -9,72 +9,9 @@
 
 @section Scripts{
 
-    <script>
-        
-    </script>
-
     <!-- Init -->
     <script>
-        window.onerror = function (msg, url, linenumber) {
-            console.log('Error message: ' + msg + '\nURL: ' + url + '\nLine Number: ' + linenumber);
-            alert('Error message: ' + msg + '\nURL: ' + url + '\nLine Number: ' + linenumber);
-            return true;
-        }
-
-        // Get display div from document
-        var display = document.getElementById("display");
-
-
-        var tunnel = new Guacamole.WebSocketTunnel("@Model.WebSocketUrl");
-
-        tunnel.onerror = function (status) {
-            console.log(status);
-            alert("Tunnel Error Code: " + status.code);
-        };
-
-        // Instantiate client, using a WebSocket tunnel for communications.
-        var guac = new Guacamole.Client(tunnel);
-
-        // Add client to display div
-        display.appendChild(guac.getDisplay().getElement());
-
-        // Error handler
-        guac.onerror = function (status) {
-            console.log(status);
-            alert("Remote Desktop Error Code: " + status.code);
-        };
-
-        // Connect
-        guac.connect("id=@Model.SessionId");
-
-        // Disconnect on close
-        window.onunload = function () {
-            guac.disconnect();
-        }
-
-        // Mouse
-        var mouse = new Guacamole.Mouse(guac.getDisplay().getElement());
-
-        mouse.onmousedown =
-            mouse.onmouseup =
-            mouse.onmousemove = function (mouseState) {
-                guac.sendMouseState(mouseState);
-            };
-
-        // Keyboard
-        var keyboard = new Guacamole.Keyboard(document);
-
-        keyboard.onkeydown = function (keysym) {
-            console.log("Down: " + DN.toHex(keysym));
-            if (keysym == 65511) keysym = 65515;
-            guac.sendKeyEvent(1, keysym);
-        };
-
-        keyboard.onkeyup = function (keysym) {
-            console.log("Up: " + DN.toHex(keysym));
-            if (keysym == 65511) keysym = 65515;
-            guac.sendKeyEvent(0, keysym);
-        };
+        Main.ThinWebClient_Remote_PageLoad(window, document, "@Model.WebSocketUrl", "@Model.SessionId");
     </script>
 
 }

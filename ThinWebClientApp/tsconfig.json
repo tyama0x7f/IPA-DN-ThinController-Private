@@ -59,7 +59,8 @@
     "watch": false
   },
   "include": [
-    "Scripts/**/*.ts"
+    "./Scripts/**/*.ts",
+    "./submodules/IPA-DN-WebNeko/Scripts/**/*.ts"
   ],
   "exclude": [
     "node_modules",
