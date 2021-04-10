@@ -16,7 +16,7 @@ import "buefy";
 import { TestClass } from "./submodules/IPA-DN-WebNeko/Scripts/WebNeko";
 
 // Guacamole Library
-import { default as Guacamole } from "./includes/guacamole-common-js/guacamole-common";
+import { default as Guacamole } from "./submodules/IPA-DN-WebNeko/Libraries/guacamole-common-js/guacamole-common";
 
 export function TestFunc(): void
 {
