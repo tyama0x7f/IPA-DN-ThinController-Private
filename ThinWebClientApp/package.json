@@ -20,7 +20,6 @@
     "core-js": "^3.10.1",
     "css-loader": "^5.2.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
-    "guacamole-common-js": "^1.3.0",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "mini-css-extract-plugin": "^1.4.1",
