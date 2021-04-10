@@ -16,7 +16,7 @@ import "buefy";
 import { TestClass } from "./submodules/IPA-DN-WebNeko/Scripts/WebNeko";
 
 // Guacamole Library
-import { default as Guacamole } from "guacamole-common-js";
+import { default as Guacamole } from "./includes/guacamole-common-js/guacamole-common";
 
 export function TestFunc(): void
 {
@@ -25,7 +25,7 @@ export function TestFunc(): void
 
 export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string, sessionId: string): void
 {
-    window.onerror = function (msg, url, linenumber): boolean
+    window.onerror = function (msg: any, url?: string, fileno?: number, linenumber?: number): any
     {
         const str = `Error message: ${msg}\nURL: ${url}\nLine Number: ${linenumber}`;
 
