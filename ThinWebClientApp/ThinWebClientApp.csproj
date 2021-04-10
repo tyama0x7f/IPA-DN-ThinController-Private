@@ -65,6 +65,10 @@
   </Target>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\bundle.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\submodules\IPA-DN-Cores\Cores.NET\Cores.Web\Cores.Web.csproj" />
   </ItemGroup>
 
