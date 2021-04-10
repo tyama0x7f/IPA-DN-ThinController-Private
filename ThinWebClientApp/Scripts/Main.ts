@@ -16,8 +16,7 @@ import "buefy";
 import { TestClass } from "./submodules/IPA-DN-WebNeko/Scripts/WebNeko";
 
 // Guacamole Library
-import { default as GuacamoleImpl } from "guacamole-common-js";
-import { default as GuacamoleType } from "./guacamole-common-js.d";
+import { default as Guacamole } from "guacamole-common-js";
 
 export function TestFunc(): void
 {
@@ -34,14 +33,14 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         alert(str);
         return true;
     }
-
+    
     // Get display div from document
     const display = document.getElementById("display")!;
 
-    const tunnel: GuacamoleType.Guacamole.Tunnel = new GuacamoleImpl.WebSocketTunnel(webSocketUrl);
+    const tunnel = new Guacamole.WebSocketTunnel(webSocketUrl);
 
     // @ts-ignore
-    tunnel.onerror = function (status: GuacamoleType.Guacamole.Status): void
+    tunnel.onerror = function (status: Guacamole.Status): void
     {
         const str = `Tunnel Error Code: ${status.code}, Message: "${status.message}"`;
 
@@ -50,14 +49,14 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     };
 
     // Instantiate client, using a WebSocket tunnel for communications.
-    const guac: GuacamoleType.Guacamole.Client = new GuacamoleImpl.Client(tunnel);
+    const guac = new Guacamole.Client(tunnel);
 
     // Add client to display div
     display.appendChild(guac.getDisplay().getElement());
 
     // Error handler
     // @ts-ignore
-    guac.onerror = function (status: GuacamoleType.Guacamole.Status): void
+    guac.onerror = function (status: Guacamole.Status): void
     {
         const str = `Remote Desktop Error Code: ${status.code}, Message: "${status.message}"`;
 
@@ -75,16 +74,16 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     }
 
     // Mouse
-    const mouse: GuacamoleType.Guacamole.Mouse = new GuacamoleImpl.Mouse(guac.getDisplay().getElement());
+    const mouse = new Guacamole.Mouse(guac.getDisplay().getElement());
 
     // @ts-ignore
-    mouse.onmousedown = mouse.onmouseup = mouse.onmousemove = function (mouseState: GuacamoleType.Guacamole.Mouse.State): void
+    mouse.onmousedown = mouse.onmouseup = mouse.onmousemove = function (mouseState: Guacamole.Mouse.State): void
     {
         guac.sendMouseState(mouseState);
     };
 
     // Keyboard
-    const keyboard: GuacamoleType.Guacamole.Keyboard = new GuacamoleImpl.Keyboard(document);
+    const keyboard = new Guacamole.Keyboard(document);
 
     // @ts-ignore
     keyboard.onkeydown = function (keysym: number): void

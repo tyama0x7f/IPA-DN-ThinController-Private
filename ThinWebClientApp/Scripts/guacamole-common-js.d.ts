@@ -1,8 +1,12 @@
+declare module 'guacamole-common-js' {
 /**
  * The namespace used by the Guacamole JavaScript API. Absolutely all classes
 defined by the Guacamole JavaScript API will be within this namespace.
  */
-export declare namespace Guacamole {
+
+export default Guacamole;
+
+export namespace Guacamole {
     /**
      * A reader which automatically handles the given input stream, returning
     strictly received packets as array buffers. Note that this object will
@@ -2437,4 +2441,4 @@ export declare namespace Guacamole {
         static getInstance(stream: Guacamole.InputStream, layer: Guacamole.Display.VisibleLayer, mimetype: string): Guacamole.VideoPlayer;
     }
 }
-
+}
