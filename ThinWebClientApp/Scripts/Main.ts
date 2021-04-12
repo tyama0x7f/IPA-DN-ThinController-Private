@@ -2,6 +2,19 @@
 
 // --- HTML Basics ---
 // isInteger polyfill for Internet Explorer
+if (!Object.entries)
+{
+    Object.entries = function (obj: any): any
+    {
+        const ownProps = Object.keys(obj);
+        let i = ownProps.length;
+        const resArray = new Array(i); // preallocate the Array
+        while (i--)
+            resArray[i] = [ownProps[i], obj[ownProps[i]]];
+
+        return resArray;
+    };
+}
 Number.isInteger = Number.isInteger || function (value: any): boolean
 {
     return typeof value === "number" && isFinite(value) && Math.floor(value) === value;
