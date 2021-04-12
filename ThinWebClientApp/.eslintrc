@@ -133,7 +133,7 @@
         "no-array-constructor": 0,
         "@typescript-eslint/no-array-constructor": 1,
         "no-empty-function": 0,
-        "@typescript-eslint/no-empty-function": 1,
+        "@typescript-eslint/no-empty-function": 0,
         "@typescript-eslint/no-empty-interface": 1,
         "@typescript-eslint/no-explicit-any": 0,
         "@typescript-eslint/no-inferrable-types": 1,
@@ -151,7 +151,7 @@
         "@typescript-eslint/type-annotation-spacing": 1,
         "no-var": 1,
         "prefer-const": 1,
-        "prefer-rest-params": 1,
+        "prefer-rest-params": 0,
         "prefer-spread": 1,
         "@typescript-eslint/explicit-function-return-type": 1
       }

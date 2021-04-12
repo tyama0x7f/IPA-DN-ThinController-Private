@@ -1,6 +1,58 @@
 ﻿require("./Main.scss");
 
-// HTML Basics
+// --- HTML Basics ---
+// isInteger polyfill for Internet Explorer
+Number.isInteger = Number.isInteger || function (value: any): boolean
+{
+    return typeof value === "number" && isFinite(value) && Math.floor(value) === value;
+};
+if (!Array.prototype.fill)
+{
+    Object.defineProperty(Array.prototype, 'fill', {
+        value: function (value: any)
+        {
+            // Steps 1-2.
+            if (this === null)
+            {
+                throw new TypeError('this is null or not defined');
+            }
+
+            const O = Object(this);
+
+            // Steps 3-5.
+            const len = O.length >>> 0;
+
+            // Steps 6-7.
+            const start = arguments[1];
+            const relativeStart = start >> 0;
+
+            // Step 8.
+            let k = relativeStart < 0 ?
+                Math.max(len + relativeStart, 0) :
+                Math.min(relativeStart, len);
+
+            // Steps 9-10.
+            const end = arguments[2];
+            const relativeEnd = end === undefined ?
+                len : end >> 0;
+
+            // Step 11.
+            const finalValue = relativeEnd < 0 ?
+                Math.max(len + relativeEnd, 0) :
+                Math.min(relativeEnd, len);
+
+            // Step 12.
+            while (k < finalValue)
+            {
+                O[k] = value;
+                k++;
+            }
+
+            // Step 13.
+            return O;
+        }
+    });
+}
 import "core-js/es/promise";
 import "@fortawesome/fontawesome-free/js/all";
 import "prismjs";
@@ -12,10 +64,11 @@ import "prismjs/plugins/command-line/prism-command-line";
 import "prismjs/plugins/normalize-whitespace/prism-normalize-whitespace";
 import "buefy";
 
-// Guacamole Library
+// --- Imports ---
 import { default as Guacamole } from "./submodules/IPA-DN-WebNeko/Libraries/guacamole-common-js-1.3.0/guacamole-common";
 import { Util } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Util";
 import { Str } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Str";
+import { GuaComfortableKeyboard, GuaConnectedKeyboard, GuaKeyCodes, GuaUtil } from "./submodules/IPA-DN-WebNeko/Scripts/Misc/GuaUtil/GuaUtil";
 
 export function TestFunc(): void
 {
@@ -31,7 +84,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         alert(str);
         return true;
     }
-    
+
     // Get display div from document
     const display = document.getElementById("display")!;
 
@@ -83,20 +136,26 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     // Keyboard
     const keyboard = new Guacamole.Keyboard(document);
 
+    const virtualKeyboard1 = new GuaConnectedKeyboard(guac);
+    const virtualKeyboard2 = new GuaComfortableKeyboard(virtualKeyboard1);
+
     // @ts-ignore
     keyboard.onkeydown = function (keysym: number): void
     {
-        //console.log("Down: " + DN.toHex(keysym));
-        if (keysym === 65511) keysym = 65515;
-        guac.sendKeyEvent(true, keysym);
+        //        console.log("Down: " + GuaUtil.KeyCodeToStr(keysym));
+        //        if (GuaUtil.KeyCodeToStr(keysym) === "Meta") keysym = GuaKeyCodes.Win[0];
+        //        guac.sendKeyEvent(true, keysym);
+        virtualKeyboard2.PhysicalKeyPressedAsync(keysym, true);
     };
 
     // @ts-ignore
     keyboard.onkeyup = function (keysym: number): void
     {
-        //console.log("Up: " + DN.toHex(keysym));
-        if (keysym === 65511) keysym = 65515;
-        guac.sendKeyEvent(false, keysym);
+        //console.log("Up: " + GuaUtil.KeyCodeToStr(keysym));
+        //if (GuaUtil.KeyCodeToStr(keysym) === "Meta") keysym = GuaKeyCodes.Win[0];
+        //guac.sendKeyEvent(false, keysym);
+        virtualKeyboard2.PhysicalKeyPressedAsync(keysym, false);
+
     };
 }
 
