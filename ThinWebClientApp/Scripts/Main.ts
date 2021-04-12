@@ -12,15 +12,13 @@ import "prismjs/plugins/command-line/prism-command-line";
 import "prismjs/plugins/normalize-whitespace/prism-normalize-whitespace";
 import "buefy";
 
-// WebNeko
-import { TestClass } from "./submodules/IPA-DN-WebNeko/Scripts/WebNeko";
-
 // Guacamole Library
 import { default as Guacamole } from "./submodules/IPA-DN-WebNeko/Libraries/guacamole-common-js-1.3.0/guacamole-common";
+import { Util } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Util";
+import { Str } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Str";
 
 export function TestFunc(): void
 {
-    console.log("TestFunc");
 }
 
 export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string, sessionId: string): void
