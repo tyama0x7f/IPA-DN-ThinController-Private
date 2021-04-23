@@ -142,7 +142,7 @@ namespace IPA.App.ThinWebClientApp
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=ThinWebClient}/{action=Start}/{id?}");
+                    pattern: "{controller=ThinWebClient}/{action=Index}/{id?}");
             });
 
             // クリーンアップ動作を定義

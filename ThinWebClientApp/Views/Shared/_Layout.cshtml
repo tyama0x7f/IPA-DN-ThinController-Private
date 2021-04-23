@@ -29,18 +29,13 @@
         <p>　</p>
         @RenderBody()
         <p>　</p>
-        <hr />
-        <p>@Page.SiteName | <a href="https://telework.cyber.ipa.go.jp/">NTT 東日本 - IPA シン・テレワークシステム</a> | <a href="https://www.apache.org/licenses/LICENSE-2.0">使用条件</a><br>Copyright &copy; @DateTime.Now.Year.ToString() IPA 産業サイバーセキュリティセンター サイバー技術研究室 ＆ NTT 東日本 特殊局. All rights reserved.</p>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bulma-extensions@6.2.7/dist/js/bulma-extensions.js" integrity="sha256-02UMNoxzmxWzx36g1Y4tr93G0oHuz+khCNMBbilTBAg=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/buefy@0.8.20/dist/buefy.js" integrity="sha256-Qt8sBKfIqJpkLiU5TSbRkU/dpr5sarUS2HOTz1uOuzs=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/buefy/0.8.20/buefy.min.js" integrity="sha512-e5so+FlfbHyvq/BXXb77X68DGhSqfX7HoogeeMFejSF79uiIZRruKp3I/BIpo7ubWQ3XBPyhM385Upm3gU4xrw==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js" integrity="sha512-VGxuOMLdTe8EmBucQ5vYNoYDTGijqUsStF6eM7P3vA/cM1pqOwSBv/uxw94PhhJJn795NlOeKBkECQZ1gIzp6A==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.19/lodash.js" integrity="sha512-ZthgzPjVSy9Fx5HgJkt0gVLjQIsU4f+l+5+4nyfz0VMi0VldrP9ssa5HcsySB5fkpOnd3QgA+JbApFYCs/9w3Q==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js" integrity="sha512-rmZcZsyhe0/MAjquhTgiUcb4d9knaFc7b5xAfju483gbEXTkeJRUMIPk6s3ySZMYUHEcjKbjLjyddGWMrNEvZg==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.21.0/prism.min.js" integrity="sha512-WkVkkoB31AoI9DAk6SEEEyacH9etQXKUov4JRRuM1Y681VsTq7jYgrRw06cbP6Io7kPsKx+tLFpH/HXZSZ2YEQ==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.21.0/components/prism-json.min.js" integrity="sha512-IC7rV8RslChgByOdUFC6ePqOGn+OwJhnKC3S5AezM8DAiOdGhJMwgsIvBChsa2yuxxoPbH2+W/kjNUM1cc+jUQ==" crossorigin="anonymous"></script>
+    <footer class="footer">
+        <div class="content has-text-left">
+            <p>@Page.SiteName | <a href="https://telework.cyber.ipa.go.jp/">NTT 東日本 - IPA シン・テレワークシステム</a> | <a href="https://www.apache.org/licenses/LICENSE-2.0">使用条件</a><br>Copyright &copy; @DateTime.Now.Year.ToString() IPA 産業サイバーセキュリティセンター サイバー技術研究室 ＆ NTT 東日本 特殊局. All rights reserved.</p>
+        </div>
+    </footer>
 
     @RenderSection("Scripts", required: false)
 
