@@ -1,26 +1,121 @@
-﻿@model ThinWebClientModelStart
+﻿@model ThinWebClientModelIndex
 @{
-    ViewData["Title"] = "Start";
+    Page.Title = "";
 }
 
-<h2 class="title is-4">@ViewData["Title"]</h2>
+<h2 class="title is-4">@Page.FullTitle</h2>
 
 <div class="box">
     <div class="content">
+        <form method="post">
 
-        <div class="field">
-            <label class="label">接続先コンピュータ ID:</label>
-            <div class="control has-icons-left has-icons-right">
-                <input class="input is-link" type="text" placeholder="コンピュータ ID を指定してください。" name="Pcid" value="@Model.Pcid">
-                <span class="icon is-small is-left">
-                    <i class="fas fa-laptop"></i>
-                </span>
+            <div class="field">
+                <label class="label">接続先コンピュータ ID:</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input is-link" type="text" placeholder="接続先のコンピュータ ID を指定してください。" style="font-weight: bold" asp-for="CurrentProfile.Pcid">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-laptop"></i>
+                    </span>
+                </div>
             </div>
-            <p class="help is-primary">
-                コンピュータ ID を指定してください。
-            </p>
-        </div>
-        <p>　</p>
+
+            <p>　</p>
+
+            <div class="field">
+                <div class="control">
+                    <button class="button is-link" style="font-weight: bold"><i class="fas fa-laptop-house"></i>&nbsp;このコンピュータ ID にリモート接続</button>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="field">
+                <label class="label">詳細オプション:</label>
+            </div>
+
+            <p>以下は、特に必要がある場合のみ変更してください。</p>
+
+            <div class="field-body">
+                <div class="field is-narrow">
+                    <div class="control">
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableAudio" id="EnableAudio"><label for="EnableAudio">オーディオを有効化</label>
+                        </p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableWallPaper" id="EnableWallPaper"><label for="EnableWallPaper">Windows の壁紙を有効化</label>
+                        </p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableTheming" id="EnableTheming"><label for="EnableTheming">Windows の視覚テーマを有効化</label>
+                        </p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableFontSmoothing" id="EnableFontSmoothing"><label for="EnableFontSmoothing">フォントのスムージングを有効化</label>
+                        </p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableFullWindowDrag" id="EnableFullWindowDrag"><label for="EnableFullWindowDrag">ウインドウの内容を表示したままのドラッグを有効化</label>
+                        </p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableDesktopComposition" id="EnableDesktopComposition"><label for="EnableDesktopComposition">デスクトップ効果を有効化</label>
+                        </p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableMenuAnimations" id="EnableMenuAnimations"><label for="EnableMenuAnimations">メニューのアニメーションを有効化</label>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <p>　</p>
+            <div class="field">
+                <label class="label">画面サイズ変更方式の選択:</label>
+                <div class="control">
+                    <select asp-for="CurrentProfile.Preference.ResizeMethodStr" asp-items="Model.ResizeMethodItems" class="input is-info"></select>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">キーボードレイアウトの選択:</label>
+                <div class="control">
+                    <select asp-for="CurrentProfile.Preference.KeyboardLayoutStr" asp-items="Model.KeyboardLayoutItems" class="input is-info"></select>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Windows ユーザー名 (RDP NLA 使用) (オプション):</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input is-link" type="text" placeholder="NLA 認証を使用する場合は Windows のユーザー名を指定します。" asp-for="CurrentProfile.Preference.Username">
+                    <span class="icon is-small is-left">
+                        <i class="far fa-user"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Windows パスワード (RDP NLA 使用) (オプション):</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input is-link" type="password" placeholder="NLA 認証を使用する場合は Windows のユーザー名を指定します。" asp-for="CurrentProfile.Preference.Password">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-key"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Windows ドメイン名 (RDP NLA 使用) (オプション):</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input is-link" type="text" placeholder="NLA 認証を使用する場合は Windows のドメイン名を指定します。" asp-for="CurrentProfile.Preference.Domain">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-server"></i>
+                    </span>
+                </div>
+            </div>
+
+            <p>　</p>
+
+            <div class="field">
+                <div class="control">
+                    <button class="button is-link" style="font-weight: bold"><i class="fas fa-laptop-house"></i>&nbsp;このコンピュータ ID にリモート接続</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 

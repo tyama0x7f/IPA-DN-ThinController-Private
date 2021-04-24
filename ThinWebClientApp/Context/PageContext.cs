@@ -68,7 +68,7 @@ namespace IPA.App.ThinWebClientApp
         // サイト名
         public PageContext()
         {
-            this.SiteName = "シン・テレワークシステム Web クライアント";
+            this.SiteName = "シン・テレワークシステム HTML5 版 Web クライアント";
         }
     }
 }
