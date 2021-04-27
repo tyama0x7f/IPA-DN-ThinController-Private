@@ -24,8 +24,11 @@ import { GuaComfortableKeyboard, GuaConnectedKeyboard, GuaKeyCodes, GuaUtil } fr
 
 
 
-export function TestFunc(): void
+export function TestFunc(str1: string): void
 {
+    str1 = Str.JavaScriptSafeStrDecode(str1);
+    
+    Util.Debug(str1);
 }
 
 export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string, sessionId: string): void
