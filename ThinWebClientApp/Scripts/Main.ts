@@ -21,11 +21,21 @@ import { default as Guacamole } from "./submodules/IPA-DN-WebNeko/Libraries/guac
 import { Util } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Util";
 import { Str } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Str";
 import { GuaComfortableKeyboard, GuaConnectedKeyboard, GuaKeyCodes, GuaUtil } from "./submodules/IPA-DN-WebNeko/Scripts/Misc/GuaUtil/GuaUtil";
+import { default as Sol } from "libsodium-wrappers";
 
-
+class TestClass
+{
+    public static async TestFuncAsync(): Promise<void>
+    {
+        Util.Debug("Wait for ready...");
+        await Sol.ready;
+        Util.Debug("OK.");
+    }
+}
 
 export function TestFunc(): void
 {
+    TestClass.TestFuncAsync();
 }
 
 export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string, sessionId: string): void
