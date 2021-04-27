@@ -7,7 +7,7 @@
 
 <div class="box">
     <div class="content">
-        <form method="post">
+        <form method="post" action="/">
 
             <div class="field">
                 <label class="label">接続先コンピュータ ID:</label>
@@ -19,11 +19,21 @@
                 </div>
             </div>
 
+            @if (Model.HistoryItems.Count >= 2)
+            {
+                <div class="field">
+                    <label class="label">接続履歴から接続:</label>
+                    <div class="select">
+                        <select asp-for="SelectedHistory" asp-items="Model.HistoryItems" class="input is-info" onChange="if (value != '') location.href = value;"></select>
+                    </div>
+                </div>
+            }
+
             <p>　</p>
 
             <div class="field">
                 <div class="control">
-                    <button class="button is-link" style="font-weight: bold"><i class="fas fa-laptop-house"></i>&nbsp;このコンピュータ ID にリモート接続</button>
+                    <button class="button is-link" style="font-weight: bold" type="submit"><i class="fas fa-laptop-house"></i>&nbsp;このコンピュータ ID にリモート接続</button>
                 </div>
             </div>
 
@@ -64,17 +74,18 @@
             </div>
 
             <p>　</p>
-            <div class="field">
-                <label class="label">画面サイズ変更方式の選択:</label>
-                <div class="control">
-                    <select asp-for="CurrentProfile.Preference.ResizeMethodStr" asp-items="Model.ResizeMethodItems" class="input is-info"></select>
-                </div>
-            </div>
 
             <div class="field">
                 <label class="label">キーボードレイアウトの選択:</label>
                 <div class="control">
                     <select asp-for="CurrentProfile.Preference.KeyboardLayoutStr" asp-items="Model.KeyboardLayoutItems" class="input is-info"></select>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">画面サイズ変更方式の選択:</label>
+                <div class="control">
+                    <select asp-for="CurrentProfile.Preference.ResizeMethodStr" asp-items="Model.ResizeMethodItems" class="input is-info"></select>
                 </div>
             </div>
 
@@ -91,7 +102,7 @@
             <div class="field">
                 <label class="label">Windows パスワード (RDP NLA 使用) (オプション):</label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input is-link" type="password" placeholder="NLA 認証を使用する場合は Windows のユーザー名を指定します。" asp-for="CurrentProfile.Preference.Password">
+                    <input class="input is-link" type="password" placeholder="NLA 認証を使用する場合は Windows のパスワードを指定します。" asp-for="CurrentProfile.Preference.Password" autocomplete="new-password">
                     <span class="icon is-small is-left">
                         <i class="fas fa-key"></i>
                     </span>
@@ -112,7 +123,7 @@
 
             <div class="field">
                 <div class="control">
-                    <button class="button is-link" style="font-weight: bold"><i class="fas fa-laptop-house"></i>&nbsp;このコンピュータ ID にリモート接続</button>
+                    <button class="button is-link" style="font-weight: bold" type="submit"><i class="fas fa-laptop-house"></i>&nbsp;このコンピュータ ID にリモート接続</button>
                 </div>
             </div>
         </form>
