@@ -22,6 +22,7 @@ import { Util } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Util";
 import { Str } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Str";
 import { GuaComfortableKeyboard, GuaConnectedKeyboard, GuaKeyCodes, GuaUtil } from "./submodules/IPA-DN-WebNeko/Scripts/Misc/GuaUtil/GuaUtil";
 import { Html } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Html";
+import { C1 } from "./submodules/IPA-DN-WebNeko/Scripts/Imports";
 
 
 // メイン画面の接続履歴候補の選択が変更された
@@ -52,6 +53,10 @@ export function Index_Load(page: Document, focusPcid: boolean): void
     {
         Html.FocusEx(pcid);
     }
+
+    const res = C1.SHA1("hello");
+    
+    Util.Debug(res.toString());
 }
 
 // 接続履歴の消去が選択された

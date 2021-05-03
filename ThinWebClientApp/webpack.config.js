@@ -52,7 +52,13 @@ module.exports = {
         modules: [
             "node_modules",
             path.resolve(__dirname, "./Scripts/")
-        ]
+        ],
+        fallback:
+        {
+            "stream": require.resolve("stream-browserify"),
+            "buffer": require.resolve("buffer"),
+            "crypto": require.resolve("crypto-browserify")
+        }
     },
     plugins: [
         new MiniCssExtractPlugin({
