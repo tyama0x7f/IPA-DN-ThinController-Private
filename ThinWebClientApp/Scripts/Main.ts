@@ -21,14 +21,43 @@ import { default as Guacamole } from "./submodules/IPA-DN-WebNeko/Libraries/guac
 import { Util } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Util";
 import { Str } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Str";
 import { GuaComfortableKeyboard, GuaConnectedKeyboard, GuaKeyCodes, GuaUtil } from "./submodules/IPA-DN-WebNeko/Scripts/Misc/GuaUtil/GuaUtil";
+import { Html } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Html";
 
 
-
-export function TestFunc(str1: string): void
+// メイン画面の接続履歴候補の選択が変更された
+export function Index_OnSelectedHistoryChange(page: Document): void
 {
-    str1 = Str.JavaScriptSafeStrDecode(str1);
-    
-    Util.Debug(str1);
+    const dropdown = page.getElementById("SelectedHistory") as HTMLSelectElement;
+    const pcid = page.getElementById("CurrentProfile_Pcid") as HTMLInputElement;
+
+    if (Str.IsFilled(dropdown.value))
+    {
+        // 何か選択されている状態に変化した。
+        Html.NativateTo(dropdown.value);
+    }
+    else
+    {
+        // 何も選択されてていない状態になった。コンピュータ ID 入力 BOX をクリアしてフォーカスを移動する。
+        pcid.value = "";
+        pcid.focus();
+    }
+}
+
+// メイン画面がロードされた
+export function Index_Load(page: Document, focusPcid: boolean): void
+{
+    const pcid = page.getElementById("CurrentProfile_Pcid") as HTMLInputElement;
+
+    if (focusPcid)
+    {
+        Html.FocusEx(pcid);
+    }
+}
+
+// 接続履歴の消去が選択された
+export function Index_DeleteAllHistory(page: Document): void
+{
+    Html.NativateTo("/?deleteall=1");
 }
 
 export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string, sessionId: string): void
@@ -43,10 +72,10 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     }
 
     // Get display div from document
-    const display = document.getElementById("display")!;
+    const display = page.getElementById("display")!;
 
     const tunnel = new Guacamole.WebSocketTunnel(webSocketUrl);
-
+    
     // @ts-ignore
     tunnel.onerror = function (status: Guacamole.Status): void
     {
@@ -91,7 +120,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     };
 
     // Keyboard
-    const keyboard = new Guacamole.Keyboard(document);
+    const keyboard = new Guacamole.Keyboard(page);
 
     const virtualKeyboard1 = new GuaConnectedKeyboard(guac);
     const virtualKeyboard2 = new GuaComfortableKeyboard(virtualKeyboard1);

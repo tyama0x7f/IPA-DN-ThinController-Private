@@ -22,9 +22,9 @@
             @if (Model.HistoryItems.Count >= 2)
             {
                 <div class="field">
-                    <label class="label">接続履歴から接続:</label>
+                    <label class="label">接続履歴:</label>
                     <div class="select">
-                        <select asp-for="SelectedHistory" asp-items="Model.HistoryItems" class="input is-info" onChange="if (value != '') location.href = value;"></select>
+                        <select asp-for="SelectedHistory" asp-items="Model.HistoryItems" class="input is-info" onChange="Main.Index_OnSelectedHistoryChange(document);"></select>
                     </div>
                 </div>
             }
@@ -34,6 +34,10 @@
             <div class="field">
                 <div class="control">
                     <button class="button is-link" style="font-weight: bold" type="submit"><i class="fas fa-laptop-house"></i>&nbsp;このコンピュータ ID にリモート接続</button>
+                    @if (Model.HistoryItems.Count >= 2)
+                    {
+                        <button class="button is-info is-light" style="font-weight: bold" type="button" onclick="Main.Index_DeleteAllHistory(document);"><i class="far fa-trash-alt"></i>&nbsp;接続履歴を消去</button>
+                    }
                 </div>
             </div>
 
@@ -132,7 +136,7 @@
 
 @section Scripts {
     <script>
-        Main.TestFunc("@Str.JavaScriptSafeStrEncode("Hello World 'こん'\nにちは\"犬猫！！")");
+        Main.Index_Load(document, @Model.FocusToPcid._ToBoolStrLower());
     </script>
 }
 
