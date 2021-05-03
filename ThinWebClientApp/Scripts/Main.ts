@@ -20,7 +20,7 @@ import "buefy";
 import { default as Guacamole } from "./submodules/IPA-DN-WebNeko/Libraries/guacamole-common-js-1.3.0/guacamole-common";
 import { Util } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Util";
 import { Str } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Str";
-import { GuaComfortableKeyboard, GuaConnectedKeyboard, GuaKeyCodes, GuaUtil } from "./submodules/IPA-DN-WebNeko/Scripts/Misc/GuaUtil/GuaUtil";
+import { GuaComfortableKeyboard, GuaConnectedKeyboard, GuaKeyCodes, GuaUtil, GuaStates, GuaConsts } from "./submodules/IPA-DN-WebNeko/Scripts/Misc/GuaUtil/GuaUtil";
 import { Html } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Html";
 import { Secure } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Secure";
 import { Task } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Task";
@@ -156,18 +156,14 @@ async function SessionHealthCheckAsync(url: string, pcid?: string): Promise<void
         {
             const response = await Axios.get(url, { timeout: 1000 });
             const str = response.data as string;
-            Util.Debug(str);
+
             if (!Str.ToBool(str))
             {
                 // セッション消滅のエラー等が発生した模様である
-                await Html.DialogAlertAsync("リモート セッションが終了しました。再接続を試行するには、トップページから再接続を行なってください。", "セッションが終了しました", true, "is-success", "fas fa-info-circle");
+                await Remote_ShowDisconnectErrorAsync(pcid);
 
-                let gotoUrl = "/";
-                if (Str.IsFilled(pcid))
-                {
-                    gotoUrl += "?id=" + Str.EncodeUrl(pcid?.trim());
-                }
-                Html.NativateTo(gotoUrl);
+                // もうループは抜けます！ ずるっこ！！
+                break;
             }
         }
         catch (ex)
@@ -178,6 +174,29 @@ async function SessionHealthCheckAsync(url: string, pcid?: string): Promise<void
 
         await Task.Delay(1000);
     }
+}
+
+let Remote_ErrorShowOnceFlag = false;
+
+// セッションが終了した旨のエラーメッセージを表示する (1 回しか表示されない)
+async function Remote_ShowDisconnectErrorAsync(pcid?: string): Promise<void>
+{
+    // 1 回しかエラーが表示されないようにする
+    if (Remote_ErrorShowOnceFlag)
+    {
+        return;
+    }
+
+    Remote_ErrorShowOnceFlag = true;
+
+    await Html.DialogAlertAsync("リモート セッションが終了しました。再接続を試行するには、トップページから再接続を行なってください。", "セッションが終了しました", true, "is-success", "fas fa-info-circle");
+
+    let gotoUrl = "/";
+    if (Str.IsFilled(pcid))
+    {
+        gotoUrl += "?id=" + Str.EncodeUrl(pcid?.trim());
+    }
+    Html.NativateTo(gotoUrl);
 }
 
 // 1 秒に 1 回 HealthCheck URL を呼び出す処理を開始する
@@ -191,6 +210,14 @@ export function Remote_StartSessionHealthCheck(sessionId: string, pcid?: string)
 
 export function Common_ErrorAlert(page: Document, errorMessage: string, pcid?: string): void
 {
+    // 1 回しかエラーが表示されないようにする
+    if (Remote_ErrorShowOnceFlag)
+    {
+        return;
+    }
+
+    Remote_ErrorShowOnceFlag = true;
+
     if (Str.IsEmpty(errorMessage))
     {
         errorMessage = "不明なエラーが発生しました。";
@@ -209,8 +236,10 @@ export function Common_ErrorAlert(page: Document, errorMessage: string, pcid?: s
     }, false);
 }
 
-export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string, sessionId: string, pcid: string): void
+export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string, sessionId: string, pcid: string, svcType: string, jsonEncrypted: string): void
 {
+    const profile = Util.JsonToObject(Secure.JavaScriptEasyStrDecrypt(jsonEncrypted, "easyJsonEncode"));
+
     pcid = Str.JavaScriptSafeStrDecode(pcid);
 
     Remote_StartSessionHealthCheck(sessionId, pcid);
@@ -253,6 +282,15 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         console.log(str);
         Common_ErrorAlert(page, str, pcid);
     };
+    // @ts-ignore
+    guac.onstatechange = function (state: GuaStates): void
+    {
+        if (state === GuaStates.STATE_DISCONNECTED || state === GuaStates.STATE_DISCONNECTING)
+        {
+            // 切断メッセージを表示
+            Remote_ShowDisconnectErrorAsync(pcid);
+        }
+    };
 
     // Connect
     guac.connect(`id=${sessionId}`);
@@ -276,7 +314,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     const keyboard = new Guacamole.Keyboard(page);
 
     const virtualKeyboard1 = new GuaConnectedKeyboard(guac);
-    const virtualKeyboard2 = new GuaComfortableKeyboard(virtualKeyboard1);
+    const virtualKeyboard2 = new GuaComfortableKeyboard(virtualKeyboard1, profile, svcType);
 
     // @ts-ignore
     keyboard.onkeydown = function (keysym: number): void
