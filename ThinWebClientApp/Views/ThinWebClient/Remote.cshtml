@@ -11,7 +11,7 @@
 
     <!-- Init -->
     <script>
-        Main.ThinWebClient_Remote_PageLoad(window, document, "@Model.WebSocketUrl", "@Model.SessionId");
+        Main.ThinWebClient_Remote_PageLoad(window, document, "@Model.WebSocketUrl", "@Model.SessionId", "@Model.ConnectOptions.Pcid.JavaScriptSafeStrEncode()");
     </script>
 
 }

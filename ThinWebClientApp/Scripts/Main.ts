@@ -24,9 +24,29 @@ import { GuaComfortableKeyboard, GuaConnectedKeyboard, GuaKeyCodes, GuaUtil } fr
 import { Html } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Html";
 import { Secure } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Secure";
 import { Task } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Task";
-import { Axios } from "./submodules/IPA-DN-WebNeko/Scripts/Imports";
-import axios from "axios";
+import { Axios, Vue, Buefy, Dialog } from "./submodules/IPA-DN-WebNeko/Scripts/Imports";
 
+// --- Init ---
+Vue.use(Buefy);
+
+
+// メイン画面の PCID のテキストが更新されるなど、状態がアップデートされた
+export function Index_UpdateControl(page: Document): void
+{
+    let ok = false;
+
+    const pcid = page.getElementById("CurrentProfile_Pcid") as HTMLInputElement;
+    const button1 = page.getElementById("ok1") as HTMLInputElement;
+    const button2 = page.getElementById("ok2") as HTMLInputElement;
+
+    if (Str.IsFilled(pcid.value))
+    {
+        ok = true;
+    }
+
+    button1.disabled = !ok;
+    button2.disabled = !ok;
+}
 
 // メイン画面の接続履歴候補の選択が変更された
 export function Index_OnSelectedHistoryChange(page: Document): void
@@ -51,6 +71,8 @@ export function Index_OnSelectedHistoryChange(page: Document): void
         pcid.value = "";
         pcid.focus();
     }
+
+    Index_UpdateControl(page);
 }
 
 // メイン画面がロードされた
@@ -68,6 +90,8 @@ export function Index_Load(page: Document, focusPcid: boolean, passwordEasyStrEn
     const passwordStr = Secure.JavaScriptEasyStrDecrypt(passwordEasyStrEncrypted, "easyEncryptStaticKey");
 
     password.value = passwordStr;
+
+    Index_UpdateControl(page);
 }
 
 // パスワード認証画面がロードされた
@@ -86,7 +110,13 @@ export function SessionAuthPassword_Load(page: Document): void
 // 接続履歴の消去ボタンがクリックされた
 export function Index_DeleteAllHistory(page: Document): void
 {
-    Html.NativateTo("/?deleteall=1");
+    Task.StartAsyncTaskAsync(async function () 
+    {
+        if (await Html.DialogConfirmAsync("接続履歴をすべて消去しますか?", "接続履歴の消去", false, "is-primary", undefined, false, "はい", "いいえ"))
+        {
+            Html.NativateTo("/?deleteall=1");
+        }
+    }, false);
 }
 
 // 1 秒に 1 回 KeepAlive URL を呼び出す
@@ -117,14 +147,80 @@ export function Common_StartSendHeartBeat(sessionId: string, requestId: string):
     Task.StartAsyncTaskAsync(SendHeartBeatAsync(url));
 }
 
-export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string, sessionId: string): void
+// 1 秒に 1 回 HealthCheck URL を呼び出し、セッションが終了していることを検出したらメッセージを出して終了する
+async function SessionHealthCheckAsync(url: string, pcid?: string): Promise<void>
 {
+    while (true)
+    {
+        try
+        {
+            const response = await Axios.get(url, { timeout: 1000 });
+            const str = response.data as string;
+            Util.Debug(str);
+            if (!Str.ToBool(str))
+            {
+                // セッション消滅のエラー等が発生した模様である
+                await Html.DialogAlertAsync("リモート セッションが終了しました。再接続を試行するには、トップページから再接続を行なってください。", "セッションが終了しました", true, "is-success", "fas fa-info-circle");
+
+                let gotoUrl = "/";
+                if (Str.IsFilled(pcid))
+                {
+                    gotoUrl += "?id=" + Str.EncodeUrl(pcid?.trim());
+                }
+                Html.NativateTo(gotoUrl);
+            }
+        }
+        catch (ex)
+        {
+            // 通信エラーは無視する
+            Util.Debug("Error get " + ex);
+        }
+
+        await Task.Delay(1000);
+    }
+}
+
+// 1 秒に 1 回 HealthCheck URL を呼び出す処理を開始する
+export function Remote_StartSessionHealthCheck(sessionId: string, pcid?: string): void
+{
+    sessionId = Str.NonNullTrim(sessionId);
+
+    const url = `/ThinWebClient/SessionHealthCheck/?sessionId=${sessionId}`;
+    Task.StartAsyncTaskAsync(SessionHealthCheckAsync(url, pcid));
+}
+
+export function Common_ErrorAlert(page: Document, errorMessage: string, pcid?: string): void
+{
+    if (Str.IsEmpty(errorMessage))
+    {
+        errorMessage = "不明なエラーが発生しました。";
+    }
+
+    Task.StartAsyncTaskAsync(async function () 
+    {
+        await Html.DialogAlertAsync(errorMessage, "エラーが発生しました", true, "is-danger", "fas fa-exclamation-triangle");
+
+        let url = "/";
+        if (Str.IsFilled(pcid))
+        {
+            url += "?id=" + Str.EncodeUrl(pcid?.trim());
+        }
+        Html.NativateTo(url);
+    }, false);
+}
+
+export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string, sessionId: string, pcid: string): void
+{
+    pcid = Str.JavaScriptSafeStrDecode(pcid);
+
+    Remote_StartSessionHealthCheck(sessionId, pcid);
+
     window.onerror = function (msg: any, url?: string, fileno?: number, linenumber?: number): any
     {
         const str = `Error message: ${msg}\nURL: ${url}\nLine Number: ${linenumber}`;
 
         console.log(str);
-        alert(str);
+        Common_ErrorAlert(page, str, pcid);
         return true;
     }
 
@@ -139,7 +235,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         const str = `Tunnel Error Code: ${status.code}, Message: "${status.message}"`;
 
         console.log(str);
-        alert(str);
+        Common_ErrorAlert(page, str, pcid);
     };
 
     // Instantiate client, using a WebSocket tunnel for communications.
@@ -155,7 +251,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         const str = `Remote Desktop Error Code: ${status.code}, Message: "${status.message}"`;
 
         console.log(str);
-        alert(str);
+        Common_ErrorAlert(page, str, pcid);
     };
 
     // Connect

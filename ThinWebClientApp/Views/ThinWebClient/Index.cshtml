@@ -12,7 +12,7 @@
             <div class="field">
                 <label class="label">接続先コンピュータ ID:</label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input is-link" type="text" placeholder="接続先のコンピュータ ID を指定してください。" style="font-weight: bold" asp-for="CurrentProfile.Pcid">
+                    <input class="input is-link" type="text" placeholder="接続先のコンピュータ ID を指定してください。" style="font-weight: bold" asp-for="CurrentProfile.Pcid" onchange="Main.Index_UpdateControl(document);" onInput="Main.Index_UpdateControl(document);" onKeyUp="Main.Index_UpdateControl(document);" onkeypress="Main.Index_UpdateControl(document);" onkeydown="Main.Index_UpdateControl(document);">
                     <span class="icon is-small is-left">
                         <i class="fas fa-laptop"></i>
                     </span>
@@ -33,7 +33,7 @@
 
             <div class="field">
                 <div class="control">
-                    <button class="button is-link" style="font-weight: bold" type="submit"><i class="fas fa-laptop-house"></i>&nbsp;このコンピュータ ID にリモート接続</button>
+                    <button class="button is-link" style="font-weight: bold" type="submit" id="ok1"><i class="fas fa-laptop-house"></i>&nbsp;このコンピュータ ID にリモート接続</button>&nbsp;&nbsp;
                     @if (Model.HistoryItems.Count >= 2)
                     {
                         <button class="button is-info is-light" style="font-weight: bold" type="button" onclick="Main.Index_DeleteAllHistory(document);"><i class="far fa-trash-alt"></i>&nbsp;接続履歴を消去</button>
@@ -127,7 +127,7 @@
 
             <div class="field">
                 <div class="control">
-                    <button class="button is-link" style="font-weight: bold" type="submit"><i class="fas fa-laptop-house"></i>&nbsp;このコンピュータ ID にリモート接続</button>
+                    <button class="button is-link" style="font-weight: bold" type="submit" id="ok2"><i class="fas fa-laptop-house"></i>&nbsp;このコンピュータ ID にリモート接続</button>
                 </div>
             </div>
         </form>
