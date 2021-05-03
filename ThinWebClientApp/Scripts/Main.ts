@@ -22,7 +22,7 @@ import { Util } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Util";
 import { Str } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Str";
 import { GuaComfortableKeyboard, GuaConnectedKeyboard, GuaKeyCodes, GuaUtil } from "./submodules/IPA-DN-WebNeko/Scripts/Misc/GuaUtil/GuaUtil";
 import { Html } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Html";
-import { C1 } from "./submodules/IPA-DN-WebNeko/Scripts/Imports";
+import { Secure } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Secure";
 
 
 // メイン画面の接続履歴候補の選択が変更された
@@ -30,6 +30,9 @@ export function Index_OnSelectedHistoryChange(page: Document): void
 {
     const dropdown = page.getElementById("SelectedHistory") as HTMLSelectElement;
     const pcid = page.getElementById("CurrentProfile_Pcid") as HTMLInputElement;
+    const username = page.getElementById("CurrentProfile_Preference_Username") as HTMLInputElement;
+    const password = page.getElementById("CurrentProfile_Preference_Password") as HTMLInputElement;
+    const domain = page.getElementById("CurrentProfile_Preference_Domain") as HTMLInputElement;
 
     if (Str.IsFilled(dropdown.value))
     {
@@ -39,14 +42,18 @@ export function Index_OnSelectedHistoryChange(page: Document): void
     else
     {
         // 何も選択されてていない状態になった。コンピュータ ID 入力 BOX をクリアしてフォーカスを移動する。
+        username.value = "";
+        password.value = "";
+        domain.value = "";
         pcid.value = "";
         pcid.focus();
     }
 }
 
 // メイン画面がロードされた
-export function Index_Load(page: Document, focusPcid: boolean): void
+export function Index_Load(page: Document, focusPcid: boolean, passwordEasyStrEncrypted: string): void
 {
+    const password = page.getElementById("CurrentProfile_Preference_Password") as HTMLInputElement;
     const pcid = page.getElementById("CurrentProfile_Pcid") as HTMLInputElement;
 
     if (focusPcid)
@@ -54,12 +61,14 @@ export function Index_Load(page: Document, focusPcid: boolean): void
         Html.FocusEx(pcid);
     }
 
-    const res = C1.SHA1("hello");
-    
-    Util.Debug(res.toString());
+    // 画面のパスワード入力テキストボックスのパスワードを入力する
+    const passwordStr = Secure.JavaScriptEasyStrDecrypt(passwordEasyStrEncrypted, "easyEncryptStaticKey");
+
+    password.value = passwordStr;
+//    Util.Debug("pass="+passwordStr);
 }
 
-// 接続履歴の消去が選択された
+// 接続履歴の消去ボタンがクリックされた
 export function Index_DeleteAllHistory(page: Document): void
 {
     Html.NativateTo("/?deleteall=1");
