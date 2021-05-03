@@ -23,6 +23,9 @@ import { Str } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Str";
 import { GuaComfortableKeyboard, GuaConnectedKeyboard, GuaKeyCodes, GuaUtil } from "./submodules/IPA-DN-WebNeko/Scripts/Misc/GuaUtil/GuaUtil";
 import { Html } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Html";
 import { Secure } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Secure";
+import { Task } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Task";
+import { Axios } from "./submodules/IPA-DN-WebNeko/Scripts/Imports";
+import axios from "axios";
 
 
 // メイン画面の接続履歴候補の選択が変更された
@@ -65,13 +68,53 @@ export function Index_Load(page: Document, focusPcid: boolean, passwordEasyStrEn
     const passwordStr = Secure.JavaScriptEasyStrDecrypt(passwordEasyStrEncrypted, "easyEncryptStaticKey");
 
     password.value = passwordStr;
-//    Util.Debug("pass="+passwordStr);
+}
+
+// パスワード認証画面がロードされた
+export function SessionAuthPassword_Load(page: Document): void
+{
+    const pcid = page.getElementById("Profile_Pcid") as HTMLInputElement;
+    const password = page.getElementById("password") as HTMLInputElement;
+
+    // PCID 入力欄を読み取り専用にする
+    pcid.readOnly = true;
+
+    // パスワード入力欄をフォーカスする
+    password.focus();
 }
 
 // 接続履歴の消去ボタンがクリックされた
 export function Index_DeleteAllHistory(page: Document): void
 {
     Html.NativateTo("/?deleteall=1");
+}
+
+// 1 秒に 1 回 KeepAlive URL を呼び出す
+async function SendHeartBeatAsync(url: string): Promise<void>
+{
+    while (true)
+    {
+        try
+        {
+            const response = await Axios.get(url, { timeout: 1000 });
+        }
+        catch (ex)
+        {
+            Util.Debug("Error get " + ex);
+        }
+
+        await Task.Delay(1000);
+    }
+}
+
+// 1 秒に 1 回 KeepAlive URL を呼び出す処理を開始する
+export function Common_StartSendHeartBeat(sessionId: string, requestId: string): void
+{
+    sessionId = Str.NonNullTrim(sessionId);
+    requestId = Str.NonNullTrim(requestId);
+
+    const url = `/ThinWebClient/SendHeartBeat/?sessionId=${sessionId}&requestId=${requestId}`;
+    Task.StartAsyncTaskAsync(SendHeartBeatAsync(url));
 }
 
 export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string, sessionId: string): void
@@ -89,7 +132,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     const display = page.getElementById("display")!;
 
     const tunnel = new Guacamole.WebSocketTunnel(webSocketUrl);
-    
+
     // @ts-ignore
     tunnel.onerror = function (status: Guacamole.Status): void
     {
