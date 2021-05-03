@@ -20,5 +20,5 @@ npm install --save-dev core-js
 
 npm install --save-dev guacamole-common-js
 
-npm install --save-dev bulma bulma-extensions @fortawesome/fontawesome-free prismjs vue buefy axios lodash @types/lodash moment jquery @types/jquery async-lock @types/async-lock crypto-js @types/crypto-js crypto-browserify buffer stream-browserify
+npm install --save-dev bulma bulma-extensions @fortawesome/fontawesome-free prismjs vue buefy axios lodash @types/lodash moment jquery @types/jquery async-lock @types/async-lock crypto-js @types/crypto-js crypto-browserify buffer stream-browserify ie-string-startswith-polyfill
 

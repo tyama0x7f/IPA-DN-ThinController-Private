@@ -3,6 +3,14 @@
     Page.Title = "エラー";
 
     string ErrorStr = "エラー: " + (Model.ErrorInfo?.Message ?? "不明なエラーが発生しました。");
+
+    // 戻り先 URL
+    string url = "/";
+    string id = Context.Request._GetQueryStringFirst("id");
+    if (id._IsFilled())
+    {
+        url += "?id=" + id._MakeVerySafeAsciiOnlyNonSpaceFileName();
+    }
 }
 
 <div class="box">
@@ -12,7 +20,7 @@
                 <p><i class="fas fa-exclamation-triangle"></i>&nbsp;@ErrorStr</p>
             </div>
             <div class="message-body">
-                <p>以下のエラーが発生しました。<b><a href="/">トップページ</a></b> から再試行してください。</p>
+                <p>以下のエラーが発生しました。<b><a href="@url">トップページ</a></b> から再試行してください。</p>
                 <p><b>エラー内容:</b><BR>@ErrorStr</p>
                 <p><b>エラー発生日時:</b><BR>@DateTimeOffset.Now._ToDtStr(withMSsecs: true)</p>
                 <p><b>エラーが発生した処理:</b><br>@Model.ErrorPath</p>
