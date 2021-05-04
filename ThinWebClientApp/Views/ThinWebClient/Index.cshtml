@@ -9,15 +9,15 @@
     <div class="content">
         <form method="post" action="/">
 
-            <a href="https://telework.cyber.ipa.go.jp"><img src="images/top.jpg" width="900" height="244" /></a>
+            <a href="https://telework.cyber.ipa.go.jp/"><img src="images/top.jpg" width="900" height="244" /></a>
 
             <p>　</p>
 
             <div class="field">
                 <label class="label">接続先コンピュータ ID:</label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input is-link" type="text" placeholder="接続先のコンピュータ ID を指定してください。" style="font-weight: bold" asp-for="CurrentProfile.Pcid" onchange="Main.Index_UpdateControl(document);" onInput="Main.Index_UpdateControl(document);" onKeyUp="Main.Index_UpdateControl(document);" onkeypress="Main.Index_UpdateControl(document);" onkeydown="Main.Index_UpdateControl(document);">
-                    <span class="icon is-small is-left">
+                    <input class="input is-link is-medium" type="text" placeholder="接続先のコンピュータ ID を指定してください" style="font-weight: bold" asp-for="CurrentProfile.Pcid" onchange="Main.Index_UpdateControl(document);" onInput="Main.Index_UpdateControl(document);" onKeyUp="Main.Index_UpdateControl(document);" onkeypress="Main.Index_UpdateControl(document);" onkeydown="Main.Index_UpdateControl(document);">
+                    <span class="icon is-medium is-left">
                         <i class="fas fa-laptop"></i>
                     </span>
                 </div>
@@ -77,9 +77,6 @@
                         <p>
                             <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableMenuAnimations" id="EnableMenuAnimations"><label for="EnableMenuAnimations">メニューのアニメーションを有効化</label>
                         </p>
-                        <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableDebug" id="EnableDebug"><label for="EnableDebug">デバッグモードを有効 (高度な技術者のみ)</label>
-                        </p>
                     </div>
                 </div>
             </div>
@@ -135,6 +132,18 @@
             <div class="field">
                 <div class="control">
                     <button class="button is-link" style="font-weight: bold" type="submit" id="ok2"><i class="fas fa-laptop-house"></i>&nbsp;このコンピュータ ID にリモート接続</button>
+                </div>
+            </div>
+
+            <p>　</p>
+
+            <div class="field-body">
+                <div class="field is-narrow">
+                    <div class="control">
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableDebug" id="EnableDebug"><label for="EnableDebug">デバッグモードを有効 (高度な技術者のみ)</label>
+                        </p>
+                    </div>
                 </div>
             </div>
         </form>
