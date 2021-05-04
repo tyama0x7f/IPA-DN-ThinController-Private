@@ -78,6 +78,9 @@
                             <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableMenuAnimations" id="EnableMenuAnimations"><label for="EnableMenuAnimations"><strong>メニューのアニメーションを有効化</strong></label>
                         </p>
                         <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ScreenAutoResize" id="ScreenAutoResize" onchange="Main.Index_UpdateControl(document);"><label for="ScreenAutoResize"><strong>リモート画面の解像度をブラウザのウインドウサイズに応じてダイナミックに変更</strong></label>
+                        </p>
+                        <p>
                             <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ScreenGetAutoSize" id="ScreenGetAutoSize" onchange="Main.Index_UpdateControl(document);"><label for="ScreenGetAutoSize"><strong>リモート画面解像度をこのコンピュータのフルスクリーン画面解像度に自動設定</strong></label>
                         </p>
                     </div>

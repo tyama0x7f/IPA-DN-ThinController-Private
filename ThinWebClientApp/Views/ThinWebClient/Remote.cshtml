@@ -1,5 +1,6 @@
 ﻿@model ThinWebClientModelRemote
 @{
+    Layout = "_Layout_Remote";
     Page.Title = $"\"{Model.ConnectOptions!.Pcid}\" のリモートデスクトップ";
 
     var profilePassToJavaScript = Model.Profile._CloneWithJson();
@@ -8,7 +9,6 @@
         profilePassToJavaScript.Preference.Password = profilePassToJavaScript.Preference.Password._MaskPassword();
     }
 }
-<h2 class="title is-4">@Page.Title</h2>
 
 <!-- Display -->
 <div id="display"></div>
@@ -21,6 +21,3 @@
     </script>
 
 }
-
-<p>　</p>
-<p>Use this page to detail your site's privacy policy.</p>

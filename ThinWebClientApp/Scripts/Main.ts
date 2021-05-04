@@ -265,7 +265,12 @@ export function Common_ErrorAlert(page: Document, errorMessage: string, pcid?: s
 export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string, sessionId: string, pcid: string, svcType: string, jsonEncrypted: string): void
 {
     const profile = Util.JsonToObject(Secure.JavaScriptEasyStrDecrypt(jsonEncrypted, "easyJsonEncode"));
-    const isDebug = profile.Preference.EnableDebug as boolean;
+    const pref = profile.Preference;
+    const isDebug = pref.EnableDebug as boolean;
+    const display = page.getElementById("display")!;
+
+    display.style.width = pref.ScreenWidth + "px";
+    display.style.height = pref.ScreenHeight + "px";
 
     pcid = Str.JavaScriptSafeStrDecode(pcid);
 
@@ -288,9 +293,6 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         Common_ErrorAlert(page, str, pcid);
         return true;
     }
-
-    // Get display div from document
-    const display = page.getElementById("display")!;
 
     const tunnel = new Guacamole.WebSocketTunnel(webSocketUrl);
 
@@ -377,6 +379,30 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         virtualKeyboard2.PhysicalKeyPressedAsync(keysym, false);
 
     };
+
+    if (pref.ScreenAutoResize)
+    {
+        // 自動リサイズが有効の場合、スクロールバーは表示しない
+        page.documentElement.style.overflowX = "hidden";
+        page.documentElement.style.overflowY = "hidden";
+
+        // 自動リサイズイベント
+        window.onresize = function (ev: UIEvent): any
+        {
+            const width = Math.min(Math.max(window.innerWidth, 800), 5760);
+            const height = Math.min(Math.max(window.innerHeight, 600), 2400);
+
+            display.style.width = width + "px";
+            display.style.height = height + "px";
+
+            //guacDisplay.resize(guacDisplay.getDefaultLayer(), width, height);
+            //guacDisplay.getDefaultLayer().resize(width, height);
+
+            guac.sendSize(width, height);
+
+            Util.Debug("resize");
+        }
+    }
 
 }
 
