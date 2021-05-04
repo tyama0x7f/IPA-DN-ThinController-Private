@@ -1,6 +1,12 @@
 ﻿@model ThinWebClientModelRemote
 @{
     Page.Title = $"\"{Model.ConnectOptions!.Pcid}\" のリモートデスクトップ";
+
+    var profilePassToJavaScript = Model.Profile._CloneWithJson();
+    if (profilePassToJavaScript != null && profilePassToJavaScript.Preference != null)
+    {
+        profilePassToJavaScript.Preference.Password = profilePassToJavaScript.Preference.Password._MaskPassword();
+    }
 }
 <h2 class="title is-4">@Page.Title</h2>
 
@@ -11,7 +17,7 @@
 
     <!-- Init -->
     <script>
-        Main.ThinWebClient_Remote_PageLoad(window, document, "@Model.WebSocketUrl", "@Model.SessionId", "@Model.ConnectOptions.Pcid._JavaScriptSafeStrEncode()", "@Model.SvcType.ToString()", "@Model.Profile._ObjectToJson()._JavaScriptEasyStrEncrypt("easyJsonEncode")");
+        Main.ThinWebClient_Remote_PageLoad(window, document, "@Model.WebSocketUrl", "@Model.SessionId", "@Model.ConnectOptions.Pcid._JavaScriptSafeStrEncode()", "@Model.SvcType.ToString()", "@profilePassToJavaScript._ObjectToJson()._JavaScriptEasyStrEncrypt("easyJsonEncode")");
     </script>
 
 }

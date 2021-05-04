@@ -189,7 +189,7 @@ async function Remote_ShowDisconnectErrorAsync(pcid?: string): Promise<void>
 
     Remote_ErrorShowOnceFlag = true;
 
-    await Html.DialogAlertAsync("リモート セッションが終了しました。再接続を試行するには、トップページから再接続を行なってください。", "セッションが終了しました", true, "is-success", "fas fa-info-circle");
+    await Html.DialogAlertAsync("リモート セッションが終了しました。再接続を試行するには、トップページから再接続を行なってください。", "お疲れ様でした", true, "is-success", "fas fa-info-circle");
 
     let gotoUrl = "/";
     if (Str.IsFilled(pcid))
@@ -239,8 +239,18 @@ export function Common_ErrorAlert(page: Document, errorMessage: string, pcid?: s
 export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string, sessionId: string, pcid: string, svcType: string, jsonEncrypted: string): void
 {
     const profile = Util.JsonToObject(Secure.JavaScriptEasyStrDecrypt(jsonEncrypted, "easyJsonEncode"));
+    const isDebug = profile.Preference.EnableDebug as boolean;
 
     pcid = Str.JavaScriptSafeStrDecode(pcid);
+
+    if (isDebug)
+    {
+        Util.Debug(`ThinWebClient_Remote_PageLoad: webSocketUrl = ${webSocketUrl}`);
+        Util.Debug(`ThinWebClient_Remote_PageLoad: sessionId = ${sessionId}`);
+        Util.Debug(`ThinWebClient_Remote_PageLoad: pcid = ${pcid}`);
+        Util.Debug(`ThinWebClient_Remote_PageLoad: svcType = ${svcType}`);
+        Util.Debug(`ThinWebClient_Remote_PageLoad: profile = ${Util.ObjectToJson(profile)}`);
+    }
 
     Remote_StartSessionHealthCheck(sessionId, pcid);
 
@@ -248,7 +258,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     {
         const str = `Error message: ${msg}\nURL: ${url}\nLine Number: ${linenumber}`;
 
-        console.log(str);
+        if (isDebug) Util.Debug(str);
         Common_ErrorAlert(page, str, pcid);
         return true;
     }
@@ -263,7 +273,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     {
         const str = `Tunnel Error Code: ${status.code}, Message: "${status.message}"`;
 
-        console.log(str);
+        if (isDebug)  Util.Debug(str);
         Common_ErrorAlert(page, str, pcid);
     };
 
@@ -279,12 +289,17 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     {
         const str = `Remote Desktop Error Code: ${status.code}, Message: "${status.message}"`;
 
-        console.log(str);
+        if (isDebug) Util.Debug(str);
         Common_ErrorAlert(page, str, pcid);
     };
     // @ts-ignore
     guac.onstatechange = function (state: GuaStates): void
     {
+        if (isDebug)
+        {
+            Util.Debug(`guac.onstatechange: ${state}`);
+        }
+
         if (state === GuaStates.STATE_DISCONNECTED || state === GuaStates.STATE_DISCONNECTING)
         {
             // 切断メッセージを表示
@@ -313,7 +328,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     // Keyboard
     const keyboard = new Guacamole.Keyboard(page);
 
-    const virtualKeyboard1 = new GuaConnectedKeyboard(guac);
+    const virtualKeyboard1 = new GuaConnectedKeyboard(guac, profile, svcType);
     const virtualKeyboard2 = new GuaComfortableKeyboard(virtualKeyboard1, profile, svcType);
 
     // @ts-ignore

@@ -9,6 +9,10 @@
     <div class="content">
         <form method="post" action="/">
 
+            <a href="https://telework.cyber.ipa.go.jp"><img src="images/top.jpg" width="900" height="244" /></a>
+
+            <p>　</p>
+
             <div class="field">
                 <label class="label">接続先コンピュータ ID:</label>
                 <div class="control has-icons-left has-icons-right">
@@ -72,6 +76,9 @@
                         </p>
                         <p>
                             <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableMenuAnimations" id="EnableMenuAnimations"><label for="EnableMenuAnimations">メニューのアニメーションを有効化</label>
+                        </p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableDebug" id="EnableDebug"><label for="EnableDebug">デバッグモードを有効 (高度な技術者のみ)</label>
                         </p>
                     </div>
                 </div>
