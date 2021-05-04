@@ -269,6 +269,16 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     const isDebug = pref.EnableDebug as boolean;
     const display = page.getElementById("display")!;
 
+    if (pref.ScreenAutoResize)
+    {
+        // 自動リサイズが有効の場合、初期ウインドウサイズを現在のウインドウサイズで上書きする
+        const width = Math.min(Math.max(window.innerWidth, 800), 5760);
+        const height = Math.min(Math.max(window.innerHeight, 600), 2400);
+
+        pref.ScreenWidth = width;
+        pref.ScreenHeight = height;
+    }
+
     display.style.width = pref.ScreenWidth + "px";
     display.style.height = pref.ScreenHeight + "px";
 
@@ -338,7 +348,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     };
 
     // Connect
-    guac.connect(`id=${sessionId}`);
+    guac.connect(`id=${sessionId}&width=${pref.ScreenWidth}&height=${pref.ScreenHeight}`);
 
     // Disconnect on close
     window.onunload = function (): void
@@ -352,7 +362,19 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     // @ts-ignore
     mouse.onmousedown = mouse.onmouseup = mouse.onmousemove = function (mouseState: Guacamole.Mouse.State): void
     {
-        guac.sendMouseState(mouseState);
+        const scale = guacDisplay.getScale();
+
+        // Scale event by current scale
+        const scaledState = new Guacamole.Mouse.State(
+            mouseState.x / scale,
+            mouseState.y / scale,
+            mouseState.left,
+            mouseState.middle,
+            mouseState.right,
+            mouseState.up,
+            mouseState.down);
+
+        guac.sendMouseState(scaledState);
     };
 
     // Keyboard
@@ -386,21 +408,49 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         page.documentElement.style.overflowX = "hidden";
         page.documentElement.style.overflowY = "hidden";
 
-        // 自動リサイズイベント
+        // @ts-ignore
+        guacDisplay.onresize = function (): void
+        {
+            // サーバーに接続した時点と、サーバー側が原因で画面サイズが変化した時点で呼ばれる
+            // 倍率の自動適用
+            const serverWidth = guacDisplay.getWidth();
+            const serverHeight = guacDisplay.getHeight();
+
+            // ユーザー指定のウインドウサイズを確認する
+            const clientWidth = Math.min(Math.max(window.innerWidth, 800), 5760);
+            const clientHeight = Math.min(Math.max(window.innerHeight, 600), 2400);
+
+            // 適切な拡大縮小倍率を計算する
+            const minScale = Math.min(clientWidth / Math.max(serverWidth, 1), clientHeight / Math.max(serverHeight, 1));
+            const maxScale = Math.max(minScale, 3);
+
+            guacDisplay.scale(minScale);
+
+            if (isDebug)
+            {
+                Util.Debug(`guacDisplay.onresize ${serverWidth} ${serverHeight}`);
+                Util.Debug(`New scale = ${minScale}`);
+            }
+        };
+
+        // ユーザーがウインドウサイズを変更した
+        // todo: 1 秒に 1 回に制限いたします
         window.onresize = function (ev: UIEvent): any
         {
-            const width = Math.min(Math.max(window.innerWidth, 800), 5760);
-            const height = Math.min(Math.max(window.innerHeight, 600), 2400);
+            const clientWidth = Math.min(Math.max(window.innerWidth, 800), 5760);
+            const clientHeight = Math.min(Math.max(window.innerHeight, 600), 2400);
 
-            display.style.width = width + "px";
-            display.style.height = height + "px";
+            display.style.width = clientWidth + "px";
+            display.style.height = clientHeight + "px";
 
             //guacDisplay.resize(guacDisplay.getDefaultLayer(), width, height);
             //guacDisplay.getDefaultLayer().resize(width, height);
 
-            guac.sendSize(width, height);
+            // サーバーにサイズ変更を依頼する
+            guac.sendSize(clientWidth, clientHeight);
 
-            Util.Debug("resize");
+            // @ts-ignore
+            guacDisplay.onresize(); // 倍率の自動適用
         }
     }
 
