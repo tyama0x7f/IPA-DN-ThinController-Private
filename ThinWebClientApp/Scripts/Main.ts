@@ -24,9 +24,9 @@ import { GuaComfortableKeyboard, GuaConnectedKeyboard, GuaKeyCodes, GuaUtil, Gua
 import { Html } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Html";
 import { Secure } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Secure";
 import { Task } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Task";
-import { Axios, Vue, Buefy, Dialog } from "./submodules/IPA-DN-WebNeko/Scripts/Imports";
+import { Axios, Vue, Buefy } from "./submodules/IPA-DN-WebNeko/Scripts/Imports";
 
-// --- Init ---
+// --- Common Init ---
 Vue.use(Buefy);
 
 
@@ -46,6 +46,32 @@ export function Index_UpdateControl(page: Document): void
 
     button1.disabled = !ok;
     button2.disabled = !ok;
+
+    const screenWidth = page.getElementById("CurrentProfile_Preference_ScreenWidth") as HTMLInputElement;
+    const screenHeight = page.getElementById("CurrentProfile_Preference_ScreenHeight") as HTMLInputElement;
+    const screenAutoCheckBox = page.getElementById("ScreenGetAutoSize") as HTMLInputElement;
+
+    const currentScreenSize = Html.GetFullScreenSize();
+
+    if (screenAutoCheckBox.checked)
+    {
+        screenWidth.value = currentScreenSize[0].toString();
+        screenHeight.value = currentScreenSize[1].toString();
+
+        screenWidth.readOnly = true;
+        screenHeight.readOnly = true;
+
+        screenWidth.style.backgroundColor = "whitesmoke";
+        screenHeight.style.backgroundColor = "whitesmoke";
+    }
+    else
+    {
+        screenWidth.readOnly = false;
+        screenHeight.readOnly = false;
+
+        screenWidth.style.backgroundColor = "white";
+        screenHeight.style.backgroundColor = "white";
+    }
 }
 
 // メイン画面の接続履歴候補の選択が変更された
@@ -273,15 +299,17 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     {
         const str = `Tunnel Error Code: ${status.code}, Message: "${status.message}"`;
 
-        if (isDebug)  Util.Debug(str);
+        if (isDebug) Util.Debug(str);
         Common_ErrorAlert(page, str, pcid);
     };
 
     // Instantiate client, using a WebSocket tunnel for communications.
     const guac = new Guacamole.Client(tunnel);
 
+    const guacDisplay = guac.getDisplay();
+
     // Add client to display div
-    display.appendChild(guac.getDisplay().getElement());
+    display.appendChild(guacDisplay.getElement());
 
     // Error handler
     // @ts-ignore
@@ -317,7 +345,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     }
 
     // Mouse
-    const mouse = new Guacamole.Mouse(guac.getDisplay().getElement());
+    const mouse = new Guacamole.Mouse(guacDisplay.getElement());
 
     // @ts-ignore
     mouse.onmousedown = mouse.onmouseup = mouse.onmousemove = function (mouseState: Guacamole.Mouse.State): void
@@ -349,6 +377,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         virtualKeyboard2.PhysicalKeyPressedAsync(keysym, false);
 
     };
+
 }
 
 

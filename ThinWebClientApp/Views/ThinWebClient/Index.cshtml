@@ -57,25 +57,28 @@
                 <div class="field is-narrow">
                     <div class="control">
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableAudio" id="EnableAudio"><label for="EnableAudio">オーディオを有効化</label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableAudio" id="EnableAudio"><label for="EnableAudio"><strong>オーディオを有効化</strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableWallPaper" id="EnableWallPaper"><label for="EnableWallPaper">Windows の壁紙を有効化</label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableWallPaper" id="EnableWallPaper"><label for="EnableWallPaper"><strong>Windows の壁紙を有効化</strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableTheming" id="EnableTheming"><label for="EnableTheming">Windows の視覚テーマを有効化</label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableTheming" id="EnableTheming"><label for="EnableTheming"><strong>Windows の視覚テーマを有効化</strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableFontSmoothing" id="EnableFontSmoothing"><label for="EnableFontSmoothing">フォントのスムージングを有効化</label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableFontSmoothing" id="EnableFontSmoothing"><label for="EnableFontSmoothing"><strong>フォントのスムージングを有効化</strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableFullWindowDrag" id="EnableFullWindowDrag"><label for="EnableFullWindowDrag">ウインドウの内容を表示したままのドラッグを有効化</label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableFullWindowDrag" id="EnableFullWindowDrag"><label for="EnableFullWindowDrag"><strong>ウインドウの内容を表示したままのドラッグを有効化</strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableDesktopComposition" id="EnableDesktopComposition"><label for="EnableDesktopComposition">デスクトップ効果を有効化</label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableDesktopComposition" id="EnableDesktopComposition"><label for="EnableDesktopComposition"><strong>デスクトップ効果を有効化</strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableMenuAnimations" id="EnableMenuAnimations"><label for="EnableMenuAnimations">メニューのアニメーションを有効化</label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableMenuAnimations" id="EnableMenuAnimations"><label for="EnableMenuAnimations"><strong>メニューのアニメーションを有効化</strong></label>
+                        </p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ScreenGetAutoSize" id="ScreenGetAutoSize" onchange="Main.Index_UpdateControl(document);"><label for="ScreenGetAutoSize"><strong>リモート画面解像度をこのコンピュータのフルスクリーン画面解像度に自動設定</strong></label>
                         </p>
                     </div>
                 </div>
@@ -84,18 +87,68 @@
             <p>　</p>
 
             <div class="field">
+                <label class="label">カスタム画面解像度 (横: ピクセル数)</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input is-link" type="text" placeholder="画面解像度 (横幅: ピクセル数) を指定します。" asp-for="CurrentProfile.Preference.ScreenWidth">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-text-width"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">カスタム画面解像度 (縦: ピクセル数)</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input is-link" type="text" placeholder="画面解像度 (横幅: ピクセル数) を指定します。" asp-for="CurrentProfile.Preference.ScreenHeight">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-text-height"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="field">
                 <label class="label">キーボードレイアウトの選択:</label>
                 <div class="control">
                     <select asp-for="CurrentProfile.Preference.KeyboardLayoutStr" asp-items="Model.KeyboardLayoutItems" class="input is-info"></select>
                 </div>
             </div>
 
-            <div class="field">
-                <label class="label">画面サイズ変更方式の選択:</label>
-                <div class="control">
-                    <select asp-for="CurrentProfile.Preference.ResizeMethodStr" asp-items="Model.ResizeMethodItems" class="input is-info"></select>
+            @*<div class="field">
+            <label class="label">画面サイズ変更方式の選択:</label>
+            <div class="control">
+                <select asp-for="CurrentProfile.Preference.ResizeMethodStr" asp-items="Model.ResizeMethodItems" class="input is-info"></select>
+            </div>
+        </div>*@
+
+            <div class="field-body">
+                <div class="field is-narrow">
+                    <div class="control">
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Win_ShiftWin" id="Win_ShiftWin"><label for="Win_ShiftWin"><strong>ローカルの「左 Shift + Windows」キーを押すことで、リモートの「Windows」キーを押下いたします。</strong></label>
+                        </p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Cad_CtrlAltEnd" id="Cad_CtrlAltEnd"><label for="Cad_CtrlAltEnd"><strong>ローカルの「Ctrl + Alt + End」キーを押すことで、リモートの「Ctrl + Alt + Del」キーを押下いたします。</strong></label>
+                        </p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Cad_CtrlAltHome" id="Cad_CtrlAltHome"><label for="Cad_CtrlAltHome"><strong>ローカルの「Ctrl + Alt + Home」キーを押すことで、リモートの「Ctrl + Alt + Del」キーを押下いたします。</strong></label>
+                        </p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Cad_CtrlAltBackspace" id="Cad_CtrlAltBackspace"><label for="Cad_CtrlAltBackspace"><strong>ローカルの「Ctrl + Alt + Backspace」キーを押すことで、リモートの「Ctrl + Alt + Del」キーを押下いたします。</strong></label>
+                        </p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Ime_LeftCtrlSpace" id="Ime_LeftCtrlSpace"><label for="Ime_LeftCtrlSpace"><strong>ローカルの「左 Ctrl + Space」キーを押すことで、リモートの IME (日本語入力) を ON/OFF いたします。</strong></label>
+                        </p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Ime_LeftShiftSpace" id="Ime_LeftShiftSpace"><label for="Ime_LeftShiftSpace"><strong>ローカルの「左 Shift + Space」キーを押すことで、リモートの IME (日本語入力) を ON/OFF いたします。</strong></label>
+                        </p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Ime_OptionSpace" id="Ime_OptionSpace"><label for="Ime_OptionSpace"><strong>ローカルの「Option + Space」キー (Mac のみ) を押すことで、リモートの IME (日本語入力) を ON/OFF いたします。</strong></label>
+                        </p>
+                    </div>
                 </div>
             </div>
+
+            <p>　</p>
 
             <div class="field">
                 <label class="label">Windows ユーザー名 (RDP 自動ログオン) (オプション):</label>
@@ -141,7 +194,7 @@
                 <div class="field is-narrow">
                     <div class="control">
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableDebug" id="EnableDebug"><label for="EnableDebug">デバッグモードを有効 (高度な技術者のみ)</label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableDebug" id="EnableDebug"><label for="EnableDebug">デバッグモードを有効 (高度な技術者専用)</label>
                         </p>
                     </div>
                 </div>
