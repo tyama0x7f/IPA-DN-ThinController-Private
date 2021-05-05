@@ -7,9 +7,9 @@ var BomPlugin = require("webpack-utf8-bom");
 
 // From: https://bulma.io/documentation/customize/with-webpack/
 module.exports = {
-    mode: "development",
-    //mode: "production",
-    devtool: "inline-source-map",
+    //mode: "development",
+    mode: "production",
+    //devtool: "inline-source-map",
     entry: [
         "./Scripts/Main.ts"
     ],
@@ -84,15 +84,33 @@ module.exports = {
                         }
                     },
                     {
+                        // Bulma の CSS で img に height:auto が指定されており、Internet Explorer で画像サイズがおかしくなる問題を CSS を動的にいじって解決
+                        // https://github.com/jgthms/bulma/issues/342
+                        loader: "string-replace-loader",
+                        options: {
+                            search: new RegExp("\\}img\\{height\\:auto\\;", "g"),
+                            replace: "\\}img_dummy\\{height\\:auto\\;",
+                        }
+                    },
+                    {
+                        // Bulma の CSS で img に height:auto が指定されており、Internet Explorer で画像サイズがおかしくなる問題を CSS を動的にいじって解決
+                        // https://github.com/jgthms/bulma/issues/342
+                        loader: "string-replace-loader",
+                        options: {
+                            search: new RegExp("\\}img\\.video\\{height\\:auto\\;", "g"),
+                            replace: "\\}video\\{height\\:auto\\;",
+                        }
+                    },
+                    {
                         loader: "css-loader",
                         options: {
-                            sourceMap: true,
+                            sourceMap: false,
                         }
                     },
                     {
                         loader: "sass-loader",
                         options: {
-                            sourceMap: true,
+                            sourceMap: false,
                         }
                     },
                 ]

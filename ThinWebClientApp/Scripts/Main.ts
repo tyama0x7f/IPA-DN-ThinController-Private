@@ -118,9 +118,6 @@ export function Index_Load(page: Document, focusPcid: boolean, passwordEasyStrEn
     password.value = passwordStr;
 
     Index_UpdateControl(page);
-
-    const x = new GuaResizeManager();
-    Util.Debug(x.Test);
 }
 
 // パスワード認証画面がロードされた
