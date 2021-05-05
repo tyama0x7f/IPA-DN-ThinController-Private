@@ -10,7 +10,10 @@ module.exports = {
     mode: "development",
     //mode: "production",
     devtool: "inline-source-map",
-    entry: path.resolve(__dirname, "./Scripts/Main.ts"),
+    entry: [
+        "babel-polyfill",
+        "./Scripts/Main.ts"
+    ],
     optimization: {
         moduleIds: "deterministic",
     },
@@ -42,12 +45,21 @@ module.exports = {
         rules: [
             {
                 test: /\.(ts|tsx)$/,
+                exclude: /node_modules/,
                 use: [
                     {
-                        loader: "ts-loader",
+                        loader: "babel-loader",
                     },
                 ]
             },
+            //{
+            //    test: /\.(ts|tsx)$/,
+            //    use: [
+            //        {
+            //            loader: "ts-loader",
+            //        },
+            //    ]
+            //},
             {
                 test: /\.(scss|sass)$/,
                 use: [
