@@ -11,7 +11,6 @@ module.exports = {
     //mode: "production",
     devtool: "inline-source-map",
     entry: [
-        //"babel-polyfill",
         "./Scripts/Main.ts"
     ],
     optimization: {
