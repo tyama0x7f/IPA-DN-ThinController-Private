@@ -20,7 +20,7 @@ import "buefy";
 import { default as Guacamole } from "./submodules/IPA-DN-WebNeko/Libraries/guacamole-common-js-1.3.0/guacamole-common";
 import { Util } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Util";
 import { Str } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Str";
-import { GuaComfortableKeyboard, GuaConnectedKeyboard, GuaKeyCodes, GuaUtil, GuaStates, GuaConsts } from "./submodules/IPA-DN-WebNeko/Scripts/Misc/GuaUtil/GuaUtil";
+import { GuaComfortableKeyboard, GuaConnectedKeyboard, GuaKeyCodes, GuaUtil, GuaStates, GuaConsts, GuaResizeManager } from "./submodules/IPA-DN-WebNeko/Scripts/Misc/GuaUtil/GuaUtil";
 import { Html } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Html";
 import { Secure } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Secure";
 import { Task } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Task";
@@ -118,6 +118,9 @@ export function Index_Load(page: Document, focusPcid: boolean, passwordEasyStrEn
     password.value = passwordStr;
 
     Index_UpdateControl(page);
+
+    const x = new GuaResizeManager();
+    Util.Debug(x.Test);
 }
 
 // パスワード認証画面がロードされた
