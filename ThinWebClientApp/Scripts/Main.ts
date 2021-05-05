@@ -262,6 +262,7 @@ export function Common_ErrorAlert(page: Document, errorMessage: string, pcid?: s
     }, false);
 }
 
+
 export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string, sessionId: string, pcid: string, svcType: string, jsonEncrypted: string): void
 {
     const profile = Util.JsonToObject(Secure.JavaScriptEasyStrDecrypt(jsonEncrypted, "easyJsonEncode"));
