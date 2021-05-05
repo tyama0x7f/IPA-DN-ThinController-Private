@@ -27,8 +27,7 @@
           "ie": "11"
         },
         "corejs": 3,
-        "modules": false,
-        "useBuiltIns": "entry"
+        "useBuiltIns": "usage"
       }
     ],
     [
