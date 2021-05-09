@@ -78,6 +78,12 @@
                             <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableMenuAnimations" id="EnableMenuAnimations"><label for="EnableMenuAnimations"><strong>メニューのアニメーションを有効化</strong></label>
                         </p>
                         <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ShowLocalMouseCursor" id="ShowLocalMouseCursor"><label for="ShowLocalMouseCursor"><strong>ローカルのマウスカーソルを描画</strong></label>
+                        </p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ShowRemoteMouseCursor" id="ShowRemoteMouseCursor"><label for="ShowRemoteMouseCursor"><strong>リモートのマウスカーソルを描画</strong></label>
+                        </p>
+                        <p>
                             <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ScreenAutoResize" id="ScreenAutoResize" onchange="Main.Index_UpdateControl(document);"><label for="ScreenAutoResize"><strong>リモート画面の解像度をブラウザのウインドウサイズに応じてダイナミックに変更</strong></label>
                         </p>
                         <p>
@@ -127,25 +133,34 @@
                 <div class="field is-narrow">
                     <div class="control">
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Win_ShiftWin" id="Win_ShiftWin"><label for="Win_ShiftWin"><strong>ローカルの「左 Shift + Windows」キーを押すことで、リモートの「Windows」キーを押下いたします。</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Win_ShiftWin" id="Win_ShiftWin"><label for="Win_ShiftWin"><strong>「左 Shift + Windows」 (Mac: 「左 Shift + ⌘Command」) キーを押すことで、リモートの「Windows」キーを押下いたします。</strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Cad_CtrlAltEnd" id="Cad_CtrlAltEnd"><label for="Cad_CtrlAltEnd"><strong>ローカルの「Ctrl + Alt + End」キーを押すことで、リモートの「Ctrl + Alt + Del」キーを押下いたします。</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Win_Ctrl2Alt2" id="Win_Ctrl2Alt2"><label for="Win_Ctrl2Alt2"><strong>「右 Ctrl + 右 Alt」 キーを押すことで、リモートの「Windows」キーを押下いたします。</strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Cad_CtrlAltHome" id="Cad_CtrlAltHome"><label for="Cad_CtrlAltHome"><strong>ローカルの「Ctrl + Alt + Home」キーを押すことで、リモートの「Ctrl + Alt + Del」キーを押下いたします。</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Tab_AltShift" id="Tab_AltShift"><label for="Tab_AltShift"><strong>「左 Alt + 左 Shift」 キーを押すことで、リモートの「Alt + Tab」キーを押下いたします。</strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Cad_CtrlAltBackspace" id="Cad_CtrlAltBackspace"><label for="Cad_CtrlAltBackspace"><strong>ローカルの「Ctrl + Alt + Backspace」キーを押すことで、リモートの「Ctrl + Alt + Del」キーを押下いたします。</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Cad_CtrlAltEnd" id="Cad_CtrlAltEnd"><label for="Cad_CtrlAltEnd"><strong>「左 Ctrl + 左 Alt + End」 (Mac: 「Ctrl + Option + End」) キーを押すことで、リモートの「Ctrl + Alt + Del」キーを押下いたします。</strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Ime_LeftCtrlSpace" id="Ime_LeftCtrlSpace"><label for="Ime_LeftCtrlSpace"><strong>ローカルの「左 Ctrl + Space」キーを押すことで、リモートの IME (日本語入力) を ON/OFF いたします。</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Cad_CtrlAltHome" id="Cad_CtrlAltHome"><label for="Cad_CtrlAltHome"><strong>「左 Ctrl + 左 Alt + Home」 (Mac: 「Ctrl + Option + Home」) キーを押すことで、リモートの「Ctrl + Alt + Del」キーを押下いたします。</strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Ime_LeftShiftSpace" id="Ime_LeftShiftSpace"><label for="Ime_LeftShiftSpace"><strong>ローカルの「左 Shift + Space」キーを押すことで、リモートの IME (日本語入力) を ON/OFF いたします。</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Cad_CtrlAltBackspace" id="Cad_CtrlAltBackspace"><label for="Cad_CtrlAltBackspace"><strong>「左 Ctrl + 左 Alt + Backspace」 (Mac: 「Ctrl + Option + Backspace」) キーを押すことで、リモートの「Ctrl + Alt + Del」キーを押下いたします。</strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Ime_OptionSpace" id="Ime_OptionSpace"><label for="Ime_OptionSpace"><strong>ローカルの「Option + Space」キー (Mac のみ) を押すことで、リモートの IME (日本語入力) を ON/OFF いたします。</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Cad_CtrlShiftBackspace" id="Cad_CtrlShiftBackspace"><label for="Cad_CtrlShiftBackspace"><strong>「左 Ctrl + 左 Shift + Backspace」 キーを押すことで、リモートの「Ctrl + Alt + Del」キーを押下いたします。</strong></label>
+                        </p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Ime_LeftCtrlSpace" id="Ime_LeftCtrlSpace"><label for="Ime_LeftCtrlSpace"><strong>「左 Ctrl + Space」キーを押すことで、リモートの IME (日本語入力) を ON/OFF いたします。</strong></label>
+                        </p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Ime_LeftShiftSpace" id="Ime_LeftShiftSpace"><label for="Ime_LeftShiftSpace"><strong>「左 Shift + Space」キーを押すことで、リモートの IME (日本語入力) を ON/OFF いたします。</strong></label>
+                        </p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Ime_OptionSpace" id="Ime_OptionSpace"><label for="Ime_OptionSpace"><strong>「Option + Space」キー (Mac のみ) を押すことで、リモートの IME (日本語入力) を ON/OFF いたします。</strong></label>
                         </p>
                     </div>
                 </div>

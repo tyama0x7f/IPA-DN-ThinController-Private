@@ -128,6 +128,7 @@ export function SessionAuthPassword_Load(page: Document): void
 
     // PCID 入力欄を読み取り専用にする
     pcid.readOnly = true;
+    pcid.style.backgroundColor = "whitesmoke";
 
     // パスワード入力欄をフォーカスする
     password.focus();
@@ -278,6 +279,11 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
 
         pref.ScreenWidth = width;
         pref.ScreenHeight = height;
+    }
+
+    if (!pref.ShowLocalMouseCursor)
+    {
+        display.style.cursor = "none";
     }
 
     display.style.width = pref.ScreenWidth + "px";
@@ -452,6 +458,11 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
 
             // @ts-ignore
             guacDisplay.onresize(); // 倍率の自動適用
+        }
+
+        if (!pref.ShowRemoteMouseCursor)
+        {
+            guacDisplay.showCursor(false);
         }
     }
 

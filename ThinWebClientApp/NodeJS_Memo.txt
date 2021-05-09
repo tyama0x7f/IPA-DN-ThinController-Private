@@ -9,7 +9,7 @@ npm init -y
 
 npm install --save-dev typescript
 
-npm install --save-dev css-loader extract-text-webpack-plugin@next mini-css-extract-plugin optimize-css-assets-webpack-plugin node-sass sass-loader style-loader string-replace-loader
+npm install --save-dev css-loader extract-text-webpack-plugin@next mini-css-extract-plugin optimize-css-assets-webpack-plugin node-sass sass-loader style-loader string-replace-loader noop-webpack-plugin
 
 npm install --save-dev webpack webpack-cli ts-loader webpack-utf8-bom babel-loader @babel/core @babel/preset-env @babel/preset-typescript
 

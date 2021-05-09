@@ -35,6 +35,7 @@
     "mini-css-extract-plugin": "^1.6.0",
     "moment": "^2.29.1",
     "node-sass": "^5.0.0",
+    "noop-webpack-plugin": "^1.0.1",
     "optimize-css-assets-webpack-plugin": "^5.0.4",
     "prismjs": "^1.23.0",
     "sass-loader": "^11.0.1",

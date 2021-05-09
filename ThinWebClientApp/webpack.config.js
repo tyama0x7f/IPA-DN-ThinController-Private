@@ -2,14 +2,21 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("optimize-css-assets-webpack-plugin");
+const NoOpPlugin = require('noop-webpack-plugin')
+
+const node_env = process.env.NODE_ENV;
+const is_production = (node_env === "production");
+const is_development = !is_production;
+const mode_str = is_development ? "development" : "production";
+
+console.log(`node_env = ${node_env}, is_production = ${is_production}, is_development = ${is_development}`);
 
 var BomPlugin = require("webpack-utf8-bom");
 
 // From: https://bulma.io/documentation/customize/with-webpack/
 module.exports = {
-    //mode: "development",
-    mode: "production",
-    //devtool: "inline-source-map",
+    mode: mode_str,
+    devtool: is_development ? "inline-source-map" : undefined,
     entry: [
         "./Scripts/Main.ts"
     ],
@@ -29,14 +36,15 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: "../css/Main.css"
         }),
-        //new CssMinimizerPlugin({
-        //    cssProcessor: require("cssnano"),
-        //    cssProcessorPluginOptions: {
-        //        preset: ["default", {
-        //            discardComments: { removeAll: true },
-        //        }],
-        //    },
-        //}),
+        is_production ?
+            new CssMinimizerPlugin({
+                cssProcessor: require("cssnano"),
+                cssProcessorPluginOptions: {
+                    preset: ["default", {
+                        discardComments: { removeAll: true },
+                    }],
+                },
+            }) : NoOpPlugin(),
         new BomPlugin(true),
     ],
     module: {
