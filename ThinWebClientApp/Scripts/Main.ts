@@ -347,6 +347,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         if (isDebug) Util.Debug(str);
         Common_ErrorAlert(page, str, pcid);
     };
+
     // @ts-ignore
     guac.onstatechange = function (state: GuaStates): void
     {
@@ -419,7 +420,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         // @ts-ignore
         guacDisplay.onresize = function (): void
         {
-            // サーバーに接続した時点と、サーバー側が原因で画面サイズが変化した時点で呼ばれる
+            // サーバーに接続した時点と、ユーザー側またはサーバー側が原因で画面サイズが変化した時点で呼ばれる
             const serverWidth = guacDisplay.getWidth();
             const serverHeight = guacDisplay.getHeight();
 
@@ -428,16 +429,30 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
             const clientHeight = Math.min(Math.max(window.innerHeight, GuaConsts.MinHeight), GuaConsts.MaxHeight);
 
             // 適切な拡大縮小倍率を計算する
-            const minScale = Math.min(clientWidth / Math.max(serverWidth, 1), clientHeight / Math.max(serverHeight, 1));
-            const maxScale = Math.max(minScale, 3);
+            const scale = Math.min(clientWidth / Math.max(serverWidth, 1), clientHeight / Math.max(serverHeight, 1));
 
-            guacDisplay.scale(minScale);
+            guacDisplay.scale(scale);
+
+            // 中央配置する
+            const childDiv = display.getElementsByTagName("div")[0];
+
+            const divWidth = childDiv.clientWidth;
+            const divHeight = childDiv.clientHeight;
+
+            const divLeft = Math.max((clientWidth - divWidth) / 2, 0);
+            const divTop = Math.max((clientHeight - divHeight) / 2, 0);
+
+            childDiv.style.left = divLeft + "px";
+            childDiv.style.top = divTop + "px";
 
             if (isDebug)
             {
                 //                Util.Debug(`guacDisplay.onresize ${serverWidth} ${serverHeight}`);
                 //                Util.Debug(`New scale = ${minScale}`);
             }
+
+            // スクロールバー表示判断ルーチン
+            scrollBarUpdateProc();
         };
 
         const resizeManager = new GuaResizeManager(guac, window.innerWidth, window.innerHeight);
@@ -452,12 +467,13 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
             display.style.height = clientHeight + "px";
 
             // サーバーにサイズ変更を依頼する
-            //guac.sendSize(clientWidth, clientHeight);
-
             resizeManager.Resize(clientWidth, clientHeight);
 
             // @ts-ignore
             guacDisplay.onresize(); // 倍率の自動適用
+
+            // スクロールバー表示判断ルーチン
+            scrollBarUpdateProc();
         }
     }
     else
@@ -478,14 +494,14 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
             display.style.width = width + "px";
             display.style.height = height + "px";
 
-            noAutoResizeScrollBarUpdateProc();
+            scrollBarUpdateProc();
         };
 
         // ユーザーがウインドウサイズを変更した
         window.onresize = function (ev: UIEvent): any
         {
             // スクロールバー表示判断ルーチン
-            noAutoResizeScrollBarUpdateProc();
+            scrollBarUpdateProc();
         }
     }
 
@@ -495,27 +511,26 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     }
 
     // オートリサイズ無効化時におけるスクロールバー表示判断ルーチン
-    const noAutoResizeScrollBarUpdateProc = (): void =>
+    const scrollBarUpdateProc = (): void =>
     {
-        const clientWidth = Math.min(Math.max(window.innerWidth, GuaConsts.MinWidth), GuaConsts.MaxWidth);
-        const clientHeight = Math.min(Math.max(window.innerHeight, GuaConsts.MinHeight), GuaConsts.MaxHeight);
+        const childDiv = display.getElementsByTagName("div")[0];
 
-        const serverWidth = guacDisplay.getWidth();
-        const serverHeight = guacDisplay.getHeight();
+        const divWidth = childDiv.clientWidth;
+        const divHeight = childDiv.clientHeight;
 
-        page.documentElement.style.overflowX = serverWidth >= clientWidth ? "auto" : "hidden";
-        page.documentElement.style.overflowY = serverHeight >= clientHeight ? "auto" : "hidden";
+        const clientWidth = window.innerWidth;
+        const clientHeight = window.innerHeight;
+
+        page.documentElement.style.overflowX = divWidth > clientWidth ? "auto" : "hidden";
+        page.documentElement.style.overflowY = divHeight > clientHeight ? "auto" : "hidden";
     };
 
     const fullScreenChangeProc = (): void =>
     {
         const isFullScreen = document.fullscreenElement ? true : false;
 
-        if (!pref.ScreenAutoResize)
-        {
-            // オートリサイズが無効な場合、スクロールバーを表示するかどうかの判断ルーチン
-            noAutoResizeScrollBarUpdateProc();
-        }
+        // スクロールバーを表示するかどうかの判断ルーチン
+        scrollBarUpdateProc();
     };
 
     // フルスクリーン設定 / 解除が発生したときのイベント
