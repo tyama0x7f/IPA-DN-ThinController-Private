@@ -9,7 +9,7 @@ const is_production = (node_env === "production");
 const is_development = !is_production;
 const mode_str = is_development ? "development" : "production";
 
-console.log(`node_env = ${node_env}, is_production = ${is_production}, is_development = ${is_development}`);
+console.log(`Starting webpack.config.js. Mode = '${mode_str}'`);
 
 var BomPlugin = require("webpack-utf8-bom");
 

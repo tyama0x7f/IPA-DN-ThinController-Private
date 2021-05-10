@@ -274,8 +274,8 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     if (pref.ScreenAutoResize)
     {
         // 自動リサイズが有効の場合、初期ウインドウサイズを現在のウインドウサイズで上書きする
-        const width = Math.min(Math.max(window.innerWidth, 800), 5760);
-        const height = Math.min(Math.max(window.innerHeight, 600), 2400);
+        const width = Math.min(Math.max(window.innerWidth, GuaConsts.MinWidth), GuaConsts.MaxWidth);
+        const height = Math.min(Math.max(window.innerHeight, GuaConsts.MinHeight), GuaConsts.MaxHeight);
 
         pref.ScreenWidth = width;
         pref.ScreenHeight = height;
@@ -334,7 +334,15 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     // @ts-ignore
     guac.onerror = function (status: Guacamole.Status): void
     {
-        const str = `Remote Desktop Error Code: ${status.code}, Message: "${status.message}"`;
+        const code = status.code;
+        let msg = status.message;
+
+        if (Str.InStr(msg, "See logs.", false))
+        {
+            msg = "Remote desktop connection aborted. This error can be caused by frequent screen resizing or by a large number of screen drawing instructions. Please kindly reconnect to the server."
+        }
+
+        const str = `Remote Desktop Error Code: ${code}, Message: "${msg}"`;
 
         if (isDebug) Util.Debug(str);
         Common_ErrorAlert(page, str, pcid);
@@ -393,20 +401,13 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     // @ts-ignore
     keyboard.onkeydown = function (keysym: number): void
     {
-        //        console.log("Down: " + GuaUtil.KeyCodeToStr(keysym));
-        //        if (GuaUtil.KeyCodeToStr(keysym) === "Meta") keysym = GuaKeyCodes.Win[0];
-        //        guac.sendKeyEvent(true, keysym);
         virtualKeyboard2.PhysicalKeyPressedAsync(keysym, true);
     };
 
     // @ts-ignore
     keyboard.onkeyup = function (keysym: number): void
     {
-        //console.log("Up: " + GuaUtil.KeyCodeToStr(keysym));
-        //if (GuaUtil.KeyCodeToStr(keysym) === "Meta") keysym = GuaKeyCodes.Win[0];
-        //guac.sendKeyEvent(false, keysym);
         virtualKeyboard2.PhysicalKeyPressedAsync(keysym, false);
-
     };
 
     if (pref.ScreenAutoResize)
@@ -419,13 +420,12 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         guacDisplay.onresize = function (): void
         {
             // サーバーに接続した時点と、サーバー側が原因で画面サイズが変化した時点で呼ばれる
-            // 倍率の自動適用
             const serverWidth = guacDisplay.getWidth();
             const serverHeight = guacDisplay.getHeight();
 
             // ユーザー指定のウインドウサイズを確認する
-            const clientWidth = Math.min(Math.max(window.innerWidth, 800), 5760);
-            const clientHeight = Math.min(Math.max(window.innerHeight, 600), 2400);
+            const clientWidth = Math.min(Math.max(window.innerWidth, GuaConsts.MinWidth), GuaConsts.MaxWidth);
+            const clientHeight = Math.min(Math.max(window.innerHeight, GuaConsts.MinHeight), GuaConsts.MaxHeight);
 
             // 適切な拡大縮小倍率を計算する
             const minScale = Math.min(clientWidth / Math.max(serverWidth, 1), clientHeight / Math.max(serverHeight, 1));
@@ -435,37 +435,96 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
 
             if (isDebug)
             {
-                Util.Debug(`guacDisplay.onresize ${serverWidth} ${serverHeight}`);
-                Util.Debug(`New scale = ${minScale}`);
+                //                Util.Debug(`guacDisplay.onresize ${serverWidth} ${serverHeight}`);
+                //                Util.Debug(`New scale = ${minScale}`);
             }
         };
 
+        const resizeManager = new GuaResizeManager(guac, window.innerWidth, window.innerHeight);
+
         // ユーザーがウインドウサイズを変更した
-        // todo: 1 秒に 1 回に制限いたします
         window.onresize = function (ev: UIEvent): any
         {
-            const clientWidth = Math.min(Math.max(window.innerWidth, 800), 5760);
-            const clientHeight = Math.min(Math.max(window.innerHeight, 600), 2400);
+            const clientWidth = Math.min(Math.max(window.innerWidth, GuaConsts.MinWidth), GuaConsts.MaxWidth);
+            const clientHeight = Math.min(Math.max(window.innerHeight, GuaConsts.MinHeight), GuaConsts.MaxHeight);
 
             display.style.width = clientWidth + "px";
             display.style.height = clientHeight + "px";
 
-            //guacDisplay.resize(guacDisplay.getDefaultLayer(), width, height);
-            //guacDisplay.getDefaultLayer().resize(width, height);
-
             // サーバーにサイズ変更を依頼する
-            guac.sendSize(clientWidth, clientHeight);
+            //guac.sendSize(clientWidth, clientHeight);
+
+            resizeManager.Resize(clientWidth, clientHeight);
 
             // @ts-ignore
             guacDisplay.onresize(); // 倍率の自動適用
         }
+    }
+    else
+    {
+        // 自動リサイズが無効の場合
 
-        if (!pref.ShowRemoteMouseCursor)
+        // @ts-ignore
+        guacDisplay.onresize = function (): void
         {
-            guacDisplay.showCursor(false);
+            // サーバーに接続した時点と、サーバー側が原因で画面サイズが変化した時点で呼ばれる
+            const serverWidth = guacDisplay.getWidth();
+            const serverHeight = guacDisplay.getHeight();
+
+            // 自動リサイズが無効の場合、初期ウインドウサイズを現在のリモートサイズで上書きする
+            const width = Math.min(Math.max(serverWidth, GuaConsts.MinWidth), GuaConsts.MaxWidth);
+            const height = Math.min(Math.max(serverHeight, GuaConsts.MinHeight), GuaConsts.MaxHeight);
+
+            display.style.width = width + "px";
+            display.style.height = height + "px";
+
+            noAutoResizeScrollBarUpdateProc();
+        };
+
+        // ユーザーがウインドウサイズを変更した
+        window.onresize = function (ev: UIEvent): any
+        {
+            // スクロールバー表示判断ルーチン
+            noAutoResizeScrollBarUpdateProc();
         }
     }
 
+    if (!pref.ShowRemoteMouseCursor)
+    {
+        guacDisplay.showCursor(false);
+    }
+
+    // オートリサイズ無効化時におけるスクロールバー表示判断ルーチン
+    const noAutoResizeScrollBarUpdateProc = (): void =>
+    {
+        const clientWidth = Math.min(Math.max(window.innerWidth, GuaConsts.MinWidth), GuaConsts.MaxWidth);
+        const clientHeight = Math.min(Math.max(window.innerHeight, GuaConsts.MinHeight), GuaConsts.MaxHeight);
+
+        const serverWidth = guacDisplay.getWidth();
+        const serverHeight = guacDisplay.getHeight();
+
+        page.documentElement.style.overflowX = serverWidth >= clientWidth ? "auto" : "hidden";
+        page.documentElement.style.overflowY = serverHeight >= clientHeight ? "auto" : "hidden";
+    };
+
+    const fullScreenChangeProc = (): void =>
+    {
+        const isFullScreen = document.fullscreenElement ? true : false;
+
+        if (!pref.ScreenAutoResize)
+        {
+            // オートリサイズが無効な場合、スクロールバーを表示するかどうかの判断ルーチン
+            noAutoResizeScrollBarUpdateProc();
+        }
+    };
+
+    // フルスクリーン設定 / 解除が発生したときのイベント
+    document.addEventListener("fullscreenchange", event =>
+    {
+        fullScreenChangeProc();
+    });
+
+    fullScreenChangeProc();
 }
 
 
