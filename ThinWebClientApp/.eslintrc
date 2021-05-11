@@ -70,7 +70,7 @@
     "no-useless-catch": 1,
     "no-useless-escape": 1,
     "no-with": 1,
-    "require-atomic-updates": 1,
+    "require-atomic-updates": 0,
     "require-yield": 1,
     "use-isnan": 1,
     "valid-typeof": 1,

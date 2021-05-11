@@ -263,6 +263,33 @@ export function Common_ErrorAlert(page: Document, errorMessage: string, pcid?: s
     }, false);
 }
 
+let Remote_ShowImeWarningFlag = false;
+
+export async function Remote_ShowImeWarningAsync(): Promise<void>
+{
+    if (Remote_ErrorShowOnceFlag)
+    {
+        // 何かエラーが発生しておる
+        return;
+    }
+    
+    if (Remote_ShowImeWarningFlag)
+    {
+        return;
+    }
+
+    Remote_ShowImeWarningFlag = true;
+
+    try
+    {
+        await Html.DialogAlertAsync("<b>ローカル コンピュータ側の IME 日本語入力が ON になっています。</b><br>ローカル コンピュータ側の IME を OFF にしてください。<BR><BR>リモート コンピュータ側で IME を ON にするキー操作については、<a href=\"/keyboard/\" target=\"_blank\"><b>「キーボード操作の解説」</b></a>を参照してください。", "IME 日本語入力について", true, "is-info", "far fa-keyboard");
+    }
+    finally
+    {
+        Remote_ShowImeWarningFlag = false;
+    }
+}
+
 
 export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string, sessionId: string, pcid: string, svcType: string, jsonEncrypted: string): void
 {
@@ -378,6 +405,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     // @ts-ignore
     mouse.onmousedown = mouse.onmouseup = mouse.onmousemove = function (mouseState: Guacamole.Mouse.State): void
     {
+        //Util.Debug(mouseState);
         const scale = guacDisplay.getScale();
 
         // Scale event by current scale
@@ -388,14 +416,18 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
             mouseState.middle,
             mouseState.right,
             mouseState.up,
-            mouseState.down);
+            mouseState.down,
+            // @ts-ignore
+            mouseState.forward,
+            // @ts-ignore
+            mouseState.back        );
 
         guac.sendMouseState(scaledState);
     };
 
     // Keyboard
     const keyboard = new Guacamole.Keyboard(page);
-
+    
     const virtualKeyboard1 = new GuaConnectedKeyboard(guac, profile, svcType);
     const virtualKeyboard2 = new GuaComfortableKeyboard(virtualKeyboard1, profile, svcType);
 
@@ -537,6 +569,19 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     document.addEventListener("fullscreenchange", event =>
     {
         fullScreenChangeProc();
+    });
+
+    document.addEventListener("keydown", event =>
+    {
+        if (event.key.length >= 1)
+        {
+            const char = event.key[0];
+            if (char >= 'ｱ' && char <= 'ﾝ')
+            {
+                // Chrome で、ローカルの IME が有効にされておるぞ
+                Remote_ShowImeWarningAsync();
+            }
+        }
     });
 
     fullScreenChangeProc();
