@@ -83,6 +83,9 @@
                             <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ShowRemoteMouseCursor" id="ShowRemoteMouseCursor"><label for="ShowRemoteMouseCursor"><strong>リモートのマウスカーソルを描画</strong></label>
                         </p>
                         <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ScreenAutoFullScreen" id="ScreenAutoFullScreen" onchange="Main.Index_UpdateControl(document);"><label for="ScreenAutoFullScreen"><strong>リモート接続時に自動的にフルスクリーンにする</strong></label>
+                        </p>
+                        <p>
                             <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ScreenAutoResize" id="ScreenAutoResize" onchange="Main.Index_UpdateControl(document);"><label for="ScreenAutoResize"><strong>リモート画面の解像度をブラウザのウインドウサイズに応じてダイナミックに変更 (変更できない場合は自動スケーリング)</strong></label>
                         </p>
                         <p>

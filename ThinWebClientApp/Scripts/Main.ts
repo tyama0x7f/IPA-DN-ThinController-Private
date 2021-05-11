@@ -272,7 +272,7 @@ export async function Remote_ShowImeWarningAsync(): Promise<void>
         // 何かエラーが発生しておる
         return;
     }
-    
+
     if (Remote_ShowImeWarningFlag)
     {
         return;
@@ -301,8 +301,16 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     if (pref.ScreenAutoResize)
     {
         // 自動リサイズが有効の場合、初期ウインドウサイズを現在のウインドウサイズで上書きする
-        const width = Math.min(Math.max(window.innerWidth, GuaConsts.MinWidth), GuaConsts.MaxWidth);
-        const height = Math.min(Math.max(window.innerHeight, GuaConsts.MinHeight), GuaConsts.MaxHeight);
+        let width = Math.min(Math.max(window.innerWidth, GuaConsts.MinWidth), GuaConsts.MaxWidth);
+        let height = Math.min(Math.max(window.innerHeight, GuaConsts.MinHeight), GuaConsts.MaxHeight);
+
+        // ただし自動フルスクリーンが ON の場合は、フルスクリーンサイズで上書きする
+        if (pref.ScreenAutoFullScreen)
+        {
+            const fullScreenSize = Html.GetFullScreenSize();
+            width = fullScreenSize[0];
+            height = fullScreenSize[1];
+        }
 
         pref.ScreenWidth = width;
         pref.ScreenHeight = height;
@@ -420,14 +428,14 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
             // @ts-ignore
             mouseState.forward,
             // @ts-ignore
-            mouseState.back        );
+            mouseState.back);
 
         guac.sendMouseState(scaledState);
     };
 
     // Keyboard
     const keyboard = new Guacamole.Keyboard(page);
-    
+
     const virtualKeyboard1 = new GuaConnectedKeyboard(guac, profile, svcType);
     const virtualKeyboard2 = new GuaComfortableKeyboard(virtualKeyboard1, profile, svcType);
 
@@ -571,8 +579,11 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         fullScreenChangeProc();
     });
 
+    let autoFullScreenInitiated = false;
+
     document.addEventListener("keydown", event =>
     {
+        let showError = false;
         if (event.key.length >= 1)
         {
             const char = event.key[0];
@@ -580,6 +591,30 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
             {
                 // Chrome で、ローカルの IME が有効にされておるぞ
                 Remote_ShowImeWarningAsync();
+                showError = true;
+            }
+        }
+
+        if (!showError)
+        {
+            if (pref.ScreenAutoFullScreen)  // 自動フルスクリーン
+            {
+                if (!autoFullScreenInitiated)
+                {
+                    autoFullScreenInitiated = true;
+
+                    // フルスクリーンになっていなければ、フルスクリーンにする
+                    Task.StartAsyncTaskAsync(async () =>
+                    {
+                        if (Html.IsFullScreenSupported())
+                        {
+                            if (page.fullscreenElement === null)
+                            {
+                                await page.body.requestFullscreen();
+                            }
+                        }
+                    });
+                }
             }
         }
     });

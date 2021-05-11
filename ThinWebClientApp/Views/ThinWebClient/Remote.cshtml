@@ -1,7 +1,7 @@
 ﻿@model ThinWebClientModelRemote
 @{
     Layout = "_Layout_Remote";
-    Page.Title = $"\"{Model.ConnectOptions!.Pcid}\" のリモートデスクトップ";
+    Page.Title = $"\"{Model.ConnectOptions!.Pcid._MakeVerySafeAsciiOnlyNonSpaceFileName()}\" のリモートデスクトップ";
 
     var profilePassToJavaScript = Model.Profile._CloneWithJson();
     if (profilePassToJavaScript != null && profilePassToJavaScript.Preference != null)
