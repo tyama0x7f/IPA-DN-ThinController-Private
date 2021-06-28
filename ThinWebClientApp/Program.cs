@@ -90,7 +90,7 @@ namespace IPA.App.ThinWebClientApp
                     UseSimpleBasicAuthentication = false,
                     HoldSimpleBasicAuthenticationDatabase = false,
                     AutomaticRedirectToHttpsIfPossible = false, // TODO
-                    HiveName = "ThinWebClientApiServerForUsers",
+                    HiveName = "ThinWebClientWebServer",
                     DenyRobots = true,
                     UseGlobalCertVault = false,
                     ServerCertSelector = (cert, sni) => DevTools.CoresDebugCACert,
