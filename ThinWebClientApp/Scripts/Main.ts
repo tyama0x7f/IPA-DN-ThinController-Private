@@ -291,7 +291,7 @@ export async function Remote_ShowImeWarningAsync(): Promise<void>
 }
 
 
-export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string, sessionId: string, pcid: string, svcType: string, jsonEncrypted: string): void
+export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string, sessionId: string, pcid: string, svcType: string, jsonEncrypted: string, connectPacketData: string): void
 {
     const profile = Util.JsonToObject(Secure.JavaScriptEasyStrDecrypt(jsonEncrypted, "easyJsonEncode"));
     const pref = profile.Preference;
@@ -325,6 +325,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     display.style.height = pref.ScreenHeight + "px";
 
     pcid = Str.JavaScriptSafeStrDecode(pcid);
+    connectPacketData = Str.JavaScriptSafeStrDecode(connectPacketData);
 
     if (isDebug)
     {
@@ -332,6 +333,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         Util.Debug(`ThinWebClient_Remote_PageLoad: sessionId = ${sessionId}`);
         Util.Debug(`ThinWebClient_Remote_PageLoad: pcid = ${pcid}`);
         Util.Debug(`ThinWebClient_Remote_PageLoad: svcType = ${svcType}`);
+        Util.Debug(`ThinWebClient_Remote_PageLoad: connectPacketData = ${connectPacketData}`);
         Util.Debug(`ThinWebClient_Remote_PageLoad: profile = ${Util.ObjectToJson(profile)}`);
     }
 
@@ -347,6 +349,9 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     }
 
     const tunnel = new Guacamole.WebSocketTunnel(webSocketUrl);
+
+    // @ts-ignore
+    tunnel.firstPacketData = connectPacketData;
 
     // @ts-ignore
     tunnel.onerror = function (status: Guacamole.Status): void
