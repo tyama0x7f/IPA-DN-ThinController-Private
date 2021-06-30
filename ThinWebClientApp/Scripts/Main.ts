@@ -336,8 +336,12 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         Util.Debug(`ThinWebClient_Remote_PageLoad: connectPacketData = ${connectPacketData}`);
         Util.Debug(`ThinWebClient_Remote_PageLoad: profile = ${Util.ObjectToJson(profile)}`);
     }
-
-    Remote_StartSessionHealthCheck(sessionId, pcid);
+    
+    if (Str.IsEmpty(connectPacketData))
+    {
+        // セッションヘルスチェックは WebSocket で ThinGate と直接対話するモードの場合は行なわない (ThinWebClient 的にはすでに何も状態を持っていないため)
+        Remote_StartSessionHealthCheck(sessionId, pcid);
+    }
 
     window.onerror = function (msg: any, url?: string, fileno?: number, linenumber?: number): any
     {
