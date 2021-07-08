@@ -120,6 +120,16 @@ export function Index_Load(page: Document, focusPcid: boolean, passwordEasyStrEn
     Index_UpdateControl(page);
 }
 
+// 高度な認証認証画面がロードされた
+export function SessionAuthAdvanced_Load(page: Document): void
+{
+    const username = page.getElementById("username") as HTMLInputElement;
+    const password = page.getElementById("password") as HTMLInputElement;
+
+    // ユーザー名入力欄をフォーカスする
+    username.focus();
+}
+
 // パスワード認証画面がロードされた
 export function SessionAuthPassword_Load(page: Document): void
 {
@@ -290,6 +300,22 @@ export async function Remote_ShowImeWarningAsync(): Promise<void>
     }
 }
 
+export function ThinWebClient_Error_PageLoad(window: Window, page: Document, message: string, title: string, redirectUrl: string): void
+{
+    message = Str.JavaScriptSafeStrDecode(message);
+    redirectUrl = Str.JavaScriptSafeStrDecode(redirectUrl);
+    title = Str.JavaScriptSafeStrDecode(title);
+
+    message = "<b>" + Str.EncodeHtml(message) + "</b>";
+
+    Task.StartAsyncTaskAsync(async function () 
+    {
+        if (await Html.DialogConfirmAsync(message, title, true, "is-info", "fas fa-exclamation-triangle", true, "OK", "詳細"))
+        {
+            Html.NativateTo(redirectUrl);
+        }
+    }, false);
+}
 
 export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string, sessionId: string, pcid: string, svcType: string, jsonEncrypted: string, connectPacketData: string): void
 {

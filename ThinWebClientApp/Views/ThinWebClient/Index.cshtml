@@ -10,7 +10,7 @@
         <form method="post" action="/">
 
             <div class="field">
-                <label class="label">接続先コンピュータ ID:</label>
+                <label class="label">接続先コンピュータ ID: @Page.StrTable["SW_LINK_NAME_VPNSMGR_SHORT"] </label>
                 <div class="control has-icons-left has-icons-right">
                     <input class="input is-link is-medium" type="text" placeholder="接続先のコンピュータ ID を指定してください" style="font-weight: bold" asp-for="CurrentProfile.Pcid" onchange="Main.Index_UpdateControl(document);" onInput="Main.Index_UpdateControl(document);" onKeyUp="Main.Index_UpdateControl(document);" onkeypress="Main.Index_UpdateControl(document);" onkeydown="Main.Index_UpdateControl(document);">
                     <span class="icon is-medium is-left">
@@ -40,7 +40,7 @@
                 </div>
             </div>
 
-            <p>　</p>
+            <p> </p>
 
             <img src="~/images/top.jpg" width="900" height="244" />
 
@@ -95,7 +95,7 @@
                 </div>
             </div>
 
-            <p>　</p>
+            <p> </p>
 
             <div class="field">
                 <label class="label">カスタム画面解像度 (横: ピクセル数)</label>
@@ -194,6 +194,19 @@
                 <label class="label">Windows ドメイン名 (RDP 自動ログオン) (オプション):</label>
                 <div class="control has-icons-left has-icons-right">
                     <input class="input is-link" type="text" placeholder="NLA 認証を使用する場合は Windows のドメイン名を指定します。" asp-for="CurrentProfile.Preference.Domain">
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-server"></i>
+                    </span>
+                </div>
+            </div>
+
+            <p>　</p>
+
+            <div class="field">
+                <label class="label">仮想 MAC アドレス (オプション):</label>
+                <p>HTML5 版クライアントは、Web ブラウザのセキュリティ制限により、MAC アドレスを取得できません。<br>サーバー側でクライアント MAC アドレス認証が有効な場合、代わりに仮想 MAC アドレスを手動で指定してください。</p>
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input is-link" type="text" placeholder="例: 00-11-22-33-44-55 (ハイフンやコロンは省略できます)" asp-for="CurrentProfile.Preference.MacAddress">
                     <span class="icon is-small is-left">
                         <i class="fas fa-server"></i>
                     </span>

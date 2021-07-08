@@ -4,6 +4,12 @@
 
     string ErrorStr = "エラー: " + (Model.ErrorInfo?.Message ?? "不明なエラーが発生しました。");
 
+    VpnException? vpnError = Model.ErrorInfo as VpnException;
+    if (vpnError != null)
+    {
+        ErrorStr = vpnError.GetFriendlyVpnErrorMessage(Page.StrTable);
+    }
+
     // 戻り先 URL
     string url = "/";
     string id = Context.Request._GetQueryStringFirst("id");
@@ -11,6 +17,9 @@
     {
         url += "?id=" + id._MakeVerySafeAsciiOnlyNonSpaceFileName();
     }
+
+    string jsTitle = "エラーが発生しました";
+
 }
 
 <div class="box">
@@ -31,3 +40,12 @@
         </article>
     </div>
 </div>
+
+@section Scripts{
+
+    <!-- Init -->
+    <script>
+        Main.ThinWebClient_Error_PageLoad(window, document, "@ErrorStr._JavaScriptSafeStrEncode()", "@jsTitle._JavaScriptSafeStrEncode()", "@url._JavaScriptSafeStrEncode()");
+    </script>
+
+}

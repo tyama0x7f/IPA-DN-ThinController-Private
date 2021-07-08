@@ -1,0 +1,27 @@
+﻿#
+#
+#
+
+$APPFULL$                   Thin Telework System (Private Version)
+$APPFULL_SERVER$            Thin Telework System Server (Private Version)
+$APPFULL_CLIENT$            Thin Telework System Client (Private Version)
+
+$APPSHORT$                  Thin Telework System (Private)
+$APPSHORT_SERVER$           Thin Telework System Server (Private)
+$APPSHORT_CLIENT$           Thin Telework System Client (Private)
+
+$APPVERYSHORT$              Thin Telework Private
+$APPVERYSHORT_SERVER$       Thin Telework Private Server
+$APPVERYSHORT_CLIENT$       Thin Telework Private Client
+
+$APPSHORT_EN$               Thin Telework System Private Version
+
+$APP_ID_PREFIX$				PRIVATE
+
+
+
+SE_COMPANY_URL			http://telework.cyber.ipa.go.jp/
+
+SW_UNINSTALLINFO_URL						https://telework.cyber.ipa.go.jp/
+SW_UNINSTALLINFO_PUBLISHER					IPA
+

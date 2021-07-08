@@ -54,12 +54,30 @@ namespace IPA.App.ThinWebClientApp
         readonly HttpServerStartupHelper StartupHelper;
         readonly AspNetLib AspNetLib;
         readonly SharedObjectHolder<ThinWebClient> ClientHolder;
+        readonly StrTableLanguageList LanguageList = new StrTableLanguageList();
 
         public ThinWebClient Client => ClientHolder.Object;
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            // 言語リストの初期化
+            this.LanguageList.Add(
+                new StrTableLanguage("ja", "Japanese", "日本語", 1041, "ja,jp,sjis,shift_jis,euc", "ja,jp",
+                    new StrTable(
+                        CodesRes["StrTablePatch/strtable_ja.patch.stb"].String,
+                        CodesRes["ThinWebClient/strtable_web_additional_ja.stb"].String,
+                        CodesRes["ThinController/strtable_ja.stb"].String
+                        )));
+
+            this.LanguageList.Add(
+                new StrTableLanguage("en", "English", "English", 1033, "en,us,c", "en",
+                    new StrTable(
+                        CodesRes["StrTablePatch/strtable_en.patch.stb"].String,
+                        CodesRes["ThinWebClient/strtable_web_additional_en.stb"].String,
+                        CodesRes["ThinController/strtable_en.stb"].String
+                        )));
 
             // HttpServer ヘルパーの初期化
             StartupHelper = new HttpServerStartupHelper(configuration);
@@ -69,6 +87,9 @@ namespace IPA.App.ThinWebClientApp
 
             // ThinWebClient インスタンスを作成 (Http サーバーのインスタンスが複数存在することを想定しているため、共有させる)
             this.ClientHolder = MyThinWebClientFactory.Factory.CreateOrGet();
+
+            // ThinWebClient の利用すべき StrTable を設定する
+            this.Client.SetLanguageList(this.LanguageList);
         }
 
         public IConfiguration Configuration { get; }
