@@ -9,15 +9,6 @@
         <input name="RequestId" type="hidden" value="@Model.RequestId">
         <input name="FormType" type="hidden" value="SessionAuthAdvanced">
 
-        <div class="field">
-            <label class="label">接続先コンピュータ ID:</label>
-            <div class="box" style="font-weight: bold">
-                @Model.Profile!.Pcid
-            </div>
-        </div>
-
-        <p>　</p>
-
         <p>接続先のテレワークサーバー '@Model.Profile!.Pcid' に接続するためには、「高度なユーザー認証」で設定されているユーザー名とパスワードが必要です。</p>
         <p>ユーザー名とパスワードを入力してください。</p>
 

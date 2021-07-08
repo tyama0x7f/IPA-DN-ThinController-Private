@@ -10,7 +10,7 @@
         <form method="post" action="/">
 
             <div class="field">
-                <label class="label">接続先コンピュータ ID: @Page.StrTable["SW_LINK_NAME_VPNSMGR_SHORT"] </label>
+                <label class="label">接続先コンピュータ ID:</label>
                 <div class="control has-icons-left has-icons-right">
                     <input class="input is-link is-medium" type="text" placeholder="接続先のコンピュータ ID を指定してください" style="font-weight: bold" asp-for="CurrentProfile.Pcid" onchange="Main.Index_UpdateControl(document);" onInput="Main.Index_UpdateControl(document);" onKeyUp="Main.Index_UpdateControl(document);" onkeypress="Main.Index_UpdateControl(document);" onkeydown="Main.Index_UpdateControl(document);">
                     <span class="icon is-medium is-left">

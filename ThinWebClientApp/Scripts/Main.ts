@@ -120,6 +120,15 @@ export function Index_Load(page: Document, focusPcid: boolean, passwordEasyStrEn
     Index_UpdateControl(page);
 }
 
+// OTP 画面がロードされた
+export function SessionOtp_Load(page: Document): void
+{
+    const otp = page.getElementById("otp") as HTMLInputElement;
+
+    // OTP 入力欄をフォーカスする
+    otp.focus();
+}
+
 // 高度な認証認証画面がロードされた
 export function SessionAuthAdvanced_Load(page: Document): void
 {
