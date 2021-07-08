@@ -35,17 +35,31 @@ export function Index_UpdateControl(page: Document): void
 {
     let ok = false;
 
+    let ok_wol = false;
+
     const pcid = page.getElementById("CurrentProfile_Pcid") as HTMLInputElement;
     const button1 = page.getElementById("ok1") as HTMLInputElement;
     const button2 = page.getElementById("ok2") as HTMLInputElement;
+    const button_wol = page.getElementById("button_wol") as HTMLInputElement;
+    const wol_target_pcid = page.getElementById("WoLTargetPcid") as HTMLInputElement;
+    const wol_trigger_pcid = page.getElementById("CurrentProfile_Preference_WoLTriggerPcid") as HTMLInputElement;
 
     if (Str.IsFilled(pcid.value))
     {
         ok = true;
     }
 
+    wol_target_pcid.value = Str.NonNullTrim(pcid.value);
+
+    if (ok && Str.IsFilled(wol_trigger_pcid.value))
+    {
+        ok_wol = true;
+    }
+
     button1.disabled = !ok;
     button2.disabled = !ok;
+
+    button_wol.disabled = !ok_wol;
 
     const screenWidth = page.getElementById("CurrentProfile_Preference_ScreenWidth") as HTMLInputElement;
     const screenHeight = page.getElementById("CurrentProfile_Preference_ScreenHeight") as HTMLInputElement;
@@ -106,6 +120,11 @@ export function Index_Load(page: Document, focusPcid: boolean, passwordEasyStrEn
 {
     const password = page.getElementById("CurrentProfile_Preference_Password") as HTMLInputElement;
     const pcid = page.getElementById("CurrentProfile_Pcid") as HTMLInputElement;
+
+    const wol_target_pcid = page.getElementById("WoLTargetPcid") as HTMLInputElement;
+    const wol_trigger_pcid = page.getElementById("CurrentProfile_Preference_WoLTriggerPcid") as HTMLInputElement;
+
+    wol_target_pcid.readOnly = true;
 
     if (focusPcid)
     {

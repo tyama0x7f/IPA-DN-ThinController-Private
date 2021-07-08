@@ -10,7 +10,7 @@
         <form method="post" action="/">
 
             <div class="field">
-                <label class="label">接続先コンピュータ ID:</label>
+                <label class="label" id="top_pcid">接続先コンピュータ ID:</label>
                 <div class="control has-icons-left has-icons-right">
                     <input class="input is-link is-medium" type="text" placeholder="接続先のコンピュータ ID を指定してください" style="font-weight: bold" asp-for="CurrentProfile.Pcid" onchange="Main.Index_UpdateControl(document);" onInput="Main.Index_UpdateControl(document);" onKeyUp="Main.Index_UpdateControl(document);" onkeypress="Main.Index_UpdateControl(document);" onkeydown="Main.Index_UpdateControl(document);">
                     <span class="icon is-medium is-left">
@@ -35,8 +35,9 @@
                     <button class="button is-link" style="font-weight: bold" type="submit" id="ok1"><i class="fas fa-laptop-house"></i>&nbsp;このコンピュータ ID にリモート接続</button>&nbsp;&nbsp;
                     @if (Model.HistoryItems.Count >= 2)
                     {
-                        <button class="button is-info is-light" style="font-weight: bold" type="button" onclick="Main.Index_DeleteAllHistory(document);"><i class="far fa-trash-alt"></i>&nbsp;接続履歴を消去</button>
+                        <button class="button is-info is-light" style="font-weight: bold" type="button" onclick="Main.Index_DeleteAllHistory(document);"><i class="far fa-trash-alt"></i>&nbsp;接続履歴を消去</button><text>&nbsp;&nbsp;</text>
                     }
+                    <a class="button is-danger is-light" style="font-weight: bold" href="#wol"><i class="fas fa-power-off"></i>&nbsp;Wake on LAN 電源オン</a>&nbsp;&nbsp;
                 </div>
             </div>
 
@@ -232,6 +233,48 @@
                     </div>
                 </div>
             </div>
+
+            <p>　</p>
+
+            <hr />
+
+            <h2 class="title is-4" id="wol">Wake on LAN による接続先 PC の電源オン機能</h2>
+
+            <img src="~/images/wol.jpg" width="660" height="226" />
+
+            <p>　</p>
+
+            <p><strong>Wake on LAN 機能を用いてターゲット PC の電源を ON にすることができます。</strong></p>
+
+            <p>接続先シン・テレワークシステム サーバー側の設定で、あらかじめ Wake on LAN 機能が有効になっている必要があります。</p>
+
+            <div class="field">
+                <label class="label">(1) Wake on LAN ターゲット PC のコンピュータ ID:</label>
+                <p>Wake on LAN ターゲット PC のコンピュータ ID は、<strong><a href="#top_pcid">このページ上部の接続先コンピュータ ID</a></strong> の欄で指定してください。</p>
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input is-link is-medium" type="text" id="WoLTargetPcid" style="font-weight: bold">
+                    <span class="icon is-medium is-left">
+                        <i class="fas fa-laptop"></i>
+                    </span>
+                </div>
+                <p>　</p>
+                <label class="label">(2) Wake on LAN トリガー PC のコンピュータ ID:</label>
+                <div class="control has-icons-left has-icons-right">
+                    <input class="input is-link is-medium" type="text" placeholder="トリガー PC のコンピュータ ID を指定してください" style="font-weight: bold" asp-for="CurrentProfile.Preference.WoLTriggerPcid" id="CurrentProfile_Preference_WoLTriggerPcid" onchange="Main.Index_UpdateControl(document);" onInput="Main.Index_UpdateControl(document);" onKeyUp="Main.Index_UpdateControl(document);" onkeypress="Main.Index_UpdateControl(document);" onkeydown="Main.Index_UpdateControl(document);">
+                    <span class="icon is-medium is-left">
+                        <i class="fas fa-laptop"></i>
+                    </span>
+                </div>
+            </div>
+
+            <p>　</p>
+
+            <div class="field">
+                <div class="control">
+                    <button class="button is-danger" style="font-weight: bold" type="submit" id="button_wol" name="button_wol" value="1"><i class="fas fa-power-off"></i>&nbsp;Wake on LAN を実行する</button>&nbsp;&nbsp;
+                </div>
+            </div>
+
         </form>
     </div>
 </div>

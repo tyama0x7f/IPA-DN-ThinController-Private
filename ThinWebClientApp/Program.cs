@@ -70,7 +70,7 @@ namespace IPA.App.ThinWebClientApp
         public static int Main(string[] args)
         {
             // ログファイルが何 GB を超えたら自動的に古いものを削除するかの設定
-            CoresConfig.Logger.DefaultAutoDeleteTotalMinSize.Value = 4_000_000_000; // 4GB
+            CoresConfig.Logger.DefaultAutoDeleteTotalMinSize.Value = 1_000_000_000; // 1GB
 
             const string appName = "IPA.App.ThinWebClientApp";
 
