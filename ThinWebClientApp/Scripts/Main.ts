@@ -366,7 +366,9 @@ export function ThinWebClient_Error_PageLoad(window: Window, page: Document, mes
     }, false);
 }
 
-export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string, sessionId: string, pcid: string, svcType: string, jsonEncrypted: string, connectPacketData: string): void
+export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string,
+    sessionId: string, pcid: string, svcType: string, jsonEncrypted: string, connectPacketData: string,
+    watermarkStr1: string, watermarkStr2: string): void
 {
     const profile = Util.JsonToObject(Secure.JavaScriptEasyStrDecrypt(jsonEncrypted, "easyJsonEncode"));
     const pref = profile.Preference;
@@ -402,6 +404,9 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     pcid = Str.JavaScriptSafeStrDecode(pcid);
     connectPacketData = Str.JavaScriptSafeStrDecode(connectPacketData);
 
+    watermarkStr1 = Str.JavaScriptSafeStrDecode(watermarkStr1);
+    watermarkStr2 = Str.JavaScriptSafeStrDecode(watermarkStr2);
+
     if (isDebug)
     {
         Util.Debug(`ThinWebClient_Remote_PageLoad: webSocketUrl = ${webSocketUrl}`);
@@ -410,6 +415,8 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         Util.Debug(`ThinWebClient_Remote_PageLoad: svcType = ${svcType}`);
         Util.Debug(`ThinWebClient_Remote_PageLoad: connectPacketData = ${connectPacketData}`);
         Util.Debug(`ThinWebClient_Remote_PageLoad: profile = ${Util.ObjectToJson(profile)}`);
+        Util.Debug(`ThinWebClient_Remote_PageLoad: watermarkStr1 = ${watermarkStr1}`);
+        Util.Debug(`ThinWebClient_Remote_PageLoad: watermarkStr2 = ${watermarkStr2}`);
     }
 
     if (Str.IsEmpty(connectPacketData))
@@ -445,6 +452,18 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     const guac = new Guacamole.Client(tunnel);
 
     const guacDisplay = guac.getDisplay();
+
+    const defaultLayer = guacDisplay.getDefaultLayer();
+
+    if (Str.IsFilled(watermarkStr1) && Str.IsFilled(watermarkStr2))
+    {
+        // @ts-ignore
+        defaultLayer.watermark_Text1 = watermarkStr1;
+        // @ts-ignore
+        defaultLayer.watermark_Text2 = watermarkStr2;
+        // @ts-ignore
+        defaultLayer.dn_is_draw_watermark = true;
+    }
 
     // Add client to display div
     display.appendChild(guacDisplay.getElement());

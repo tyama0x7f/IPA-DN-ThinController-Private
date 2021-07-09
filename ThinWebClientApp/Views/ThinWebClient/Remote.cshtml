@@ -17,7 +17,16 @@
 
     <!-- Init -->
     <script>
-        Main.ThinWebClient_Remote_PageLoad(window, document, "@Model.WebSocketUrl", "@Model.SessionId", "@Model.ConnectOptions.Pcid._JavaScriptSafeStrEncode()", "@Model.SvcType.ToString()", "@profilePassToJavaScript._ObjectToJson()._JavaScriptEasyStrEncrypt("easyJsonEncode")", "@Model.ConnectOptions.ConnectPacketData._JavaScriptSafeStrEncode()");
+        Main.ThinWebClient_Remote_PageLoad(window, document,
+            "@Model.WebSocketUrl",
+            "@Model.SessionId",
+            "@Model.ConnectOptions.Pcid._JavaScriptSafeStrEncode()",
+            "@Model.SvcType.ToString()",
+            "@profilePassToJavaScript._ObjectToJson()._JavaScriptEasyStrEncrypt("easyJsonEncode")",
+            "@Model.ConnectOptions.ConnectPacketData._JavaScriptSafeStrEncode()",
+            "@Model.WatermarkStr1._JavaScriptSafeStrEncode()",
+            "@Model.WatermarkStr2._JavaScriptSafeStrEncode()",
+        );
     </script>
 
 }
