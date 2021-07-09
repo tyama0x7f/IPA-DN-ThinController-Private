@@ -622,8 +622,11 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
             display.style.width = clientWidth + "px";
             display.style.height = clientHeight + "px";
 
-            // サーバーにサイズ変更を依頼する
-            resizeManager.Resize(clientWidth, clientHeight);
+            if (pref.ScreenAutoResizeRemoteFit)
+            {
+                // サーバーにサイズ変更を依頼する
+                resizeManager.Resize(clientWidth, clientHeight);
+            }
 
             // @ts-ignore
             guacDisplay.onresize(); // 倍率の自動適用
@@ -689,10 +692,44 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         scrollBarUpdateProc();
     };
 
+    let fullScreenUnsetOnceFlag = false;
+
     // フルスクリーン設定 / 解除が発生したときのイベント
     document.addEventListener("fullscreenchange", event =>
     {
         fullScreenChangeProc();
+
+        const isFullScreen = document.fullscreenElement ? true : false;
+        if (!isFullScreen)
+        {
+            if (pref.ShowHelpOnFullScreenUnset)
+            {
+                if (pref.ScreenAutoFullScreen)
+                {
+                    if (autoFullScreenInitiated)
+                    {
+                        if (!fullScreenUnsetOnceFlag)
+                        {
+                            fullScreenUnsetOnceFlag = true;
+
+                            // 自動フルスクリーンモードが ON のとき、初回にフルスクリーンが解除された場合はメッセージを出す
+                            Task.StartAsyncTaskAsync(async function () 
+                            {
+                                const msg = "フルスクリーン表示に戻るには、Web ブラウザのアドレスバー部分をクリックしてから、以下のキーを押します。<BR><BR>" +
+                                    "- Windows の場合: 「F11」 キー<BR>" +
+                                    "- Mac の場合: 「⌘Command + Control + F」キー<BR>" +
+                                    "- Chromebook の場合:&nbsp;&nbsp;<i class='fas fa-expand'></i> キー<BR>&nbsp;&nbsp;&nbsp;(または、「<i class='fas fa-search'></i> + <i class='fas fa-expand'></i>」キー)<BR><BR>" +
+                                    "または、Web ブラウザのメニューから「フルスクリーン」や「全画面表示」を選択します。<BR>" +
+                                    "<BR>" +
+                                    "詳しくは、<a href='/ThinWebClient/help/' target='_blank'>リモート画面操作のヘルプ</a> をご参照ください。";
+
+                                await Html.DialogAlertAsync(msg, "", true, "is-success is-light", "far fa-keyboard");
+                            }, false);
+                        }
+                    }
+                }
+            }
+        }
     });
 
     let autoFullScreenInitiated = false;
