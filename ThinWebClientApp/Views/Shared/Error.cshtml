@@ -2,13 +2,7 @@
 @{
     Page.Title = "エラー";
 
-    string ErrorStr = "エラー: " + (Model.ErrorInfo?.Message ?? "不明なエラーが発生しました。");
-
-    VpnException? vpnError = Model.ErrorInfo as VpnException;
-    if (vpnError != null)
-    {
-        ErrorStr = vpnError.GetFriendlyVpnErrorMessage(Page.StrTable);
-    }
+    string ErrorStr = ThinWebClientErrorUtil.GetFriendlyErrorMessage(Model.ErrorInfo, Page);
 
     // 戻り先 URL
     string url = "/";

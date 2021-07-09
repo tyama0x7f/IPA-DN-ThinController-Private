@@ -116,13 +116,16 @@ export function Index_OnSelectedHistoryChange(page: Document): void
 }
 
 // メイン画面がロードされた
-export function Index_Load(page: Document, focusPcid: boolean, passwordEasyStrEncrypted: string): void
+export function Index_Load(page: Document, focusPcid: boolean, passwordEasyStrEncrypted: string, wolErrorMessage: string, wolOkMessage: string, jumpToWol: boolean): void
 {
     const password = page.getElementById("CurrentProfile_Preference_Password") as HTMLInputElement;
     const pcid = page.getElementById("CurrentProfile_Pcid") as HTMLInputElement;
 
     const wol_target_pcid = page.getElementById("WoLTargetPcid") as HTMLInputElement;
     const wol_trigger_pcid = page.getElementById("CurrentProfile_Preference_WoLTriggerPcid") as HTMLInputElement;
+
+    wolErrorMessage = Str.JavaScriptSafeStrDecode(wolErrorMessage);
+    wolOkMessage = Str.JavaScriptSafeStrDecode(wolOkMessage);
 
     wol_target_pcid.readOnly = true;
 
@@ -137,6 +140,26 @@ export function Index_Load(page: Document, focusPcid: boolean, passwordEasyStrEn
     password.value = passwordStr;
 
     Index_UpdateControl(page);
+
+    Task.StartAsyncTaskAsync(async function () 
+    {
+        // WoL エラーまたは WoL OK が発生している場合はエラーメッセージを表示する
+        if (Str.IsFilled(wolErrorMessage))
+        {
+            await Html.DialogAlertAsync(wolErrorMessage, "Wake on LAN エラー", false, "is-info", "fas fa-exclamation-triangle", undefined, true);
+        }
+
+        if (Str.IsFilled(wolOkMessage))
+        {
+            await Html.DialogAlertAsync(wolOkMessage, "Wake on LAN を実行しました", false, "is-primary", "fas fa-power-off", undefined, false);
+        }
+    }, false);
+
+    if (jumpToWol)
+    {
+        // WoL の部分にジャンプする
+        window.location.hash = "#wol";
+    }
 }
 
 // OTP 画面がロードされた
@@ -334,11 +357,9 @@ export function ThinWebClient_Error_PageLoad(window: Window, page: Document, mes
     redirectUrl = Str.JavaScriptSafeStrDecode(redirectUrl);
     title = Str.JavaScriptSafeStrDecode(title);
 
-    message = "<b>" + Str.EncodeHtml(message) + "</b>";
-
     Task.StartAsyncTaskAsync(async function () 
     {
-        if (await Html.DialogConfirmAsync(message, title, true, "is-info", "fas fa-exclamation-triangle", true, "OK", "詳細"))
+        if (await Html.DialogConfirmAsync(message, title, false, "is-info", "fas fa-exclamation-triangle", true, "OK", "詳細", true))
         {
             Html.NativateTo(redirectUrl);
         }
@@ -390,7 +411,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         Util.Debug(`ThinWebClient_Remote_PageLoad: connectPacketData = ${connectPacketData}`);
         Util.Debug(`ThinWebClient_Remote_PageLoad: profile = ${Util.ObjectToJson(profile)}`);
     }
-    
+
     if (Str.IsEmpty(connectPacketData))
     {
         // セッションヘルスチェックは WebSocket で ThinGate と直接対話するモードの場合は行なわない (ThinWebClient 的にはすでに何も状態を持っていないため)

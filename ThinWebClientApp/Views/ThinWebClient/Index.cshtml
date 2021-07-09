@@ -37,7 +37,7 @@
                     {
                         <button class="button is-info is-light" style="font-weight: bold" type="button" onclick="Main.Index_DeleteAllHistory(document);"><i class="far fa-trash-alt"></i>&nbsp;接続履歴を消去</button><text>&nbsp;&nbsp;</text>
                     }
-                    <a class="button is-danger is-light" style="font-weight: bold" href="#wol"><i class="fas fa-power-off"></i>&nbsp;Wake on LAN 電源オン</a>&nbsp;&nbsp;
+                    <a class="button is-danger is-light" style="font-weight: bold" href="#wol"><i class="fas fa-power-off"></i>&nbsp;Wake on LAN 機能</a>&nbsp;&nbsp;
                 </div>
             </div>
 
@@ -281,7 +281,12 @@
 
 @section Scripts {
     <script>
-        Main.Index_Load(document, @Model.FocusToPcid._ToBoolStrLower(), "@Secure.JavaScriptEasyStrEncrypt(Model.CurrentProfile?.Preference?.Password ?? "", "easyEncryptStaticKey")");
+        Main.Index_Load(document, @Model.FocusToPcid._ToBoolStrLower(),
+            "@Secure.JavaScriptEasyStrEncrypt(Model.CurrentProfile?.Preference?.Password ?? "", "easyEncryptStaticKey")",
+            "@Model.WolErrorMessage._JavaScriptSafeStrEncode()",
+            "@Model.WolOkMessage._JavaScriptSafeStrEncode()",
+            @Model.JumpToWol._ToBoolStrLower()
+        );
     </script>
 }
 
