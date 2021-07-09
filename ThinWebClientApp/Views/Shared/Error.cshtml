@@ -4,6 +4,16 @@
 
     string ErrorStr = ThinWebClientErrorUtil.GetFriendlyErrorMessage(Model.ErrorInfo, Page);
 
+    VpnException? vpnError = Model.ErrorInfo as VpnException;
+    if (vpnError != null)
+    {
+        if (vpnError.HasRecvUrl)
+        {
+            // URL 受信。URL にジャンプ。
+            Context.Response.Redirect(vpnError.RecvUrl);
+        }
+    }
+
     // 戻り先 URL
     string url = "/";
     string id = Context.Request._GetQueryStringFirst("id");
