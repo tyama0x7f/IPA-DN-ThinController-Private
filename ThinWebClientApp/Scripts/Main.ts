@@ -118,6 +118,12 @@ export function Index_OnSelectedHistoryChange(page: Document): void
 // メイン画面がロードされた
 export function Index_Load(page: Document, focusPcid: boolean, passwordEasyStrEncrypted: string, wolErrorMessage: string, wolOkMessage: string, jumpToWol: boolean): void
 {
+    if (Str.IsSamei(Html.GetBrowserType(), "ie"))
+    {
+        const ie_warning = page.getElementById("ie_warning");
+        ie_warning!.hidden = false;
+    }
+
     const password = page.getElementById("CurrentProfile_Preference_Password") as HTMLInputElement;
     const pcid = page.getElementById("CurrentProfile_Pcid") as HTMLInputElement;
 
@@ -430,6 +436,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         const str = `Error message: ${msg}\nURL: ${url}\nLine Number: ${linenumber}`;
 
         if (isDebug) Util.Debug(str);
+        Html.SetPreventPageUnload(false);
         Common_ErrorAlert(page, str, pcid);
         return true;
     }
@@ -445,6 +452,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         const str = `Tunnel Error Code: ${status.code}, Message: "${status.message}"`;
 
         if (isDebug) Util.Debug(str);
+        Html.SetPreventPageUnload(false);
         Common_ErrorAlert(page, str, pcid);
     };
 
@@ -483,6 +491,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         const str = `Remote Desktop Error Code: ${code}, Message: "${msg}"`;
 
         if (isDebug) Util.Debug(str);
+        Html.SetPreventPageUnload(false);
         Common_ErrorAlert(page, str, pcid);
     };
 
@@ -496,10 +505,14 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
 
         if (state === GuaStates.STATE_DISCONNECTED || state === GuaStates.STATE_DISCONNECTING)
         {
+            Html.SetPreventPageUnload(false);
+
             // 切断メッセージを表示
             Remote_ShowDisconnectErrorAsync(pcid);
         }
     };
+
+    Html.SetPreventPageUnload(true);
 
     // Connect
     guac.connect(`id=${sessionId}&width=${pref.ScreenWidth}&height=${pref.ScreenHeight}`);
