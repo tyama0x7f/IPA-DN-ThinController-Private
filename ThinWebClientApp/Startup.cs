@@ -25,14 +25,12 @@ using System.Threading;
 using System.Net;
 using System.Net.Sockets;
 
+using IPA.App.ThinVars;
+
 #pragma warning disable CS1998 // 非同期メソッドは、'await' 演算子がないため、同期的に実行されます
 
 namespace IPA.App.ThinWebClientApp
 {
-    public class MyThinWebClientHook : ThinWebClientHookBase
-    {
-    }
-
     public class MyThinWebClientFactory : SharedObjectFactory<ThinWebClient>
     {
         public static readonly MyThinWebClientFactory Factory = new MyThinWebClientFactory();

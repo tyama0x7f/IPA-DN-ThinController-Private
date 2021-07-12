@@ -48,8 +48,9 @@
   <ItemGroup>
     <Compile Include="../submodules/IPA-DN-Cores/Cores.NET/Cores.Codes/**/*.cs" />
     <Content Include="../submodules/IPA-DN-Cores/Cores.NET/Cores.Codes/**/*.cshtml" />
+    <Compile Include="../Vars/**/*.cs" />
     <EmbeddedResource Include="../submodules/IPA-DN-Cores/Cores.NET/Cores.Codes/Resources/**/*" />
-    <EmbeddedResource Include="Resources/**/*" />
+    <EmbeddedResource Include="../Vars/VarResources/**/*" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(BuildingInsideVisualStudio)' == 'true'">
