@@ -449,7 +449,17 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     // @ts-ignore
     tunnel.onerror = function (status: Guacamole.Status): void
     {
-        const str = `Tunnel Error Code: ${status.code}, Message: "${status.message}"`;
+        const code = status.code;
+        let msg = status.message;
+        const original = "内部エラー文字列: ";
+
+        if (code === 519)
+        {
+            msg = "HTML5 のリモート画面転送の通信が切断されました。再接続してみてください。<BR><BR>" +
+                original + msg;
+        }
+
+        const str = `Tunnel Error Code: ${code}, Message: "${msg}"`;
 
         if (isDebug) Util.Debug(str);
         Html.SetPreventPageUnload(false);
