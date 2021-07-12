@@ -349,7 +349,7 @@ export async function Remote_ShowImeWarningAsync(): Promise<void>
 
     try
     {
-        await Html.DialogAlertAsync("<b>ローカル コンピュータ側の IME 日本語入力が ON になっています。</b><br>ローカル コンピュータ側の IME を OFF にしてください。<BR><BR>リモート コンピュータ側で IME を ON にするキー操作については、<a href=\"/keyboard/\" target=\"_blank\"><b>「キーボード操作の解説」</b></a>を参照してください。", "IME 日本語入力について", true, "is-info", "far fa-keyboard");
+        await Html.DialogAlertAsync("<b>ローカル コンピュータ側の IME 日本語入力が ON になっています。</b><br>ローカル コンピュータ側の IME を OFF にしてください。<BR><BR>リモート コンピュータ側で IME を ON にするキー操作については、<a href=\"/ThinWebClient/help/\" target=\"_blank\"><b>「キーボード操作の解説」</b></a>を参照してください。", "IME 日本語入力について", true, "is-info", "far fa-keyboard");
     }
     finally
     {
@@ -487,7 +487,8 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
 
         if (Str.InStr(msg, "See logs.", false))
         {
-            msg = "Remote desktop connection aborted. This error can be caused by frequent screen resizing or by a large number of screen drawing instructions. Please kindly reconnect to the server."
+            msg = "Remote desktop connection aborted. This error can be caused by frequent screen resizing or by a large number of screen drawing instructions. Please kindly reconnect to the server. " +
+                "<BR><BR>この現象が頻繁に発生する場合は、接続設定 (トップページ) の「ブラウザのウインドウサイズを変更したとき、リモート画面の解像度をブラウザのウインドウサイズに応じてダイナミックに変更」機能を OFF にしてみてください。";
         }
         else if (code === 519)
         {
