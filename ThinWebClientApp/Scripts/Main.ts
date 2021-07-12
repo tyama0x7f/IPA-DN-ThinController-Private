@@ -483,9 +483,23 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         const code = status.code;
         let msg = status.message;
 
+        const original = "内部エラー文字列: ";
+
         if (Str.InStr(msg, "See logs.", false))
         {
             msg = "Remote desktop connection aborted. This error can be caused by frequent screen resizing or by a large number of screen drawing instructions. Please kindly reconnect to the server."
+        }
+        else if (code === 519)
+        {
+            msg = "接続先のサーバー端末の Windows のリモートデスクトップ機能は、「ネットワーク レベル認証を使用したユーザー認証を必要とする」設定またはポリシーが有効になっています。<BR><BR>" +
+                "接続設定 (トップページ) の「Windows ユーザー名 (RDP 自動ログオン)」、「Windows パスワード (RDP 自動ログオン)」でログインに必要なパスワードを指定してください。<BR><BR>" +
+                original + msg;
+        }
+        else if (code === 769)
+        {
+            msg = "接続設定 (トップページ) の「Windows ユーザー名 (RDP 自動ログオン)」または「Windows パスワード (RDP 自動ログオン)」が正しくありません。<BR><BR>" +
+                "リモート接続先の Windows 端末のユーザー名とパスワードを指定してください。<BR><BR>" +
+                original + msg;
         }
 
         const str = `Remote Desktop Error Code: ${code}, Message: "${msg}"`;
@@ -613,26 +627,123 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
 
         const resizeManager = new GuaResizeManager(guac, window.innerWidth, window.innerHeight);
 
-        // ユーザーがウインドウサイズを変更した
-        window.onresize = function (ev: UIEvent): any
+        const isRezieDebug = true;
+
+        if (!isRezieDebug)
         {
-            const clientWidth = Math.min(Math.max(window.innerWidth, GuaConsts.MinWidth), GuaConsts.MaxWidth);
-            const clientHeight = Math.min(Math.max(window.innerHeight, GuaConsts.MinHeight), GuaConsts.MaxHeight);
+            // ユーザーがウインドウサイズを変更した
+            window.onresize = function (ev: UIEvent): any
+            {
+                const clientWidth = Math.min(Math.max(window.innerWidth, GuaConsts.MinWidth), GuaConsts.MaxWidth);
+                const clientHeight = Math.min(Math.max(window.innerHeight, GuaConsts.MinHeight), GuaConsts.MaxHeight);
 
-            display.style.width = clientWidth + "px";
-            display.style.height = clientHeight + "px";
+                display.style.width = clientWidth + "px";
+                display.style.height = clientHeight + "px";
 
+                if (pref.ScreenAutoResizeRemoteFit)
+                {
+                    // サーバーにサイズ変更を依頼する
+                    resizeManager.Resize(clientWidth, clientHeight);
+                }
+
+                // @ts-ignore
+                guacDisplay.onresize(); // 倍率の自動適用
+
+                // スクロールバー表示判断ルーチン
+                scrollBarUpdateProc();
+            }
+        }
+        else
+        {
+            // リサイズバグを再現するためのデバッグ (ストレステスト)
+            Task.StartAsyncTaskAsync(async function () 
+            {
+                while (false)
+                {
+                    await Task.Delay(Util.GetRandInt(300) + 10);
+
+                    //console.log("aaa");
+                    const clientWidth = Util.GetRandInt(500) + 1300;
+                    const clientHeight = Util.GetRandInt(300) + 700;
+                    display.style.width = clientWidth + "px";
+                    display.style.height = clientHeight + "px";
+
+                    if (pref.ScreenAutoResizeRemoteFit)
+                    {
+                        // サーバーにサイズ変更を依頼する
+                        resizeManager.Resize(clientWidth, clientHeight, true);
+                    }
+
+                    // @ts-ignore
+                    guacDisplay.onresize(); // 倍率の自動適用
+
+                    // スクロールバー表示判断ルーチン
+                    scrollBarUpdateProc();
+                }
+            }, false);
+
+            // マウスを適当に動かす
             if (pref.ScreenAutoResizeRemoteFit)
             {
-                // サーバーにサイズ変更を依頼する
-                resizeManager.Resize(clientWidth, clientHeight);
+                Task.StartAsyncTaskAsync(async function () 
+                {
+                    while (true)
+                    {
+                        const count = Util.GetRandInt(100) + 1;
+
+                        for (let i = 0; i < count; i++)
+                        {
+                            await Task.Delay(Util.GetRandInt(10) + 1);
+
+                            try
+                            {
+                                const scale = guacDisplay.getScale();
+
+                                const x = Util.GetRandInt(1300);
+                                const y = Util.GetRandInt(700);
+
+                                //console.log("" + x + " " + y);
+
+                                // Scale event by current scale
+                                const scaledState = new Guacamole.Mouse.State(
+                                    x / scale,
+                                    y / scale,
+                                    false,
+                                    false,
+                                    false,
+                                    false,
+                                    false,
+                                    // @ts-ignore
+                                    false,
+                                    // @ts-ignore
+                                    false);
+
+                                guac.sendMouseState(scaledState);
+                            }
+                            catch { }
+                        }
+
+                        await Task.Delay(Util.GetRandInt(500));
+
+                    }
+                }, false);
             }
 
-            // @ts-ignore
-            guacDisplay.onresize(); // 倍率の自動適用
+            // キーボードを適当に押す
+            if (pref.ScreenAutoResizeRemoteFit)
+            {
+                Task.StartAsyncTaskAsync(async function () 
+                {
+                    while (true)
+                    {
+                        await virtualKeyboard1.PhysicalKeyPressedAsync(GuaKeyCodes.Win, true);
+                        await Task.Delay(Util.GetRandInt(512) + 256);
 
-            // スクロールバー表示判断ルーチン
-            scrollBarUpdateProc();
+                        await virtualKeyboard1.PhysicalKeyPressedAsync(GuaKeyCodes.Win, false);
+                        await Task.Delay(Util.GetRandInt(512) + 256);
+                    }
+                }, false);
+            }
         }
     }
     else
@@ -715,7 +826,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
                             // 自動フルスクリーンモードが ON のとき、初回にフルスクリーンが解除された場合はメッセージを出す
                             Task.StartAsyncTaskAsync(async function () 
                             {
-                                const msg = "フルスクリーン表示に戻るには、Web ブラウザのアドレスバー部分をクリックしてから、以下のキーを押します。<BR><BR>" +
+                                const msg = "フルスクリーン画面に戻るには、Web ブラウザのアドレスバー部分をクリックしてから、以下のキーを押します。<BR><BR>" +
                                     "- Windows の場合: 「F11」 キー<BR>" +
                                     "- Mac の場合: 「⌘Command + Control + F」キー<BR>" +
                                     "- Chromebook の場合:&nbsp;&nbsp;<i class='fas fa-expand'></i> キー<BR>&nbsp;&nbsp;&nbsp;(または、「<i class='fas fa-search'></i> + <i class='fas fa-expand'></i>」キー)<BR><BR>" +
@@ -748,7 +859,8 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
             }
         }
 
-        if (!showError)
+        // 最初の 1 文字目を入力するときに、自動的にフルスクリーンにする
+        if (!showError && !Remote_ErrorShowOnceFlag) // 何かエラーが発生しているときは表示しない
         {
             if (pref.ScreenAutoFullScreen)  // 自動フルスクリーン
             {
