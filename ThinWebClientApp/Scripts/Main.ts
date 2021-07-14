@@ -25,6 +25,7 @@ import { Html } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Html";
 import { Secure } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Secure";
 import { Task } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Task";
 import { Axios, Vue, Buefy } from "./submodules/IPA-DN-WebNeko/Scripts/Imports";
+import { Time } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Time";
 
 // --- Common Init ---
 Vue.use(Buefy);
@@ -302,12 +303,17 @@ export function Remote_StartSessionHealthCheck(sessionId: string, pcid?: string)
     Task.StartAsyncTaskAsync(SessionHealthCheckAsync(url, pcid));
 }
 
-export function Common_ErrorAlert(page: Document, errorMessage: string, pcid?: string): void
+export function Common_ErrorAlert(page: Document, errorMessage: string, pcid?: string, title?: string, buttonColor = "is-danger", icon = "fas fa-exclamation-triangle"): void
 {
     // 1 回しかエラーが表示されないようにする
     if (Remote_ErrorShowOnceFlag)
     {
         return;
+    }
+
+    if (Str.IsEmpty(title))
+    {
+        title = "エラーが発生しました";
     }
 
     Remote_ErrorShowOnceFlag = true;
@@ -319,7 +325,7 @@ export function Common_ErrorAlert(page: Document, errorMessage: string, pcid?: s
 
     Task.StartAsyncTaskAsync(async function () 
     {
-        await Html.DialogAlertAsync(errorMessage, "エラーが発生しました", true, "is-danger", "fas fa-exclamation-triangle");
+        await Html.DialogAlertAsync(errorMessage, title, true, buttonColor, icon);
 
         let url = "/";
         if (Str.IsFilled(pcid))
@@ -374,12 +380,15 @@ export function ThinWebClient_Error_PageLoad(window: Window, page: Document, mes
 
 export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string,
     sessionId: string, pcid: string, svcType: string, jsonEncrypted: string, connectPacketData: string,
-    watermarkStr1: string, watermarkStr2: string): void
+    watermarkStr1: string, watermarkStr2: string, miscJsonObj: string): void
 {
+    const misc = Util.JsonToObject(Str.JavaScriptSafeStrDecode(miscJsonObj));
     const profile = Util.JsonToObject(Secure.JavaScriptEasyStrDecrypt(jsonEncrypted, "easyJsonEncode"));
     const pref = profile.Preference;
     const isDebug = pref.EnableDebug as boolean;
     const display = page.getElementById("display")!;
+
+    let userInputOccured = false;
 
     if (pref.ScreenAutoResize)
     {
@@ -423,6 +432,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         Util.Debug(`ThinWebClient_Remote_PageLoad: profile = ${Util.ObjectToJson(profile)}`);
         Util.Debug(`ThinWebClient_Remote_PageLoad: watermarkStr1 = ${watermarkStr1}`);
         Util.Debug(`ThinWebClient_Remote_PageLoad: watermarkStr2 = ${watermarkStr2}`);
+        Util.Debug(`ThinWebClient_Remote_PageLoad: misc = ${Util.ObjectToJson(misc)}`);
     }
 
     if (Str.IsEmpty(connectPacketData))
@@ -554,6 +564,8 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     // @ts-ignore
     mouse.onmousedown = mouse.onmouseup = mouse.onmousemove = function (mouseState: Guacamole.Mouse.State): void
     {
+        userInputOccured = true;
+
         //Util.Debug(mouseState);
         const scale = guacDisplay.getScale();
 
@@ -601,6 +613,8 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         // @ts-ignore
         guacDisplay.onresize = function (): void
         {
+            userInputOccured = true;
+
             // サーバーに接続した時点と、ユーザー側またはサーバー側が原因で画面サイズが変化した時点で呼ばれる
             const serverWidth = guacDisplay.getWidth();
             const serverHeight = guacDisplay.getHeight();
@@ -638,13 +652,15 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
 
         const resizeManager = new GuaResizeManager(guac, window.innerWidth, window.innerHeight);
 
-        const isRezieDebug = true;
+        const isRezieDebug = false;
 
         if (!isRezieDebug)
         {
             // ユーザーがウインドウサイズを変更した
             window.onresize = function (ev: UIEvent): any
             {
+                userInputOccured = true;
+
                 const clientWidth = Math.min(Math.max(window.innerWidth, GuaConsts.MinWidth), GuaConsts.MaxWidth);
                 const clientHeight = Math.min(Math.max(window.innerHeight, GuaConsts.MinHeight), GuaConsts.MaxHeight);
 
@@ -764,6 +780,8 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         // @ts-ignore
         guacDisplay.onresize = function (): void
         {
+            userInputOccured = true;
+
             // サーバーに接続した時点と、サーバー側が原因で画面サイズが変化した時点で呼ばれる
             const serverWidth = guacDisplay.getWidth();
             const serverHeight = guacDisplay.getHeight();
@@ -819,6 +837,8 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     // フルスクリーン設定 / 解除が発生したときのイベント
     document.addEventListener("fullscreenchange", event =>
     {
+        userInputOccured = true;
+
         fullScreenChangeProc();
 
         const isFullScreen = document.fullscreenElement ? true : false;
@@ -858,6 +878,8 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
 
     document.addEventListener("keydown", event =>
     {
+        userInputOccured = true;
+
         let showError = false;
         if (event.key.length >= 1)
         {
@@ -896,6 +918,76 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     });
 
     fullScreenChangeProc();
+
+    // アイドルタイムアウト等の実装
+    if (true)
+    {
+        const idleTimeout: number = misc.IdleTimeout;
+        const lifetime: number = misc.LifeTime;
+        let lifetimeMsg: string = misc.LifeTimeMsg;
+        lifetimeMsg = Str.NonNull(lifetimeMsg);
+        if (Str.IsEmpty(lifetimeMsg)) lifetimeMsg = `Disconnected by lifetime param ${lifetime}.`;
+
+        if (idleTimeout !== 0)
+        {
+            Task.StartAsyncTaskAsync(async () =>
+            {
+                let lastInputTick = Time.Tick64;
+
+                while (true)
+                {
+                    const now = Time.Tick64;
+
+                    if (userInputOccured)
+                    {
+                        userInputOccured = false;
+                        lastInputTick = now;
+                    }
+                    else
+                    {
+                        if (now > (lastInputTick + (idleTimeout * 1000)))
+                        {
+                            disconnectByTimeout(Str.EncodeHtml(
+                                Str.ReplaceStr("キーボードまたはマウスが __number__ 秒間未操作であったため、アイドルタイムアウトが発生しました。\r\n\r\nアイドルタイムアウトまでの間隔は、接続先サーバーのネットワーク管理者が設置しているポリシーサーバーの「IDLE_TIMEOUT」の値で規定されています。詳しくは、ネットワーク管理者にお問い合わせください。", "__number__", Str.IntToStr(idleTimeout))));
+                        }
+                    }
+
+                    await Task.Delay(256);
+                }
+            });
+        }
+
+        if (lifetime !== 0)
+        {
+            Task.StartAsyncTaskAsync(async () =>
+            {
+                await Task.Delay(lifetime);
+
+                disconnectByTimeout(Str.EncodeHtml(lifetimeMsg));
+            });
+        }
+
+        let disconnectedFlagByTimeout = false;
+
+        const disconnectByTimeout = (msg: string): void =>
+        {
+            if (!disconnectedFlagByTimeout)
+            {
+                disconnectedFlagByTimeout = true;
+
+                Common_ErrorAlert(page, msg, pcid, "タイムアウト", "is-primary", "far fa-clock");
+
+                try
+                {
+                    guac.disconnect();
+                }
+                catch (ex)
+                {
+                    Util.Debug(ex);
+                }
+            }
+        };
+    };
 }
 
 

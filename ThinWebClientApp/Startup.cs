@@ -37,13 +37,11 @@ namespace IPA.App.ThinWebClientApp
 
         protected override ThinWebClient CreateNewImpl()
         {
-            ThinWebClientSettings settings = new ThinWebClientSettings
-            {
-            };
-
             MyThinWebClientHook hook = new MyThinWebClientHook();
 
-            return new ThinWebClient(settings, hook);
+            ThinWebClientOptions options = new ThinWebClientOptions(ThinVarsGlobal.Certs.MasterCert.PkiCertificate._SingleList());
+
+            return new ThinWebClient(options, hook);
         }
     }
 

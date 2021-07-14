@@ -30,6 +30,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
+using System.Security.Authentication;
 
 using IPA.Cores.Basic;
 using IPA.Cores.Helper.Basic;
@@ -45,6 +46,29 @@ using static IPA.Cores.Globals.Codes;
 
 namespace IPA.App.ThinVars
 {
+    public static class ThinVarsGlobal
+    {
+        // 初期化
+        public static void InitMain()
+        {
+            // 許容する TLS のバージョンを設定するには、以下の行をコメントアウトして設定を変更すること。
+            //CoresConfig.SslSettings.DefaultSslProtocolVersionsAsClient.TrySet(SslProtocols.Tls | SslProtocols.Tls11 | SslProtocols.Tls12 | SslProtocols.Tls13);
+            //CoresConfig.SslSettings.DefaultSslProtocolVersionsAsServer.TrySet(SslProtocols.Tls | SslProtocols.Tls11 | SslProtocols.Tls12 | SslProtocols.Tls13);
+        }
+
+        // 証明書データを保持するクラス
+        public static partial class Certs
+        {
+            // マスター証明書
+            static readonly Singleton<PalX509Certificate> MasterCert_Singleton = new Singleton<PalX509Certificate>(() => new PalX509Certificate(new FilePath(AppGlobal.AppRes, "Settings/00_Master.cer")));
+            public static PalX509Certificate MasterCert => MasterCert_Singleton;
+
+            // コントローラ証明書
+            static readonly Singleton<PalX509Certificate> ControllerCert_Singleton = new Singleton<PalX509Certificate>(() => new PalX509Certificate(new FilePath(AppGlobal.AppRes, "Settings/02_Controller.pfx")));
+            public static PalX509Certificate ControllerCert => ControllerCert_Singleton;
+        }
+    }
+
 #if CORES_CODES_THINCONTROLLER
     // シンテレワークシステム コントローラの動作をカスタマイズするためのクラスです。
     public class MyThinControllerHook : ThinControllerHookBase
@@ -95,5 +119,25 @@ namespace IPA.App.ThinVars
     {
     }
 #endif // CORES_CODES_THINWEBCLIENT
+
+    /// --- 以下のコードは変更しないでください ---
+    /// 
+    // 内部ヘルパー
+    public static class _AppLibHelper
+    {
+        public static readonly string AppThisSourceCodeFileName = Dbg.GetCallerSourceCodeFilePath();
+    }
+
+    // 内部ヘルパー
+    public static partial class AppGlobal
+    {
+        public static ResourceFileSystem AppRes => Res.Codes;
+
+        public static partial class Res
+        {
+            public static readonly ResourceFileSystem Codes = ResourceFileSystem.CreateOrGet(
+                new AssemblyWithSourceInfo(typeof(Res), new SourceCodePathAndMarkerFileName(_AppLibHelper.AppThisSourceCodeFileName, "app_resource_root")));
+        }
+    }
 }
 

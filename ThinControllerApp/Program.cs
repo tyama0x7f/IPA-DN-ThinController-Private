@@ -41,48 +41,21 @@ using IPA.Cores.Web;
 using IPA.Cores.Helper.Web;
 using static IPA.Cores.Globals.Web;
 
-using static IPA.App.ThinControllerApp.AppGlobal;
+using IPA.App.ThinVars;
 
 // 日本語
 
 namespace IPA.App.ThinControllerApp
 {
-    // 内部ヘルパー
-    public static class _AppLibHelper
-    {
-        public static readonly string AppThisSourceCodeFileName = Dbg.GetCallerSourceCodeFilePath();
-    }
-
-    // 内部ヘルパー
-    public static partial class AppGlobal
-    {
-        public static ResourceFileSystem AppRes => Res.Codes;
-
-        public static partial class Res
-        {
-            public static readonly ResourceFileSystem Codes = ResourceFileSystem.CreateOrGet(
-                new AssemblyWithSourceInfo(typeof(Res), new SourceCodePathAndMarkerFileName(_AppLibHelper.AppThisSourceCodeFileName, "app_resource_root")));
-        }
-    }
-
-    // 証明書データを保持するクラス
-    public static partial class AppCerts
-    {
-        // マスター証明書
-        static readonly Singleton<PalX509Certificate> MasterCert_Singleton = new Singleton<PalX509Certificate>(() => new PalX509Certificate(new FilePath(AppRes, "Settings/00_Master.cer")));
-        public static PalX509Certificate MasterCert => MasterCert_Singleton;
-
-        // コントローラ証明書
-        static readonly Singleton<PalX509Certificate> ControllerCert_Singleton = new Singleton<PalX509Certificate>(() => new PalX509Certificate(new FilePath(AppRes, "Settings/02_Controller.pfx")));
-        public static PalX509Certificate ControllerCert => ControllerCert_Singleton;
-    }
-
     public class Program
     {
         public static int Main(string[] args)
         {
             // ログファイルが何 GB を超えたら自動的に古いものを削除するかの設定
             CoresConfig.Logger.DefaultAutoDeleteTotalMinSize.Value = 1_000_000_000; // 1GB
+
+            // Vars の InitMain を呼び出す
+            ThinVarsGlobal.InitMain();
 
             CoresConfig.HttpServerSimpleBasicAuthDatabaseConfig.InitAuthDatabaseUsernameAndPasswordCallback.Set(db =>
             {
@@ -110,7 +83,7 @@ namespace IPA.App.ThinControllerApp
                     HiveName = "ThinControllerApiServerForUsers",
                     DenyRobots = true,
                     UseGlobalCertVault = false,
-                    ServerCertSelector = (cert, sni) => (X509Certificate2)AppCerts.ControllerCert.NativeCertificate,
+                    ServerCertSelector = (cert, sni) => (X509Certificate2)ThinVarsGlobal.Certs.ControllerCert.NativeCertificate,
                     StringOptions = new string[] { ThinControllerServiceType.ApiServiceForUsers.ToString() }.ToList(),
                     MaxRequestBodySize = ThinControllerConsts.ControllerMaxBodySizeForUsers,
                     KestrelMaxConcurrentConnections = ThinControllerConsts.ControllerMaxConcurrentKestrelConnectionsForUsers,
@@ -129,7 +102,7 @@ namespace IPA.App.ThinControllerApp
                     HiveName = "ThinControllerApiServerForGateway",
                     DenyRobots = true,
                     UseGlobalCertVault = false,
-                    ServerCertSelector = (cert, sni) => (X509Certificate2)AppCerts.ControllerCert.NativeCertificate,
+                    ServerCertSelector = (cert, sni) => (X509Certificate2)ThinVarsGlobal.Certs.ControllerCert.NativeCertificate,
                     StringOptions = new string[] { ThinControllerServiceType.ApiServiceForGateway.ToString() }.ToList(),
                     MaxRequestBodySize = ThinControllerConsts.ControllerMaxBodySizeForGateway,
                     IPv4Only = true,

@@ -42,6 +42,7 @@ using IPA.Cores.Helper.Web;
 using static IPA.Cores.Globals.Web;
 
 using static IPA.App.ThinWebClientApp.AppGlobal;
+using IPA.App.ThinVars;
 
 // 日本語
 
@@ -71,6 +72,9 @@ namespace IPA.App.ThinWebClientApp
         {
             // ログファイルが何 GB を超えたら自動的に古いものを削除するかの設定
             CoresConfig.Logger.DefaultAutoDeleteTotalMinSize.Value = 1_000_000_000; // 1GB
+
+            // Vars の InitMain を呼び出す
+            ThinVarsGlobal.InitMain();
 
             const string appName = "IPA.App.ThinWebClientApp";
 

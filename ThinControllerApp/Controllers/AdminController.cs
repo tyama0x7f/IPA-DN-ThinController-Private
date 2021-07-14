@@ -39,8 +39,6 @@ using IPA.Cores.Web;
 using IPA.Cores.Helper.Web;
 using static IPA.Cores.Globals.Web;
 
-using static IPA.App.ThinControllerApp.AppGlobal;
-
 using IPA.App.ThinControllerApp.Models;
 
 using Microsoft.AspNetCore.Authorization;
