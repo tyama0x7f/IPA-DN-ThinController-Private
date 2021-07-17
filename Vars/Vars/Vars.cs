@@ -117,6 +117,19 @@ namespace IPA.App.ThinVars
     // シンテレワークシステム HTML5 Web クライアントの動作をカスタマイズするためのクラスです。
     public class MyThinWebClientHook : ThinWebClientHookBase
     {
+        // 接続要求に対する Rate Limiter の設定
+        public override RateLimiter<string> GetRateLimiterForNewSession()
+        {
+            // デフォルト設定: 30 秒間で 10 回までバースト接続可能。それを超えた場合は、10 秒間に 1 回の割合まで接続可能。
+            return new RateLimiter<string>(
+                new RateLimiterOptions(
+                    burst: 10.0,
+                    limitPerSecond: 0.1,
+                    expiresMsec: 30 * 1000,
+                    mode: RateLimiterMode.NoPenalty
+                    )
+                );;
+        }
     }
 #endif // CORES_CODES_THINWEBCLIENT
 
