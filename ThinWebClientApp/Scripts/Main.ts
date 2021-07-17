@@ -386,6 +386,7 @@ export function ThinWebClient_Error_PageLoad(window: Window, page: Document, mes
     }, false);
 }
 
+
 export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string,
     sessionId: string, pcid: string, svcType: string, jsonEncrypted: string, connectPacketData: string,
     watermarkStr1: string, watermarkStr2: string, miscJsonObj: string): void
@@ -395,6 +396,13 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     const pref = profile.Preference;
     const isDebug = pref.EnableDebug as boolean;
     const display = page.getElementById("display")!;
+
+    // 高速化のまじない (効かないかも)
+    function window_animate_callback(timestamp: number): void
+    {
+        window.requestAnimationFrame(window_animate_callback);
+    }
+    window.requestAnimationFrame(window_animate_callback);
 
     let userInputOccured = false;
 
