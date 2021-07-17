@@ -67,6 +67,7 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\js\bundle.js" />
+    <Content Remove="wwwroot\js\strtable.js" />
   </ItemGroup>
 
   <ItemGroup>
