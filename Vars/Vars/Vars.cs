@@ -60,11 +60,11 @@ namespace IPA.App.ThinVars
         public static partial class Certs
         {
             // マスター証明書
-            static readonly Singleton<PalX509Certificate> MasterCert_Singleton = new Singleton<PalX509Certificate>(() => new PalX509Certificate(new FilePath(AppGlobal.AppRes, "Settings/00_Master.cer")));
+            static readonly Singleton<PalX509Certificate> MasterCert_Singleton = new Singleton<PalX509Certificate>(() => new PalX509Certificate(new FilePath(AppGlobal.AppRes, "ThinControllerCerts/00_Master.cer")));
             public static PalX509Certificate MasterCert => MasterCert_Singleton;
 
             // コントローラ証明書
-            static readonly Singleton<PalX509Certificate> ControllerCert_Singleton = new Singleton<PalX509Certificate>(() => new PalX509Certificate(new FilePath(AppGlobal.AppRes, "Settings/02_Controller.pfx")));
+            static readonly Singleton<PalX509Certificate> ControllerCert_Singleton = new Singleton<PalX509Certificate>(() => new PalX509Certificate(new FilePath(AppGlobal.AppRes, "ThinControllerCerts/02_Controller.pfx")));
             public static PalX509Certificate ControllerCert => ControllerCert_Singleton;
         }
     }
