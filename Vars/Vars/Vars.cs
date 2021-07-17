@@ -99,10 +99,6 @@ namespace IPA.App.ThinVars
             // 全体的な動作設定
             public static void InitMain()
             {
-                // 中継ゲートウェイと同一のプロトコル透かし (バイナリデータ) を変更したい場合は、
-                // 「ThinWebClient_ProtocolWatermark/ThinWebClient_ProtocolWatermark.txt」 ファイルの内容を変更するか、または、別のファイルを以下の行で参照すること。
-                // 詳しくは、「Vars/VarResources/VarResources/ThinWebClient_ProtocolWatermark/README.txt」ファイルの説明を参照すること。
-                CoresConfig.WtcConfig.DefaultWaterMark.TrySet(Str.CHexArrayToBinary(AppGlobal.AppRes["ThinWebClient_ProtocolWatermark/ThinWebClient_ProtocolWatermark.txt"].String));
             }
 
             // Web サーバーの設定
@@ -209,6 +205,15 @@ namespace IPA.App.ThinVars
                     mode: RateLimiterMode.NoPenalty
                     )
                 );;
+        }
+
+        // 中継ゲートウェイと同一のプロトコル透かし (バイナリデータ) の取得
+        public override ReadOnlyMemory<byte> GetProtocolWatermarkBinary()
+        {
+            // 中継ゲートウェイと同一のプロトコル透かし (バイナリデータ) を変更したい場合は、
+            // 「ThinWebClient_ProtocolWatermark/ThinWebClient_ProtocolWatermark.txt」 ファイルの内容を変更するか、または、別のファイルを以下の行で参照すること。
+            // 詳しくは、「Vars/VarResources/VarResources/ThinWebClient_ProtocolWatermark/README.txt」ファイルの説明を参照すること。
+            return Str.CHexArrayToBinary(AppGlobal.AppRes["ThinWebClient_ProtocolWatermark/ThinWebClient_ProtocolWatermark.txt"].String);
         }
     }
 #endif // CORES_CODES_THINWEBCLIENT
