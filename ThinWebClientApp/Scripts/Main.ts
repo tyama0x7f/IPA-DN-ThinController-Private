@@ -167,6 +167,14 @@ export function Index_Load(page: Document, focusPcid: boolean, passwordEasyStrEn
         // WoL の部分にジャンプする
         window.location.hash = "#wol";
     }
+
+    // Webp サポートの有無の検出 (非同期処理が必要)
+    Task.StartAsyncTaskAsync(async function ()
+    {
+        const isWebpSuppported = await Html.IsWebpSupportedAsync();
+        const isWebpSuppported_formvalue = page.getElementById("IsWebpSupported") as HTMLInputElement;
+        isWebpSuppported_formvalue.value = Str.ToStr(isWebpSuppported);
+    });
 }
 
 // OTP 画面がロードされた
