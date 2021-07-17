@@ -20,7 +20,6 @@ using IPA.Cores.Codes;
 using IPA.Cores.Helper.Codes;
 using static IPA.Cores.Globals.Codes;
 
-using static IPA.App.ThinWebClientApp.AppGlobal;
 using System.Threading;
 using System.Net;
 using System.Net.Sockets;

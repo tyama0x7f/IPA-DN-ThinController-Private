@@ -56,6 +56,7 @@ namespace IPA.App.ThinControllerApp
 
             // Vars の InitMain を呼び出す
             ThinVarsGlobal.InitMain();
+            ThinVarsGlobal.ThinControllerVarsConfig.InitMain();
 
             CoresConfig.HttpServerSimpleBasicAuthDatabaseConfig.InitAuthDatabaseUsernameAndPasswordCallback.Set(db =>
             {

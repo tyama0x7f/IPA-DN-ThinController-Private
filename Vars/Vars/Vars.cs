@@ -31,6 +31,7 @@ using System.Runtime.CompilerServices;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using System.Security.Authentication;
+using Microsoft.AspNetCore.Server.Kestrel.Https;
 
 using IPA.Cores.Basic;
 using IPA.Cores.Helper.Basic;
@@ -46,7 +47,7 @@ using static IPA.Cores.Globals.Codes;
 
 namespace IPA.App.ThinVars
 {
-    public static class ThinVarsGlobal
+    public static partial class ThinVarsGlobal
     {
         // 初期化
         public static void InitMain()
@@ -59,13 +60,92 @@ namespace IPA.App.ThinVars
         // 証明書データを保持するクラス
         public static partial class Certs
         {
-            // マスター証明書
+            // マスター証明書 (X.509 PEM 形式)
+            // このサンプルコードでは、ソースコードツリー中の
+            // Vars/VarResources/VarResources/ThinControllerCerts/00_Master.cer
+            // ファイルをマスター証明書として取り扱っています。
+            // マスター証明書の置換は、以下のファイル名を変更するか、または、上記のファイルに使用したい証明書データファイルを上書きすることで可能です。
             static readonly Singleton<PalX509Certificate> MasterCert_Singleton = new Singleton<PalX509Certificate>(() => new PalX509Certificate(new FilePath(AppGlobal.AppRes, "ThinControllerCerts/00_Master.cer")));
             public static PalX509Certificate MasterCert => MasterCert_Singleton;
 
-            // コントローラ証明書
+            // コントローラの HTTPS サーバー証明書と秘密鍵 (PKCS#12 形式)
+            // このサンプルコードでは、ソースコードツリー中の
+            // Vars/VarResources/VarResources/ThinControllerCerts/02_Controller.pfx
+            // ファイルをコントローラの HTTPS サーバー証明書と秘密鍵として取り扱っています。
+            // コントローラの HTTPS サーバー証明書と秘密鍵の置換は、以下のファイル名を変更するか、または、上記のファイルに使用したい証明書データファイルを上書きすることで可能です。
             static readonly Singleton<PalX509Certificate> ControllerCert_Singleton = new Singleton<PalX509Certificate>(() => new PalX509Certificate(new FilePath(AppGlobal.AppRes, "ThinControllerCerts/02_Controller.pfx")));
             public static PalX509Certificate ControllerCert => ControllerCert_Singleton;
+
+            // HTML5 クライアント証明書認証 ルート CA 証明書 (X.509 PEM 形式)
+            // このサンプルコードでは、ソースコードツリー中の
+            // Vars/VarResources/VarResources/ThinWebClient_ClientCertAuth_SampleCerts/01_thin_html5_cert_auth_sample_root_ca.cer
+            // ファイルを HTML5 クライアント証明書認証 ルート CA 証明書として取り扱っています。
+            // HTML5 クライアント証明書認証 ルート CA 証明書の置換は、以下のファイル名を変更するか、または、上記のファイルに使用したい証明書データファイルを上書きすることで可能です。
+            static readonly Singleton<PalX509Certificate> Html5ClientCertAuth_RootCaCert_Singleton = new Singleton<PalX509Certificate>(() => new PalX509Certificate(new FilePath(AppGlobal.AppRes, "ThinWebClient_ClientCertAuth_SampleCerts/01_thin_html5_cert_auth_sample_root_ca.cer")));
+            public static PalX509Certificate Html5ClientCertAuth_RootCaCert => Html5ClientCertAuth_RootCaCert_Singleton;
+        }
+
+        // コントローラ固有の設定クラス
+        public static partial class ThinControllerVarsConfig
+        {
+            public static void InitMain()
+            {
+            }
+        }
+
+        // HTML5 版 Web クライアントアプリ固有の設定クラス
+        public static partial class ThinWebClientVarsConfig
+        {
+            // 全体的な動作設定
+            public static void InitMain()
+            {
+                // 中継ゲートウェイと同一のプロトコル透かし (バイナリデータ) を変更したい場合は、
+                // 「ThinWebClient_ProtocolWatermark/ThinWebClient_ProtocolWatermark.txt」 ファイルの内容を変更するか、または、別のファイルを以下の行で参照すること。
+                // 詳しくは、「Vars/VarResources/VarResources/ThinWebClient_ProtocolWatermark/README.txt」ファイルの説明を参照すること。
+                CoresConfig.WtcConfig.DefaultWaterMark.TrySet(Str.CHexArrayToBinary(AppGlobal.AppRes["ThinWebClient_ProtocolWatermark/ThinWebClient_ProtocolWatermark.txt"].String));
+            }
+
+            // Web サーバーの設定
+            public static void InitalizeWebServerConfig(HttpServerOptions opt)
+            {
+                // false にすると robots.txt ファイルを設置しなくなります。
+                opt.DenyRobots = true;
+
+                // true にすると HTTP ポートへのアクセス時に自動的に HTTPS ポートにリダイレクトするようになります。
+                // 適切な SSL サーバー証明書が利用されていない場合、Web ブラウザで証明書エラーが発生します。
+                opt.AutomaticRedirectToHttpsIfPossible = false;
+
+                // 「NoCertificate」を「RequireCertificate」に変更することにより、クライアント証明書認証を強制します。
+                opt.ClientCertficateMode = ClientCertificateMode.RequireCertificate;
+
+                // クライアント証明書認証を行なう場合は、クライアントが提示した証明書が受け入れ可能かどうかを検証する任意の判定式を以下に記述します。
+                if (opt.ClientCertficateMode == ClientCertificateMode.RequireCertificate)
+                {
+                    // 以下のサンプルコードでは、
+                    opt.ClientCertificateValidator = (cert, chain, err) =>
+                    {
+                        var clientCertObject = cert.AsPkiCertificate();
+
+                        if (clientCertObject.CheckIfSignedByAnyOfParentCertificatesListOrExactlyMatch(
+                            new Certificate[] {
+                                Certs.Html5ClientCertAuth_RootCaCert,
+                            },
+                            out bool exactlyMatchToRootCa) == false)
+                        {
+                            throw new CoresLibException($"The client SSL certificate '{clientCertObject}' is not trusted by any of root CA certificates.");
+                        }
+                        else if (exactlyMatchToRootCa == false)
+                        {
+                            if (cert.AsPkiCertificate().IsExpired())
+                            {
+                                throw new CoresLibException($"The client SSL certificate '{clientCertObject}' is expired or not valid. NotBefore = '{clientCertObject.NotBefore._ToDtStr()}', NotAfter = '{clientCertObject.NotAfter._ToDtStr()}'");
+                            }
+                        }
+
+                        return true;
+                    };
+                }
+            }
         }
     }
 

@@ -41,31 +41,12 @@ using IPA.Cores.Web;
 using IPA.Cores.Helper.Web;
 using static IPA.Cores.Globals.Web;
 
-using static IPA.App.ThinWebClientApp.AppGlobal;
 using IPA.App.ThinVars;
 
 // 日本語
 
 namespace IPA.App.ThinWebClientApp
 {
-    // 内部ヘルパー
-    public static class _AppLibHelper
-    {
-        public static readonly string AppThisSourceCodeFileName = Dbg.GetCallerSourceCodeFilePath();
-    }
-
-    // 内部ヘルパー
-    public static partial class AppGlobal
-    {
-        public static ResourceFileSystem AppRes => Res.Codes;
-
-        public static partial class Res
-        {
-            public static readonly ResourceFileSystem Codes = ResourceFileSystem.CreateOrGet(
-                new AssemblyWithSourceInfo(typeof(Res), new SourceCodePathAndMarkerFileName(_AppLibHelper.AppThisSourceCodeFileName, "app_resource_root")));
-        }
-    }
-
     public class Program
     {
         public static int Main(string[] args)
@@ -75,6 +56,7 @@ namespace IPA.App.ThinWebClientApp
 
             // Vars の InitMain を呼び出す
             ThinVarsGlobal.InitMain();
+            ThinVarsGlobal.ThinWebClientVarsConfig.InitMain();
 
             const string appName = "IPA.App.ThinWebClientApp";
 
@@ -85,25 +67,31 @@ namespace IPA.App.ThinWebClientApp
                     defaultPrintStatToConsole: false,
                     defaultRecordLeakFullStack: false),
                 args: args,
-                getDaemonProc: () => new HttpServerDaemon<Startup>(appName, appName, new HttpServerOptions
+                getDaemonProc: () =>
                 {
-                    HttpPortsList = 80._SingleList(),
-                    HttpsPortsList = 443._SingleList(),
-                    UseKestrelWithIPACoreStack = false,
-                    DebugKestrelToConsole = false,
-                    UseSimpleBasicAuthentication = false,
-                    HoldSimpleBasicAuthenticationDatabase = false,
-                    AutomaticRedirectToHttpsIfPossible = false, // TODO
-                    HiveName = "ThinWebClientWebServer",
-                    DenyRobots = true,
-                    UseGlobalCertVault = false,
-                    ServerCertSelector = (cert, sni) => DevTools.CoresDebugCACert,
-                    MaxRequestBodySize = ThinWebClientConsts.ControllerMaxBodySizeForUsers,
-                    KestrelMaxConcurrentConnections = ThinWebClientConsts.ControllerMaxConcurrentKestrelConnectionsForUsers,
-                    KestrelMaxUpgradedConnections = ThinWebClientConsts.ControllerMaxConcurrentKestrelConnectionsForUsers,
-                    IPv4Only = true,
-                }
-                ));
+                    HttpServerOptions webServerOptions = new HttpServerOptions
+                    {
+                        HttpPortsList = 80._SingleList(),
+                        HttpsPortsList = 443._SingleList(),
+                        UseKestrelWithIPACoreStack = false,
+                        DebugKestrelToConsole = false,
+                        UseSimpleBasicAuthentication = false,
+                        HoldSimpleBasicAuthenticationDatabase = false,
+                        AutomaticRedirectToHttpsIfPossible = false,
+                        HiveName = "ThinWebClientWebServer",
+                        DenyRobots = true,
+                        UseGlobalCertVault = true,
+                        MaxRequestBodySize = ThinWebClientConsts.ControllerMaxBodySizeForUsers,
+                        KestrelMaxConcurrentConnections = ThinWebClientConsts.ControllerMaxConcurrentKestrelConnectionsForUsers,
+                        KestrelMaxUpgradedConnections = ThinWebClientConsts.ControllerMaxConcurrentKestrelConnectionsForUsers,
+                        IPv4Only = true,
+                    };
+
+                    // Vars.cs ファイルで Web サーバーオプションを変更可能とする
+                    ThinVarsGlobal.ThinWebClientVarsConfig.InitalizeWebServerConfig(webServerOptions);
+
+                    return new HttpServerDaemon<Startup>(appName, appName, webServerOptions);
+                });
         }
     }
 }
