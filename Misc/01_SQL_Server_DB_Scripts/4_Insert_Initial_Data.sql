@@ -27,6 +27,11 @@ INSERT [dbo].[VAR] ([VAR_NAME], [VAR_VALUE1], [VAR_VALUE2], [VAR_VALUE3], [VAR_V
 INSERT [dbo].[VAR] ([VAR_NAME], [VAR_VALUE1], [VAR_VALUE2], [VAR_VALUE3], [VAR_VALUE4], [VAR_VALUE5], [VAR_VALUE6]) VALUES (N'QueryPassword_Sessions', N'super', NULL, NULL, NULL, NULL, NULL)
 INSERT [dbo].[VAR] ([VAR_NAME], [VAR_VALUE1], [VAR_VALUE2], [VAR_VALUE3], [VAR_VALUE4], [VAR_VALUE5], [VAR_VALUE6]) VALUES (N'AllowedProxyIpAcl', N'127.0.0.0/8', NULL, NULL, NULL, NULL, NULL)
 INSERT [dbo].[VAR] ([VAR_NAME], [VAR_VALUE1], [VAR_VALUE2], [VAR_VALUE3], [VAR_VALUE4], [VAR_VALUE5], [VAR_VALUE6]) VALUES (N'ControllerRecordStatIntervalMsecs', N'600000', NULL, NULL, NULL, NULL, NULL)
+INSERT [dbo].[VAR] ([VAR_NAME], [VAR_VALUE1], [VAR_VALUE2], [VAR_VALUE3], [VAR_VALUE4], [VAR_VALUE5], [VAR_VALUE6]) VALUES (N'ThinWebClient_WebSocketWildCardDomainName', N'websocket.jp', NULL, NULL, NULL, NULL, NULL)
+INSERT [dbo].[VAR] ([VAR_NAME], [VAR_VALUE1], [VAR_VALUE2], [VAR_VALUE3], [VAR_VALUE4], [VAR_VALUE5], [VAR_VALUE6]) VALUES (N'ThinWebClient_WebSocketWildCardCertServerLatestUrl', N'http://ssl-cert-server.websocket.jp/wildcard_cert_files/websocket.jp/latest/', NULL, NULL, NULL, NULL, NULL)
+INSERT [dbo].[VAR] ([VAR_NAME], [VAR_VALUE1], [VAR_VALUE2], [VAR_VALUE3], [VAR_VALUE4], [VAR_VALUE5], [VAR_VALUE6]) VALUES (N'ThinWebClient_WebSocketWildCardCertServerLatestUrl_Username', N'user123', NULL, NULL, NULL, NULL, NULL)
+INSERT [dbo].[VAR] ([VAR_NAME], [VAR_VALUE1], [VAR_VALUE2], [VAR_VALUE3], [VAR_VALUE4], [VAR_VALUE5], [VAR_VALUE6]) VALUES (N'ThinWebClient_WebSocketWildCardCertServerLatestUrl_Password', N'pass123', NULL, NULL, NULL, NULL, NULL)
+INSERT [dbo].[VAR] ([VAR_NAME], [VAR_VALUE1], [VAR_VALUE2], [VAR_VALUE3], [VAR_VALUE4], [VAR_VALUE5], [VAR_VALUE6]) VALUES (N'WildCardDnsDomainName', N'websocket.jp', NULL, NULL, NULL, NULL, NULL)
 
 GO
 
