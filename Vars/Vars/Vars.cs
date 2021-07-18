@@ -99,6 +99,24 @@ namespace IPA.App.ThinVars
             // 全体的な動作設定
             public static void InitMain()
             {
+                // HTTPS Web サーバーの証明書マネージャ (CertVault) の初期設定
+                // ※ この設定を変更する前に、一度でも ThinWebClient を起動した場合は、
+                //    初回起動時に設定ファイル「ThinWebClientApp/Local/App_IPA.App.ThinWebClientApp/Config/CertVault/settings.json」が
+                //    自動生成されている。
+                //    その後にこの Vars.cs ファイルの内容を書き換えても、
+                //    「ThinWebClientApp/Local/App_IPA.App.ThinWebClientApp/Config/CertVault/settings.json」
+                //    ファイルの内容には適用されない。
+                //    このような場合には、
+                //    一度 ThinWebClient を終了し、
+                //    「ThinWebClientApp/Local/App_IPA.App.ThinWebClientApp/Config/CertVault/settings.json」
+                //    を削除してから再度 ThinWebClient を起動すると、以下の内容が適用される。
+
+                // true に設定すると、Let's Encrypt を使用して証明書を自動取得・更新するように試みるようになる。
+                // Let's Encrypt を使用する場合は true、使用しない場合は false に設定すること。
+                // 通常は、Let's Encrypt を使用せず、証明書を別に管理し、証明書ファイル (.pfx) を設置することを推奨する。
+                CoresConfig.CertVaultSettings.DefaultUseAcme.TrySetValue(false);
+
+                CoresConfig.CertVaultSettings.DefaultNonAcmeEnableAutoGenerateSubjectNameCert.TrySetValue(false);   // これは、false を設定することを推奨する。
             }
 
             // Web サーバーの設定
