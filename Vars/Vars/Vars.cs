@@ -113,7 +113,8 @@ namespace IPA.App.ThinVars
 
                 // true に設定すると、Let's Encrypt を使用して証明書を自動取得・更新するように試みるようになる。
                 // Let's Encrypt を使用する場合は true、使用しない場合は false に設定すること。
-                // 通常は、Let's Encrypt を使用せず、証明書を別に管理し、証明書ファイル (.pfx) を設置することを推奨する。
+                // 通常は、Let's Encrypt を使用せず、証明書を別に管理し、
+                // 静的証明書ファイル (ThinWebClientApp/Local/App_IPA.App.ThinWebClientApp/Config/CertVault/StaticCerts/default.pfx) を設置しメンテナンスすることを推奨する。
                 CoresConfig.CertVaultSettings.DefaultUseAcme.TrySetValue(false);
 
                 CoresConfig.CertVaultSettings.DefaultNonAcmeEnableAutoGenerateSubjectNameCert.TrySetValue(false);   // これは、false を設定することを推奨する。
@@ -130,7 +131,7 @@ namespace IPA.App.ThinVars
                 opt.AutomaticRedirectToHttpsIfPossible = false;
 
                 // 「NoCertificate」を「RequireCertificate」に変更することにより、クライアント証明書認証を強制します。
-                opt.ClientCertficateMode = ClientCertificateMode.RequireCertificate;
+                opt.ClientCertficateMode = ClientCertificateMode.NoCertificate;
 
                 // クライアント証明書認証を行なう場合は、クライアントが提示した証明書が受け入れ可能かどうかを検証する任意の判定式を以下に記述します。
                 if (opt.ClientCertficateMode == ClientCertificateMode.RequireCertificate)

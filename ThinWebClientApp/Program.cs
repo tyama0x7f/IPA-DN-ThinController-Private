@@ -81,6 +81,7 @@ namespace IPA.App.ThinWebClientApp
                         HiveName = "ThinWebClientWebServer",
                         DenyRobots = true,
                         UseGlobalCertVault = true,
+                        StartGlobalCertVaultOnHttpServerStartup = true,
                         MaxRequestBodySize = ThinWebClientConsts.ControllerMaxBodySizeForUsers,
                         KestrelMaxConcurrentConnections = ThinWebClientConsts.ControllerMaxConcurrentKestrelConnectionsForUsers,
                         KestrelMaxUpgradedConnections = ThinWebClientConsts.ControllerMaxConcurrentKestrelConnectionsForUsers,
