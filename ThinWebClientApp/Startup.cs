@@ -110,6 +110,7 @@ namespace IPA.App.ThinWebClientApp
 
             // 全ページ共通コンテキストの注入
             services.AddScoped<PageContext>();
+            IPA.Cores.Web.TagHelpers.GlobalSettings.SetPageContextType<PageContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
