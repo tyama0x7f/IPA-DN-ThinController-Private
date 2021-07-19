@@ -54,7 +54,7 @@
                 <label class="label">詳細オプション:</label>
             </div>
 
-            <p>以下は、特に必要がある場合のみ変更してください。</p>
+            <p>以下は、特に必要がある場合のみ変更してください。一部のオプションは、接続先のサーバーが「システムモード」で動作している場合のみ有効です。</p>
 
             <div class="field-body">
                 <div class="field is-narrow">
@@ -73,6 +73,7 @@
                         </p>
                         <p>
                             <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableFullWindowDrag" id="EnableFullWindowDrag"><label for="EnableFullWindowDrag"><strong>ウインドウの内容を表示したままのドラッグを有効化</strong></label>
+                            <br><i class="fas fa-exclamation-triangle"></i> このオプションを有効にした場合、画面の描画速度が低下する可能性があります。
                         </p>
                         <p>
                             <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableDesktopComposition" id="EnableDesktopComposition"><label for="EnableDesktopComposition"><strong>デスクトップ効果を有効化</strong></label>
@@ -98,11 +99,15 @@
                             <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ShowHelpOnFullScreenUnset" id="ShowHelpOnFullScreenUnset" onchange="Main.Index_UpdateControl(document);"><label for="ShowHelpOnFullScreenUnset"><strong>フルスクリーンが解除された際にキーボードヘルプを表示する</strong></label>
                         </p>
                         <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ShowOnceMsg" id="ShowOnceMsg" onchange="Main.Index_UpdateControl(document);"><label for="ShowOnceMsg"><strong>操作に関するヒントがある場合は、接続完了時に表示する</strong></label>
+                        </p>
+                        <p>
                             <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ScreenAutoResize" id="ScreenAutoResize" onchange="Main.Index_UpdateControl(document);"><label for="ScreenAutoResize"><strong>画面サイズをブラウザのウインドウサイズに合わせて自動的に拡大・縮小</strong></label>
+                            <br><i class="fas fa-exclamation-triangle"></i> このオプションを無効にすると、画面は原寸大で表示され、スクロールバーが表示されます。サーバーが「ユーザーモード」で動作しており、リモート画面とローカル画面の解像度が異なる場合に ON/OFF を試行すると、快適に操作できるようになる場合があります。
                         </p>
                         <p>
                             <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ScreenAutoResizeRemoteFit" id="ScreenAutoResizeRemoteFit" onchange="Main.Index_UpdateControl(document);"><label for="ScreenAutoResizeRemoteFit"><strong>ブラウザのウインドウサイズを変更したとき、リモート画面の解像度をブラウザのウインドウサイズに応じてダイナミックに変更 (システムモードのみ)</strong></label>
-                            <br><i class="fas fa-exclamation-triangle"></i> このオプションを有効にした場合、リサイズを複数回行なうと、描画エラーが発生し、接続が切断される場合があります。その場合は、無効にしてください。
+                            <br><i class="fas fa-exclamation-triangle"></i> このオプションを有効にした場合、リサイズを複数回行なうと、描画エラーが発生し、接続が切断される場合があります。その場合は、無効にしてください。また、「画面サイズをブラウザのウインドウサイズに合わせて自動的に拡大・縮小」オプションも有効になっている必要があります。
                         </p>
                         <p>
                             <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ScreenGetAutoSize" id="ScreenGetAutoSize" onchange="Main.Index_UpdateControl(document);"><label for="ScreenGetAutoSize"><strong>接続時にリモート画面の解像度をこのコンピュータのフルスクリーン画面解像度に自動設定 (システムモードのみ)</strong></label>

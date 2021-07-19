@@ -297,7 +297,7 @@ async function Remote_ShowDisconnectErrorAsync(pcid?: string): Promise<void>
     let gotoUrl = "/";
     if (Str.IsFilled(pcid))
     {
-        gotoUrl += "?id=" + Str.EncodeUrl(pcid?.trim());
+        gotoUrl += "?pcid=" + Str.EncodeUrl(pcid?.trim());
     }
     Html.NativateTo(gotoUrl);
 }
@@ -338,7 +338,7 @@ export function Common_ErrorAlert(page: Document, errorMessage: string, pcid?: s
         let url = "/";
         if (Str.IsFilled(pcid))
         {
-            url += "?id=" + Str.EncodeUrl(pcid?.trim());
+            url += "?pcid=" + Str.EncodeUrl(pcid?.trim());
         }
         Html.NativateTo(url);
     }, false);
@@ -389,9 +389,10 @@ export function ThinWebClient_Error_PageLoad(window: Window, page: Document, mes
 
 export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, webSocketUrl: string,
     sessionId: string, pcid: string, svcType: string, jsonEncrypted: string, connectPacketData: string,
-    watermarkStr1: string, watermarkStr2: string, miscJsonObj: string): void
+    watermarkStr1: string, watermarkStr2: string, miscJsonObj: string, misc2JsonObj: string): void
 {
     const misc = Util.JsonToObject(Str.JavaScriptSafeStrDecode(miscJsonObj));
+    const misc2 = Util.JsonToObject(Str.JavaScriptSafeStrDecode(misc2JsonObj));
     const profile = Util.JsonToObject(Secure.JavaScriptEasyStrDecrypt(jsonEncrypted, "easyJsonEncode"));
     const pref = profile.Preference;
     const isDebug = pref.EnableDebug as boolean;
@@ -484,6 +485,11 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
             msg = "HTML5 のリモート画面転送の通信が切断されました。再接続してみてください。<BR><BR>" +
                 original + msg;
         }
+        else if (code === 514)
+        {
+            msg = "通信回線の速度が著しく低下したか、またはパケットロスが発生した等の理由で、HTML5 のリモート画面転送の通信がタイムアウトしました。<BR><BR>モバイル回線を利用している場合で、回線速度に原因があると考えられる場合は、、WiFi やブロードバンド回線、LAN などの通常程度の回線を利用して再接続してみてください。<BR><BR>また、接続先のサーバーが「ユーザーモード」で動作している場合は、「システムモード」での動作を検討してください。<BR><BR>" +
+                original + msg;
+        }
 
         const str = `Tunnel Error Code: ${code}, Message: "${msg}"`;
 
@@ -546,6 +552,8 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         Common_ErrorAlert(page, str, pcid);
     };
 
+    let onceMsgShowed = false;
+
     // @ts-ignore
     guac.onstatechange = function (state: GuaStates): void
     {
@@ -560,6 +568,29 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
 
             // 切断メッセージを表示
             Remote_ShowDisconnectErrorAsync(pcid);
+        }
+        else if (state === GuaStates.STATE_CONNECTED)
+        {
+            if (!onceMsgShowed)
+            {
+                onceMsgShowed = true;
+                // 接続完了時にメッセージを表示する
+                Task.StartAsyncTaskAsync(async function () 
+                {
+                    let onceMsg = Str.NonNull(misc2.OnceMsg);
+                    const onceMsgTitle = Str.NonNull(misc2.OnceMsgTitle);
+
+                    if (Str.IsFilled(onceMsg) && Str.IsFilled(onceMsgTitle))
+                    {
+                        if (pref.ShowOnceMsg)
+                        {
+                            onceMsg += "\r\n\r\nこのメッセージは、接続設定で非表示にすることができます。";
+
+                            await Html.DialogAlertAsync(onceMsg, onceMsgTitle, false, "is-success is-light", "fas fa-info-circle");
+                        }
+                    }
+                }, false);
+            }
         }
     };
 

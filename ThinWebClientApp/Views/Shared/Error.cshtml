@@ -19,7 +19,7 @@
     string id = Context.Request._GetQueryStringFirst("id");
     if (id._IsFilled())
     {
-        url += "?id=" + id._MakeVerySafeAsciiOnlyNonSpaceFileName();
+        url += "?pcid=" + id._MakeVerySafeAsciiOnlyNonSpaceFileName();
     }
 
     string jsTitle = "エラーが発生しました";
