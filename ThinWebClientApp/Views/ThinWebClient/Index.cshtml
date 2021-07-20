@@ -12,7 +12,7 @@
             <div class="field">
                 <label class="label" id="top_pcid">接続先コンピュータ ID:</label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input is-link is-medium" type="text" placeholder="接続先のコンピュータ ID を指定してください" style="font-weight: bold" asp-for="CurrentProfile.Pcid" onchange="Main.Index_UpdateControl(document);" onInput="Main.Index_UpdateControl(document);" onKeyUp="Main.Index_UpdateControl(document);" onkeypress="Main.Index_UpdateControl(document);" onkeydown="Main.Index_UpdateControl(document);">
+                    <input class="input is-link is-medium" type="text" placeholder="@Page.Stb["THINWEBC_INDEX_PCID_BACKGROUND_TEXT"]" style="font-weight: bold" asp-for="CurrentProfile.Pcid" onchange="Main.Index_UpdateControl(document);" onInput="Main.Index_UpdateControl(document);" onKeyUp="Main.Index_UpdateControl(document);" onkeypress="Main.Index_UpdateControl(document);" onkeydown="Main.Index_UpdateControl(document);">
                     <span class="icon is-medium is-left">
                         <i class="fas fa-laptop"></i>
                     </span>

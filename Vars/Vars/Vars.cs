@@ -65,7 +65,10 @@ namespace IPA.App.ThinVars
             // Vars/VarResources/VarResources/ThinControllerCerts/00_Master.cer
             // ファイルをマスター証明書として取り扱っています。
             // マスター証明書の置換は、以下のファイル名を変更するか、または、上記のファイルに使用したい証明書データファイルを上書きすることで可能です。
-            static readonly Singleton<PalX509Certificate> MasterCert_Singleton = new Singleton<PalX509Certificate>(() => new PalX509Certificate(new FilePath(AppGlobal.AppRes, "ThinControllerCerts/00_Master.cer")));
+            static readonly Singleton<PalX509Certificate> MasterCert_Singleton =
+                new Singleton<PalX509Certificate>(() => new PalX509Certificate(new FilePath(AppGlobal.AppRes, 
+                    "ThinControllerCerts/00_Master.cer")));
+
             public static PalX509Certificate MasterCert => MasterCert_Singleton;
 
             // コントローラの HTTPS サーバー証明書と秘密鍵 (PKCS#12 形式)
@@ -73,7 +76,10 @@ namespace IPA.App.ThinVars
             // Vars/VarResources/VarResources/ThinControllerCerts/02_Controller.pfx
             // ファイルをコントローラの HTTPS サーバー証明書と秘密鍵として取り扱っています。
             // コントローラの HTTPS サーバー証明書と秘密鍵の置換は、以下のファイル名を変更するか、または、上記のファイルに使用したい証明書データファイルを上書きすることで可能です。
-            static readonly Singleton<PalX509Certificate> ControllerCert_Singleton = new Singleton<PalX509Certificate>(() => new PalX509Certificate(new FilePath(AppGlobal.AppRes, "ThinControllerCerts/02_Controller.pfx")));
+            static readonly Singleton<PalX509Certificate> ControllerCert_Singleton =
+                new Singleton<PalX509Certificate>(() => new PalX509Certificate(new FilePath(AppGlobal.AppRes, 
+                    "ThinControllerCerts/02_Controller.pfx")));
+
             public static PalX509Certificate ControllerCert => ControllerCert_Singleton;
 
             // HTML5 クライアント証明書認証 ルート CA 証明書 (X.509 PEM 形式)
@@ -81,7 +87,10 @@ namespace IPA.App.ThinVars
             // Vars/VarResources/VarResources/ThinWebClient_ClientCertAuth_SampleCerts/01_thin_html5_cert_auth_sample_root_ca.cer
             // ファイルを HTML5 クライアント証明書認証 ルート CA 証明書として取り扱っています。
             // HTML5 クライアント証明書認証 ルート CA 証明書の置換は、以下のファイル名を変更するか、または、上記のファイルに使用したい証明書データファイルを上書きすることで可能です。
-            static readonly Singleton<PalX509Certificate> Html5ClientCertAuth_RootCaCert_Singleton = new Singleton<PalX509Certificate>(() => new PalX509Certificate(new FilePath(AppGlobal.AppRes, "ThinWebClient_ClientCertAuth_SampleCerts/01_thin_html5_cert_auth_sample_root_ca.cer")));
+            static readonly Singleton<PalX509Certificate> Html5ClientCertAuth_RootCaCert_Singleton =
+                new Singleton<PalX509Certificate>(() => new PalX509Certificate(new FilePath(AppGlobal.AppRes, 
+                    "ThinWebClient_ClientCertAuth_SampleCerts/01_thin_html5_cert_auth_sample_root_ca.cer")));
+
             public static PalX509Certificate Html5ClientCertAuth_RootCaCert => Html5ClientCertAuth_RootCaCert_Singleton;
         }
 
