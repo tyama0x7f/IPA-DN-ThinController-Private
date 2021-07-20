@@ -1,6 +1,6 @@
 ﻿@model ThinWebClientModelOtp
 @{
-    Page.Title = $"ワンタイムパスワード (OTP) 認証 - \"{Model.ConnectOptions!.Pcid}\" への接続";
+    Page.Title = Page.Stb["THINWEB_OTP_TITLE"]._FormatC(Model.ConnectOptions!.Pcid);
 }
 <h2 class="title is-4">@Page.Title</h2>
 
@@ -12,13 +12,13 @@
 
             <img src="~/images/otp.jpg" width="500" height="188" />
 
-            <p>シン・テレワークシステム サーバーの設定画面で事前設定されているメールアドレスに、ワンタイムパスワード (OTP) が送付されました。</p>
-            <p>メールをご確認いただき、OTP を入力してください。</p>
+            <p><stb>THINWEB_OTP1</stb></p>
+            <p><stb>THINWEB_OTP2</stb></p>
 
             <p>　</p>
 
             <div class="field">
-                <label class="label">ワンタイムパスワード (OTP):</label>
+                <label class="label"><stb>THINWEB_OTP3</stb></label>
                 <div class="control has-icons-left has-icons-right">
                     <input class="input is-link" type="text" style="font-weight: bold" name="otp" id="otp">
                     <span class="icon is-small is-left">
@@ -29,14 +29,14 @@
 
             <p>　</p>
 
-            <p>しばらく経過してもメールが届かない場合は、一度キャンセルしてから、再度ログインを試行してください。</p>
+            <p><stb>THINWEB_OTP4</stb></p>
 
             <p>　</p>
 
             <div class="field">
                 <div class="control">
                     <button class="button is-link" style="font-weight: bold" type="submit"><i class="fas fa-arrow-circle-right"></i>&nbsp;OK</button>
-                    <a class="button is-info is-light" style="font-weight: bold" href="/?pcid=@Model.Profile!.Pcid._MakeVerySafeAsciiOnlyNonSpaceFileName()"><i class="fas fa-times-circle"></i>&nbsp;キャンセル</a>
+                    <a class="button is-info is-light" style="font-weight: bold" href="/?pcid=@Model.Profile!.Pcid._MakeVerySafeAsciiOnlyNonSpaceFileName()"><i class="fas fa-times-circle"></i>&nbsp;<stb>THINWEB_ADV6</stb></a>
                 </div>
             </div>
 

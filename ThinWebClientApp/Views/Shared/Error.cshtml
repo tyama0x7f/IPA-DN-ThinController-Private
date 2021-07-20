@@ -1,6 +1,6 @@
 ﻿@model AspNetErrorModel
 @{
-    Page.Title = "エラー";
+    Page.Title = Page.Stb["THINWEB_ERROR"];
 
     string ErrorStr = ThinWebClientErrorUtil.GetFriendlyErrorMessage(Model.ErrorInfo, Page);
 
@@ -22,7 +22,7 @@
         url += "?pcid=" + id._MakeVerySafeAsciiOnlyNonSpaceFileName();
     }
 
-    string jsTitle = "エラーが発生しました";
+    string jsTitle = Page.Stb["THINWEB_ERROR_MSG"];
 
 }
 
@@ -33,13 +33,13 @@
                 <p><i class="fas fa-exclamation-triangle"></i>&nbsp;@ErrorStr</p>
             </div>
             <div class="message-body">
-                <p>以下のエラーが発生しました。<b><a href="@url">トップページ</a></b> から再試行してください。</p>
-                <p><b>エラー内容:</b><BR>@ErrorStr</p>
-                <p><b>エラー発生日時:</b><BR>@DateTimeOffset.Now._ToDtStr(withMSsecs: true)</p>
-                <p><b>エラーが発生した処理:</b><br>@Model.ErrorPath</p>
-                <p><b>リスクエスト ID:</b><br>@Model.RequestId</p>
-                <p><b>Web サーバー名:</b><BR>@Model.WebServerName</p>
-                <p><b>Web クライアント名:</b><BR>@Model.WebClientName</p>
+                <p><stb>THINWEB_ERROR1</stb><b><stb>THINWEB_ERROR4</stb><a href="@url"><stb>THINWEB_ERROR2</stb></a></b><stb>THINWEB_ERROR3</stb></p>
+                <p><b><stb>THINWEB_ERROR5</stb></b><BR>@ErrorStr</p>
+                <p><b><stb>THINWEB_ERROR6</stb></b><BR>@DateTimeOffset.Now._ToDtStr(withMSsecs: true)</p>
+                <p><b><stb>THINWEB_ERROR7</stb></b><br>@Model.ErrorPath</p>
+                <p><b><stb>THINWEB_ERROR8</stb></b><br>@Model.RequestId</p>
+                <p><b><stb>THINWEB_ERROR9</stb></b><BR>@Model.WebServerName</p>
+                <p><b><stb>THINWEB_ERROR10</stb></b><BR>@Model.WebClientName</p>
             </div>
         </article>
     </div>

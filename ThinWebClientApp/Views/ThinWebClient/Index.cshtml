@@ -8,11 +8,11 @@
 <div class="box">
     <div class="content">
         <form method="post" action="/">
-            
+
             <div class="field">
-                <label class="label" id="top_pcid">接続先コンピュータ ID:</label>
+                <label class="label" id="top_pcid"><stb>THINWEB_PCID</stb></label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input is-link is-medium" type="text" placeholder="@Page.Stb["THINWEBC_INDEX_PCID_BACKGROUND_TEXT"]" style="font-weight: bold" asp-for="CurrentProfile.Pcid" onchange="Main.Index_UpdateControl(document);" onInput="Main.Index_UpdateControl(document);" onKeyUp="Main.Index_UpdateControl(document);" onkeypress="Main.Index_UpdateControl(document);" onkeydown="Main.Index_UpdateControl(document);">
+                    <input class="input is-link is-medium" type="text" placeholder="@Page.Stb["THINWEB_PCID_BACKGROUND_TEXT"]" style="font-weight: bold" asp-for="CurrentProfile.Pcid" onchange="Main.Index_UpdateControl(document);" onInput="Main.Index_UpdateControl(document);" onKeyUp="Main.Index_UpdateControl(document);" onkeypress="Main.Index_UpdateControl(document);" onkeydown="Main.Index_UpdateControl(document);">
                     <span class="icon is-medium is-left">
                         <i class="fas fa-laptop"></i>
                     </span>
@@ -22,7 +22,7 @@
             @if (Model.HistoryItems.Count >= 2)
             {
                 <div class="field">
-                    <label class="label">接続履歴:</label>
+                    <label class="label"><stb>THINWEB_HISTORY</stb></label>
                     <div class="select">
                         <select asp-for="SelectedHistory" asp-items="Model.HistoryItems" class="input is-info" onChange="Main.Index_OnSelectedHistoryChange(document);"></select>
                     </div>
@@ -31,17 +31,17 @@
 
             <div class="field">
                 <div class="control">
-                    <button class="button is-link" style="font-weight: bold" type="submit" id="ok1"><i class="fas fa-laptop-house"></i>&nbsp;このコンピュータ ID にリモート接続</button>&nbsp;&nbsp;
+                    <button class="button is-link" style="font-weight: bold" type="submit" id="ok1"><i class="fas fa-laptop-house"></i>&nbsp;<stb>THINWEB_CONNECT_BUTTON</stb></button>&nbsp;&nbsp;
                     @if (Model.HistoryItems.Count >= 2)
                     {
-                        <button class="button is-info is-light" style="font-weight: bold" type="button" onclick="Main.Index_DeleteAllHistory(document);"><i class="far fa-trash-alt"></i>&nbsp;接続履歴を消去</button><text>&nbsp;&nbsp;</text>
+                        <button class="button is-info is-light" style="font-weight: bold" type="button" onclick="Main.Index_DeleteAllHistory(document);"><i class="far fa-trash-alt"></i>&nbsp;<stb>THINWEB_ERASE_HISTORY</stb></button><text>&nbsp;&nbsp;</text>
                     }
                     <a class="button is-danger is-light" style="font-weight: bold" href="#wol"><i class="fas fa-power-off"></i>&nbsp;Wake on LAN 機能</a>&nbsp;&nbsp;
                 </div>
             </div>
 
             <div class="notification is-warning is-light" id="ie_warning" hidden>
-                <i class="fab fa-internet-explorer"></i> <strong>ご注意: この Web ブラウザは、Internet Explorer です。</strong><br>Internet Explorer では本システムは動作はするものの、動作速度が低速であり、描画が不安定になったり、画面の一部が表示されなかったりする不具合が発生する場合があります。<br><strong><a href="https://www.microsoft.com/edge/" target="_blank">Microsoft Edge</a></strong>、<strong><a href="https://www.google.com/chrome/" target="_blank">Google Chrome</a></strong> または <strong><a href="https://www.mozilla.org/" target="_blank">Mozilla Firefox</a></strong> の利用をお勧めします。
+                <i class="fab fa-internet-explorer"></i> <stb>THINWEB_IE_WARNING</stb>
             </div>
 
             <p> </p>
@@ -51,66 +51,66 @@
             <hr>
 
             <div class="field">
-                <label class="label">詳細オプション:</label>
+                <label class="label"><stb>THINWEB_OPTIONS</stb></label>
             </div>
 
-            <p>以下は、特に必要がある場合のみ変更してください。一部のオプションは、接続先のサーバーが「システムモード」で動作している場合のみ有効です。</p>
+            <p><stb>THINWEB_OPTIONS_TEXT</stb></p>
 
             <div class="field-body">
                 <div class="field is-narrow">
                     <div class="control">
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableAudio" id="EnableAudio"><label for="EnableAudio"><strong>オーディオを有効化</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableAudio" id="EnableAudio"><label for="EnableAudio"><strong><stb>THINWEB_ENABLEAUDIO</stb></strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableWallPaper" id="EnableWallPaper"><label for="EnableWallPaper"><strong>Windows の壁紙を有効化</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableWallPaper" id="EnableWallPaper"><label for="EnableWallPaper"><strong><stb>THINWEB_ENABLEWALLPAPER</stb></strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableTheming" id="EnableTheming"><label for="EnableTheming"><strong>Windows の視覚テーマを有効化</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableTheming" id="EnableTheming"><label for="EnableTheming"><strong><stb>THINWEB_ENABLETHEMING</stb></strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableFontSmoothing" id="EnableFontSmoothing"><label for="EnableFontSmoothing"><strong>フォントのスムージングを有効化</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableFontSmoothing" id="EnableFontSmoothing"><label for="EnableFontSmoothing"><strong><stb>THINWEB_ENABLEFONTSMOOTHING</stb></strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableFullWindowDrag" id="EnableFullWindowDrag"><label for="EnableFullWindowDrag"><strong>ウインドウの内容を表示したままのドラッグを有効化</strong></label>
-                            <br><i class="fas fa-exclamation-triangle"></i> このオプションを有効にした場合、画面の描画速度が低下する可能性があります。
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableFullWindowDrag" id="EnableFullWindowDrag"><label for="EnableFullWindowDrag"><strong><stb>THINWEB_ENABLEFULLWINDOWDRAG</stb></strong></label>
+                            <br><i class="fas fa-exclamation-triangle"></i> <stb>THINWEB_ENABLEFULLWINDOWDRAG_WARNING</stb>
+</p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableDesktopComposition" id="EnableDesktopComposition"><label for="EnableDesktopComposition"><strong><stb>THINWEB_ENABLEDESKTOPCOMPOSITION</stb></strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableDesktopComposition" id="EnableDesktopComposition"><label for="EnableDesktopComposition"><strong>デスクトップ効果を有効化</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableAlwaysWebp" id="EnableAlwaysWebp" onchange="Main.Index_UpdateControl(document);"><label for="EnableAlwaysWebp"><strong><stb>THINWEB_ENABLEALWAYSWEBP</stb></strong></label>
+                            <br><i class="fas fa-exclamation-triangle"></i> <stb>THINWEB_ENABLEALWAYSWEBP_WARNING</stb>
+</p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableMenuAnimations" id="EnableMenuAnimations"><label for="EnableMenuAnimations"><strong><stb>THINWEB_ENABLEMENUANIMATIONS</stb></strong></label>
+                            <br><i class="fas fa-exclamation-triangle"></i> <stb>THINWEB_ENABLEMENUANIMATIONS_WARNING</stb>
+</p>
+                        <p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ShowLocalMouseCursor" id="ShowLocalMouseCursor"><label for="ShowLocalMouseCursor"><strong><stb>THINWEB_SHOWLOCALMOUSECURSOR</stb></strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableAlwaysWebp" id="EnableAlwaysWebp" onchange="Main.Index_UpdateControl(document);"><label for="EnableAlwaysWebp"><strong>画面描画をさらに高速化することを試行</strong></label>
-                            <br><i class="fas fa-exclamation-triangle"></i> このオプションを有効にした場合、常時 WebP が使用されます。ネットワーク帯域が多く消費される可能性があります。また、帯域や CPU 速度が十分でない場合は、逆に描画速度が低下する場合があります。ON/OFF の試行錯誤をしてみてください。一部の古いブラウザでは利用できません。
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ShowRemoteMouseCursor" id="ShowRemoteMouseCursor"><label for="ShowRemoteMouseCursor"><strong><stb>THINWEB_SHOWREMOTEMOUSECURSOR</stb></strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableMenuAnimations" id="EnableMenuAnimations"><label for="EnableMenuAnimations"><strong>メニューのアニメーションを有効化</strong></label>
-                            <br><i class="fas fa-exclamation-triangle"></i> このオプションを有効にした場合、画面の描画速度が低下する可能性があります。
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ScreenAutoFullScreen" id="ScreenAutoFullScreen" onchange="Main.Index_UpdateControl(document);"><label for="ScreenAutoFullScreen"><strong><stb>THINWEB_SCREENAUTOFULLSCREEN</stb></strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ShowLocalMouseCursor" id="ShowLocalMouseCursor"><label for="ShowLocalMouseCursor"><strong>ローカルのマウスカーソルを描画</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ShowHelpOnFullScreenUnset" id="ShowHelpOnFullScreenUnset" onchange="Main.Index_UpdateControl(document);"><label for="ShowHelpOnFullScreenUnset"><strong><stb>THINWEB_SHOWHELPONFULLSCREENUNSET</stb></strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ShowRemoteMouseCursor" id="ShowRemoteMouseCursor"><label for="ShowRemoteMouseCursor"><strong>リモートのマウスカーソルを描画</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ShowOnceMsg" id="ShowOnceMsg" onchange="Main.Index_UpdateControl(document);"><label for="ShowOnceMsg"><strong><stb>THINWEB_SHOWONCEMSG</stb></strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ScreenAutoFullScreen" id="ScreenAutoFullScreen" onchange="Main.Index_UpdateControl(document);"><label for="ScreenAutoFullScreen"><strong>リモート接続時に自動的にフルスクリーンにする</strong></label>
-                        </p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ScreenAutoResize" id="ScreenAutoResize" onchange="Main.Index_UpdateControl(document);"><label for="ScreenAutoResize"><strong><stb>THINWEB_SCREENAUTORESIZE</stb></strong></label>
+                            <br><i class="fas fa-exclamation-triangle"></i> <stb>THINWEB_SCREENAUTORESIZE_WARNING</stb>
+</p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ShowHelpOnFullScreenUnset" id="ShowHelpOnFullScreenUnset" onchange="Main.Index_UpdateControl(document);"><label for="ShowHelpOnFullScreenUnset"><strong>フルスクリーンが解除された際にキーボードヘルプを表示する</strong></label>
-                        </p>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ScreenAutoResizeRemoteFit" id="ScreenAutoResizeRemoteFit" onchange="Main.Index_UpdateControl(document);"><label for="ScreenAutoResizeRemoteFit"><strong><stb>THINWEB_SCREENAUTORESIZEREMOTEFIT</stb></strong></label>
+                            <br><i class="fas fa-exclamation-triangle"></i> <stb>THINWEB_SCREENAUTORESIZEREMOTEFIT_WARNING</stb>
+</p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ShowOnceMsg" id="ShowOnceMsg" onchange="Main.Index_UpdateControl(document);"><label for="ShowOnceMsg"><strong>操作に関するヒントがある場合は、接続完了時に表示する</strong></label>
-                        </p>
-                        <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ScreenAutoResize" id="ScreenAutoResize" onchange="Main.Index_UpdateControl(document);"><label for="ScreenAutoResize"><strong>画面サイズをブラウザのウインドウサイズに合わせて自動的に拡大・縮小</strong></label>
-                            <br><i class="fas fa-exclamation-triangle"></i> このオプションを無効にすると、画面は原寸大で表示され、スクロールバーが表示されます。サーバーが「ユーザーモード」で動作しており、リモート画面とローカル画面の解像度が異なる場合に ON/OFF を試行すると、快適に操作できるようになる場合があります。
-                        </p>
-                        <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ScreenAutoResizeRemoteFit" id="ScreenAutoResizeRemoteFit" onchange="Main.Index_UpdateControl(document);"><label for="ScreenAutoResizeRemoteFit"><strong>ブラウザのウインドウサイズを変更したとき、リモート画面の解像度をブラウザのウインドウサイズに応じてダイナミックに変更 (システムモードのみ)</strong></label>
-                            <br><i class="fas fa-exclamation-triangle"></i> このオプションを有効にした場合、リサイズを複数回行なうと、描画エラーが発生し、接続が切断される場合があります。その場合は、無効にしてください。また、「画面サイズをブラウザのウインドウサイズに合わせて自動的に拡大・縮小」オプションも有効になっている必要があります。
-                        </p>
-                        <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ScreenGetAutoSize" id="ScreenGetAutoSize" onchange="Main.Index_UpdateControl(document);"><label for="ScreenGetAutoSize"><strong>接続時にリモート画面の解像度をこのコンピュータのフルスクリーン画面解像度に自動設定 (システムモードのみ)</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.ScreenGetAutoSize" id="ScreenGetAutoSize" onchange="Main.Index_UpdateControl(document);"><label for="ScreenGetAutoSize"><strong><stb>THINWEB_SCREENGETAUTOSIZE</stb></strong></label>
                         </p>
                     </div>
                 </div>
@@ -119,9 +119,9 @@
             <p> </p>
 
             <div class="field">
-                <label class="label">カスタム画面解像度 (横: ピクセル数)</label>
+                <label class="label"><stb>THINWEB_RESOLUTION_WIDTH</stb></label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input is-link" type="text" placeholder="画面解像度 (横幅: ピクセル数) を指定します。" asp-for="CurrentProfile.Preference.ScreenWidth">
+                    <input class="input is-link" type="text" placeholder="@Page.Stb["THINWEB_RESOLUTION_WIDTH_BACK"]" asp-for="CurrentProfile.Preference.ScreenWidth">
                     <span class="icon is-small is-left">
                         <i class="fas fa-text-width"></i>
                     </span>
@@ -129,9 +129,9 @@
             </div>
 
             <div class="field">
-                <label class="label">カスタム画面解像度 (縦: ピクセル数)</label>
+                <label class="label"><stb>THINWEB_RESOLUTION_HEIGHT</stb></label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input is-link" type="text" placeholder="画面解像度 (横幅: ピクセル数) を指定します。" asp-for="CurrentProfile.Preference.ScreenHeight">
+                    <input class="input is-link" type="text" placeholder="@Page.Stb["THINWEB_RESOLUTION_HEIGHT_BACK"]" asp-for="CurrentProfile.Preference.ScreenHeight">
                     <span class="icon is-small is-left">
                         <i class="fas fa-text-height"></i>
                     </span>
@@ -139,51 +139,44 @@
             </div>
 
             <div class="field">
-                <label class="label">キーボードレイアウトの選択:</label>
+                <label class="label"><stb>THINWEB_KEYBOARDLAYOUTSTR</stb></label>
                 <div class="control">
                     <select asp-for="CurrentProfile.Preference.KeyboardLayoutStr" asp-items="Model.KeyboardLayoutItems" class="input is-info"></select>
                 </div>
             </div>
 
-            @*<div class="field">
-            <label class="label">画面サイズ変更方式の選択:</label>
-            <div class="control">
-                <select asp-for="CurrentProfile.Preference.ResizeMethodStr" asp-items="Model.ResizeMethodItems" class="input is-info"></select>
-            </div>
-        </div>*@
-
             <div class="field-body">
                 <div class="field is-narrow">
                     <div class="control">
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Win_ShiftWin" id="Win_ShiftWin"><label for="Win_ShiftWin"><strong>「左 Shift + Windows」 (Mac: 「左 Shift + ⌘Command」) キーを押すことで、リモートの「Windows」キーを押下いたします。</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Win_ShiftWin" id="Win_ShiftWin"><label for="Win_ShiftWin"><strong><stb>THINWEB_WIN_SHIFTWIN</stb></strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Win_Ctrl2Alt2" id="Win_Ctrl2Alt2"><label for="Win_Ctrl2Alt2"><strong>「右 Ctrl + 右 Alt」 キーを押すことで、リモートの「Windows」キーを押下いたします。</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Win_Ctrl2Alt2" id="Win_Ctrl2Alt2"><label for="Win_Ctrl2Alt2"><strong><stb>THINWEB_WIN_CTRL2ALT2</stb></strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Tab_AltShift" id="Tab_AltShift"><label for="Tab_AltShift"><strong>「左 Alt + 左 Shift」 キーを押すことで、リモートの「Alt + Tab」キーを押下いたします。</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Tab_AltShift" id="Tab_AltShift"><label for="Tab_AltShift"><strong><stb>THINWEB_TAB_ALTSHIFT</stb></strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Cad_CtrlAltEnd" id="Cad_CtrlAltEnd"><label for="Cad_CtrlAltEnd"><strong>「左 Ctrl + 左 Alt + End」 (Mac: 「Ctrl + Option + End」) キーを押すことで、リモートの「Ctrl + Alt + Del」キーを押下いたします。</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Cad_CtrlAltEnd" id="Cad_CtrlAltEnd"><label for="Cad_CtrlAltEnd"><strong><stb>THINWEB_CAD_CTRLALTEND</stb></strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Cad_CtrlAltHome" id="Cad_CtrlAltHome"><label for="Cad_CtrlAltHome"><strong>「左 Ctrl + 左 Alt + Home」 (Mac: 「Ctrl + Option + Home」) キーを押すことで、リモートの「Ctrl + Alt + Del」キーを押下いたします。</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Cad_CtrlAltHome" id="Cad_CtrlAltHome"><label for="Cad_CtrlAltHome"><strong><stb>THINWEB_CAD_CTRLALTHOME</stb></strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Cad_CtrlAltBackspace" id="Cad_CtrlAltBackspace"><label for="Cad_CtrlAltBackspace"><strong>「左 Ctrl + 左 Alt + Backspace」 (Mac: 「Ctrl + Option + Backspace」) キーを押すことで、リモートの「Ctrl + Alt + Del」キーを押下いたします。</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Cad_CtrlAltBackspace" id="Cad_CtrlAltBackspace"><label for="Cad_CtrlAltBackspace"><strong><stb>THINWEB_CAD_CTRLALTBACKSPACE</stb></strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Cad_CtrlShiftBackspace" id="Cad_CtrlShiftBackspace"><label for="Cad_CtrlShiftBackspace"><strong>「左 Ctrl + 左 Shift + Backspace」 キーを押すことで、リモートの「Ctrl + Alt + Del」キーを押下いたします。</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Cad_CtrlShiftBackspace" id="Cad_CtrlShiftBackspace"><label for="Cad_CtrlShiftBackspace"><strong><stb>THINWEB_CAD_CTRLSHIFTBACKSPACE</stb></strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Ime_LeftCtrlSpace" id="Ime_LeftCtrlSpace"><label for="Ime_LeftCtrlSpace"><strong>「左 Ctrl + Space」キーを押すことで、リモートの IME (日本語入力) を ON/OFF いたします。</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Ime_LeftCtrlSpace" id="Ime_LeftCtrlSpace"><label for="Ime_LeftCtrlSpace"><strong><stb>THINWEB_IME_LEFTCTRLSPACE</stb></strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Ime_LeftShiftSpace" id="Ime_LeftShiftSpace"><label for="Ime_LeftShiftSpace"><strong>「左 Shift + Space」キーを押すことで、リモートの IME (日本語入力) を ON/OFF いたします。</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Ime_LeftShiftSpace" id="Ime_LeftShiftSpace"><label for="Ime_LeftShiftSpace"><strong><stb>THINWEB_IME_LEFTSHIFTSPACE</stb></strong></label>
                         </p>
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Ime_OptionSpace" id="Ime_OptionSpace"><label for="Ime_OptionSpace"><strong>「Option + Space」キー (Mac のみ) を押すことで、リモートの IME (日本語入力) を ON/OFF いたします。</strong></label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.Ime_OptionSpace" id="Ime_OptionSpace"><label for="Ime_OptionSpace"><strong><stb>THINWEB_IME_OPTIONSPACE</stb></strong></label>
                         </p>
                     </div>
                 </div>
@@ -192,9 +185,9 @@
             <p>　</p>
 
             <div class="field">
-                <label class="label">Windows ユーザー名 (RDP 自動ログオン) (オプション):</label>
+                <label class="label"><stb>THINWEB_WINLOGON_USERNAME</stb></label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input is-link" type="text" placeholder="NLA 認証を使用する場合は Windows のユーザー名を指定します。" asp-for="CurrentProfile.Preference.Username">
+                    <input class="input is-link" type="text" placeholder="@Page.Stb["THINWEB_WINLOGON_USERNAME_BACK"]" asp-for="CurrentProfile.Preference.Username">
                     <span class="icon is-small is-left">
                         <i class="far fa-user"></i>
                     </span>
@@ -202,9 +195,9 @@
             </div>
 
             <div class="field">
-                <label class="label">Windows パスワード (RDP 自動ログオン) (オプション):</label>
+                <label class="label"><stb>THINWEB_WINLOGON_PASSWORD</stb></label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input is-link" type="password" placeholder="NLA 認証を使用する場合は Windows のパスワードを指定します。" asp-for="CurrentProfile.Preference.Password" autocomplete="new-password">
+                    <input class="input is-link" type="password" placeholder="@Page.Stb["THINWEB_WINLOGON_PASSWORD_BACK"]" asp-for="CurrentProfile.Preference.Password" autocomplete="new-password">
                     <span class="icon is-small is-left">
                         <i class="fas fa-key"></i>
                     </span>
@@ -212,9 +205,9 @@
             </div>
 
             <div class="field">
-                <label class="label">Windows ドメイン名 (RDP 自動ログオン) (オプション):</label>
+                <label class="label"><stb>THINWEB_WINLOGON_DOMAIN</stb></label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input is-link" type="text" placeholder="NLA 認証を使用する場合は Windows のドメイン名を指定します。" asp-for="CurrentProfile.Preference.Domain">
+                    <input class="input is-link" type="text" placeholder="@Page.Stb["THINWEB_WINLOGON_DOMAIN_BACK"]" asp-for="CurrentProfile.Preference.Domain">
                     <span class="icon is-small is-left">
                         <i class="fas fa-server"></i>
                     </span>
@@ -224,10 +217,10 @@
             <p>　</p>
 
             <div class="field">
-                <label class="label">仮想 MAC アドレス (オプション):</label>
-                <p>HTML5 版クライアントは、Web ブラウザのセキュリティ制限により、MAC アドレスを取得できません。<br>サーバー側でクライアント MAC アドレス認証が有効な場合、代わりに仮想 MAC アドレスを手動で指定してください。</p>
+                <label class="label"><stb>THINWEB_MACADDRESS</stb></label>
+                <p><stb>THINWEB_MACADDRESS_WARNING</stb></p>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input is-link" type="text" placeholder="例: 00-11-22-33-44-55 (ハイフンやコロンは省略できます)" asp-for="CurrentProfile.Preference.MacAddress">
+                    <input class="input is-link" type="text" placeholder="@Page.Stb["THINWEB_MACADDRESS_BACK"]" asp-for="CurrentProfile.Preference.MacAddress">
                     <span class="icon is-small is-left">
                         <i class="fas fa-server"></i>
                     </span>
@@ -238,7 +231,7 @@
 
             <div class="field">
                 <div class="control">
-                    <button class="button is-link" style="font-weight: bold" type="submit" id="ok2"><i class="fas fa-laptop-house"></i>&nbsp;このコンピュータ ID にリモート接続</button>
+                    <button class="button is-link" style="font-weight: bold" type="submit" id="ok2"><i class="fas fa-laptop-house"></i>&nbsp;<stb>THINWEB_CONNECT_BUTTON</stb></button>
                 </div>
             </div>
 
@@ -248,7 +241,7 @@
                 <div class="field is-narrow">
                     <div class="control">
                         <p>
-                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableDebug" id="EnableDebug"><label for="EnableDebug">デバッグモードを有効 (高度な技術者専用)</label>
+                            <input type="checkbox" class="switch" asp-for="CurrentProfile.Preference.EnableDebug" id="EnableDebug"><label for="EnableDebug"><stb>THINWEB_ENABLEDEBUG</stb></label>
                         </p>
                     </div>
                 </div>
@@ -258,19 +251,19 @@
 
             <hr />
 
-            <h2 class="title is-4" id="wol"><i class="fas fa-plug"></i>&nbsp;Wake on LAN による接続先 PC の電源オン機能</h2>
+            <h2 class="title is-4" id="wol"><i class="fas fa-plug"></i>&nbsp;<stb>THINWEB_WOL</stb></h2>
 
             <img src="~/images/wol.jpg" width="660" height="226" />
 
             <p>　</p>
 
-            <p><strong>Wake on LAN 機能を用いてターゲット PC の電源を ON にすることができます。</strong></p>
+            <p><strong><stb>THINWEB_WOL2</stb></strong></p>
 
-            <p>接続先シン・テレワークシステム サーバー側の設定で、あらかじめ Wake on LAN 機能が有効になっている必要があります。</p>
+            <p><stb>THINWEB_WOL3</stb></p>
 
             <div class="field">
-                <label class="label">(1) Wake on LAN ターゲット PC のコンピュータ ID:</label>
-                <p>Wake on LAN ターゲット PC のコンピュータ ID は、<strong><a href="#top_pcid">このページ上部の接続先コンピュータ ID</a></strong> の欄で指定してください。</p>
+                <label class="label"><stb>THINWEB_WOL4</stb></label>
+                <p><stb>THINWEB_WOL5</stb></p>
                 <div class="control has-icons-left has-icons-right">
                     <input class="input is-link is-medium" type="text" id="WoLTargetPcid" style="font-weight: bold">
                     <span class="icon is-medium is-left">
@@ -278,9 +271,9 @@
                     </span>
                 </div>
                 <p>　</p>
-                <label class="label">(2) Wake on LAN トリガー PC のコンピュータ ID:</label>
+                <label class="label"><stb>THINWEB_WOL6</stb></label>
                 <div class="control has-icons-left has-icons-right">
-                    <input class="input is-link is-medium" type="text" placeholder="トリガー PC のコンピュータ ID を指定してください" style="font-weight: bold" asp-for="CurrentProfile.Preference.WoLTriggerPcid" id="CurrentProfile_Preference_WoLTriggerPcid" onchange="Main.Index_UpdateControl(document);" onInput="Main.Index_UpdateControl(document);" onKeyUp="Main.Index_UpdateControl(document);" onkeypress="Main.Index_UpdateControl(document);" onkeydown="Main.Index_UpdateControl(document);">
+                    <input class="input is-link is-medium" type="text" placeholder="@Page.Stb["THINWEB_WOL7"]" style="font-weight: bold" asp-for="CurrentProfile.Preference.WoLTriggerPcid" id="CurrentProfile_Preference_WoLTriggerPcid" onchange="Main.Index_UpdateControl(document);" onInput="Main.Index_UpdateControl(document);" onKeyUp="Main.Index_UpdateControl(document);" onkeypress="Main.Index_UpdateControl(document);" onkeydown="Main.Index_UpdateControl(document);">
                     <span class="icon is-medium is-left">
                         <i class="fas fa-plug"></i>
                     </span>
@@ -291,7 +284,7 @@
 
             <div class="field">
                 <div class="control">
-                    <button class="button is-danger" style="font-weight: bold" type="submit" id="button_wol" name="button_wol" value="1"><i class="fas fa-power-off"></i>&nbsp;Wake on LAN を実行する</button>&nbsp;&nbsp;
+                    <button class="button is-danger" style="font-weight: bold" type="submit" id="button_wol" name="button_wol" value="1"><i class="fas fa-power-off"></i>&nbsp;<stb>THINWEB_WOL_BUTTON</stb></button>&nbsp;&nbsp;
                 </div>
             </div>
 

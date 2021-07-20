@@ -66,9 +66,14 @@ namespace IPA.App.ThinWebClientApp
         public DateTimeOffset Now = DateTimeOffset.Now;
 
         // サイト名
+        public override string SiteName
+        {
+            get => this.Stb["THINWEB_SITENAME"];
+            set => throw new NotImplementedException();
+        }
+
         public PageContext(ThinWebClient controller)
         {
-            this.SiteName = "NTT 東日本 - IPA 「シン・テレワークシステム」 HTML5 版 Web クライアント";
         }
     }
 }

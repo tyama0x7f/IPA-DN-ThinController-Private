@@ -17,9 +17,9 @@
             </a>
             <div class="navbar-item">
                 <div class="buttons">
-                    <a class="button is-link" style="font-weight: bold" href="/"><i class="fas fa-laptop"></i>&nbsp;新しい接続</a>
-                    <a class="button is-warning is-light" style="font-weight: bold" href="/ThinWebClient/help/" target="_blank"><i class="far fa-question-circle"></i>&nbsp;リモート画面操作のヘルプ</a>
-                    <a class="button is-info is-light" style="font-weight: bold" href="https://telework.cyber.ipa.go.jp/" target="_blank"><i class="fas fa-globe"></i>&nbsp;シン・テレワークシステム Web ページ</a>
+                    <a class="button is-link" style="font-weight: bold" href="/"><i class="fas fa-laptop"></i>&nbsp;<stb>THINWEB_BANNER_NEW</stb></a>
+                    <a class="button is-warning is-light" style="font-weight: bold" href="/ThinWebClient/help/" target="_blank"><i class="far fa-question-circle"></i>&nbsp;<stb>THINWEB_BANNER_HELP</stb></a>
+                    <a class="button is-info is-light" style="font-weight: bold" href="@Page.Stb["SE_COMPANY_URL"]" target="_blank"><i class="fas fa-globe"></i>&nbsp;<stb>THINWEB_BANNER_WEB</stb></a>
                 </div>
             </div>
         </div>
@@ -33,7 +33,7 @@
 
     <footer class="footer">
         <div class="content has-text-left">
-            <p>@Page.SiteName | <a href="https://telework.cyber.ipa.go.jp/">NTT 東日本 - IPA シン・テレワークシステム</a> | <a href="https://www.apache.org/licenses/LICENSE-2.0">使用条件</a><br>Copyright &copy; @DateTime.Now.Year.ToString() IPA 産業サイバーセキュリティセンター サイバー技術研究室 ＆ NTT 東日本 特殊局. All rights reserved.</p>
+            <p>@Page.SiteName | <a href="@Page.Stb["SE_COMPANY_URL"]"><stb>$APPFULL$</stb></a> | <a href="https://www.apache.org/licenses/LICENSE-2.0"><stb>THINWEB_FOOTER_TERMS</stb></a><br>Copyright &copy; @DateTime.Now.Year.ToString() <stb>THINWEB_FOOTER_COPYRIGHT</stb></p><br>
         </div>
     </footer>
 

@@ -1,121 +1,122 @@
 ﻿@model ThinWebClientModelOtp
 @{
-    Page.Title = $"リモート画面操作のヘルプ";
+    Page.Title = Page.Stb["THINWEB_HELP1"];
 }
 <h2 class="title is-4">@Page.FullTitle</h2>
 
 <div class="box">
     <div class="content">
-        <p><strong><i class="fas fa-dog"></i> 以下の操作は、慣れれば容易に覚えることができます。<br>しばらくの間は、本ページの内容をメモにコピーするか、印刷してパソコンの近くに置くなどして、参照できるようにすると便利です。</strong></p>
+        <p><strong><i class="fas fa-dog"></i> <stb>THINWEB_HELP2</stb></strong></p>
 
 
-        <h3 class="title is-4"><i class="far fa-keyboard"></i> キーボードの操作方法</h3>
+        <h3 class="title is-4"><i class="far fa-keyboard"></i> <stb>THINWEB_HELP3</stb></h3>
 
-        <p>HTML5 版クライアントを経由して、リモート PC 上で特殊なキー操作を行なう方法は、以下のとおりです。</p>
+        <p><stb>THINWEB_HELP4</stb></p>
 
-        <h4 class="title is-5">1. Windows キーを押す方法</h4>
+        <h4 class="title is-5"><stb>THINWEB_HELP5</stb></h4>
         <ul>
-            <li>「左 Shift + Windows」 (Mac: 「左 Shift + ⌘Command」) キーを押すことで、リモートの「Windows」キーを押下いたします。</li>
-            <li>「右 Ctrl + 右 Alt」 キーを押すことで、リモートの「Windows」キーを押下いたします。</li>
-            <li>上記の方法と組み合わせて、Windows + R などの他のキーとの組み合わせコマンドも可能です。</li>
+            <li><stb>THINWEB_HELP6</stb></li>
+            <li><stb>THINWEB_HELP7</stb></li>
+            <li><stb>THINWEB_HELP8</stb></li>
         </ul>
 
-        <h4 class="title is-5">2. Alt + Tab キーを押す方法</h4>
+        <h4 class="title is-5"><stb>THINWEB_HELP9</stb></h4>
         <ul>
-            <li>「左 Alt + 左 Shift」 キーを押すことで、リモートの「Alt + Tab」キーを押下いたします。</li>
+            <li><stb>THINWEB_HELP10</stb></li>
         </ul>
 
-        <h4 class="title is-5">3. Ctrl + Alt + Del キーを押す方法</h4>
+        <h4 class="title is-5"><stb>THINWEB_HELP11</stb></h4>
         <ul>
-            <li>「左 Ctrl + 左 Alt + End」 (Mac: 「Ctrl + Option + End」) キーを押すことで、リモートの「Ctrl + Alt + Del」キーを押下いたします。</li>
-            <li>「左 Ctrl + 左 Alt + Home」 (Mac: 「Ctrl + Option + Home」) キーを押すことで、リモートの「Ctrl + Alt + Del」キーを押下いたします。</li>
-            <li>「左 Ctrl + 左 Alt + Backspace」 (Mac: 「Ctrl + Option + Backspace」) キーを押すことで、リモートの「Ctrl + Alt + Del」キーを押下いたします。</li>
-            <li>「左 Ctrl + 左 Shift + Backspace」 キーを押すことで、リモートの「Ctrl + Alt + Del」キーを押下いたします。</li>
+            <li><stb>THINWEB_HELP12</stb></li>
+            <li><stb>THINWEB_HELP13</stb></li>
+            <li><stb>THINWEB_HELP14</stb></li>
+            <li><stb>THINWEB_HELP15</stb></li>
         </ul>
 
-        <h4 class="title is-5">4. IME (日本語入力) を ON/OFF する方法</h4>
+        <h4 class="title is-5"><stb>THINWEB_HELP16</stb></h4>
         <ul>
-            <li>「左 Ctrl + Space」キーを押すことで、リモートの IME (日本語入力) を ON/OFF いたします。</li>
-            <li>「左 Shift + Space」キーを押すことで、リモートの IME (日本語入力) を ON/OFF いたします。</li>
-            <li>「Option + Space」キー (Mac のみ) を押すことで、リモートの IME (日本語入力) を ON/OFF いたします。<br><br></li>
-            <li>一部のクライアント側 Web ブラウザ、サーバー端末、IME の種類によっては、上記の方法のみでは日本語入力の ON/OFF が適切に設定できない場合があります。<br>この場合は、リモート端末の Windows のコントロールパネルまたは IME 製品の設定画面から、IME を操作する際のホット・キーの設定を変更して対応してください。</li>
+            <li><stb>THINWEB_HELP17</stb></li>
+            <li><stb>THINWEB_HELP18</stb></li>
+            <li><stb>THINWEB_HELP19</stb><br><br></li>
+            <li><stb>THINWEB_HELP20</stb></li>
         </ul>
 
-        <h4 class="title is-5">Chromebook や MacBook, 小型 Windows PC などを利用される際の推奨事項</h4>
-        <p>日本語入力 (IME) を利用されている場合、F1 ～ F10 のファンクションキーを変換時に活用されることが多いかと思われます。快適にリモート操作を行なうには、以下の設定を推奨します。</p>
+        <h4 class="title is-5"><stb>THINWEB_HELP21</stb></h4>
+        <p><stb>THINWEB_HELP22</stb></p>
         <ul>
             <li>
-                キーボードの最上段のキーが、ファンクションキーと特殊なキーとを共有している場合があります。<br>最上段のキーを常に F1 ～ F12 等のファンクションキーとして使用する設定にしておくことをお勧めします。
+                <stb>THINWEB_HELP23</stb>
                 <ul>
-                    <li><a href="https://www.google.com/search?q=Chromebook+%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89%E3%81%AE%E6%9C%80%E4%B8%8A%E6%AE%B5%E3%81%AE%E3%82%AD%E3%83%BC%E3%82%92%E3%83%95%E3%82%A1%E3%83%B3%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%AD%E3%83%BC%E3%81%A8%E3%81%97%E3%81%A6%E5%88%A9%E7%94%A8%E3%81%99%E3%82%8B" target="_blank">Chromebook の最上段キーを常にファンクションキーとして利用する方法</a></li>
-                    <li><a href="https://support.apple.com/ja-jp/HT204436" target="_blank">MacBook (一般的な製品) でファンクションキーを使う方法</a></li>
-                    <li><a href="https://support.apple.com/ja-jp/HT207240" target="_blank">MacBook Pro 等 (Touch Bar 搭載製品) でファンクションキーを使う方法</a></li>
-                    <li>Windows のノート PC においても、最上段キーがデフォルトで特殊キー (スピーカ音量調整等) に割り当てられている場合があります。<br>この場合は、各ノート PC 製品のマニュアルを参照し、最上段のキーを常に F1 ～ F12 等のファンクションキーとして使用する設定にしておくことをお勧めします。</li>
+                    <li><a href="@Page.Stb["THINWEB_HELP24"]" target="_blank"></a><stb>THINWEB_HELP25</stb></li>
+                    <li><a href="@Page.Stb["THINWEB_HELP26"]" target="_blank"></a><stb>THINWEB_HELP27</stb></li>
+                    <li><a href="@Page.Stb["THINWEB_HELP28"]" target="_blank"></a><stb>THINWEB_HELP29</stb></li>
+                    <li><stb>THINWEB_HELP30</stb></li>
                 </ul>
             </li>
         </ul>
 
-        <h3 class="title is-4"><i class="fas fa-desktop"></i> 画面のフルスクリーン / 解除の方法</h3>
+        <h3 class="title is-4"><i class="fas fa-desktop"></i> <stb>THINWEB_HELP31</stb></h3>
 
-        <p>
-            画面をフルスクリーンにすると、直接対象端末を操作しているように使用でき、とても快適です。
-        </p>
+        <p><stb>THINWEB_HELP32</stb></p>
 
         <ul>
             <li>
-                Windows の場合
+                <stb>THINWEB_HELP33</stb>
                 <ul>
-                    <li>Windows では、多くのブラウザでは、ブラウザのアドレスバー部分をクリックしてアドレスバーにフォーカスを当て、「F11」キーを押すと、画面をフルスクリーン化することができます。</li>
-                    <li>また、ブラウザのメニューの「フルスクリーン」または「全画面表示」といった項目やウインドウのボタンから、マウス操作でフルスリーン化することもできます。</li>
-                    <li>フルスクリーンを解除するには、もう一度 F11 キーを押します。</li>
+                    <li><stb>THINWEB_HELP34</stb></li>
+                    <li><stb>THINWEB_HELP35</stb></li>
+                    <li><stb>THINWEB_HELP36</stb></li>
                 </ul>
             </li>
             <li>
-                Mac の場合
+                <stb>
+                    THINWEB_HELP37
+                </stb>
                 <ul>
-                    <li>Mac では、多くのブラウザでは、ブラウザのアドレスバー部分をクリックしてアドレスバーにフォーカスを当て、「⌘Command + Control + F」キーを押すと、画面をフルスクリーン化することができます。</li>
-                    <li>また、ブラウザのメニューの「フルスクリーン」または「全画面表示」といった項目やウインドウのボタンから、マウス操作でフルスリーン化することもできます。</li>
-                    <li>フルスクリーンを解除するには、もう一度「⌘Command + Control + F」キーを押します。</li>
+                    <li><stb>THINWEB_HELP38</stb></li>
+                    <li><stb>THINWEB_HELP39</stb></li>
+                    <li><stb>THINWEB_HELP40</stb></li>
                 </ul>
             </li>
             <li>
-                Chromebook の場合
+                <stb>
+                    THINWEB_HELP41
+                </stb>
                 <ul>
-                    <li>
-                        Chromebook では、キーボードの最上段にある、<i class="fas fa-expand"></i> キー (絵文字は若干異なる可能性があります) を押すと、画面をフルスクリーン化することができます。
-                        <br>(<a href="https://www.google.com/search?q=Chromebook+%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89%E3%81%AE%E6%9C%80%E4%B8%8A%E6%AE%B5%E3%81%AE%E3%82%AD%E3%83%BC%E3%82%92%E3%83%95%E3%82%A1%E3%83%B3%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%AD%E3%83%BC%E3%81%A8%E3%81%97%E3%81%A6%E5%88%A9%E7%94%A8%E3%81%99%E3%82%8B" target="_blank">最上段キーを常にファンクションキーとして使用する設定</a> が有効な場合は、代わりに、「<i class="fas fa-search"></i> + <i class="fas fa-expand"></i>」キーを押します。)
-                    </li>
-                    <li>また、ブラウザのメニューの「フルスクリーン」または「全画面表示」といった項目やウインドウのボタンから、マウス操作でフルスリーン化することもできます。</li>
-                    <li>フルスクリーンを解除するには、もう一度、<i class="fas fa-expand"></i> キー (または、「<i class="fas fa-search"></i> + <i class="fas fa-expand"></i>」キー) を押します。</li>
+                    <li><stb>THINWEB_HELP42</stb></li>
+                    <li><stb>THINWEB_HELP43</stb></li>
+                    <li><stb>THINWEB_HELP44</stb></li>
                 </ul>
             </li>
             <li>
-                Firefox ブラウザのフルスクリーン時の問題の解決
+                <stb>THINWEB_HELP45</stb>
                 <ul>
-                    <li>Firefox では、フルスクリーン画面の操作時にマウスカーソルを画面上部に移動すると、メニューバーが表示され、リサイズされてしまう場合があります。<br>この Firefox のフルスクリーン時のメニューバーの自動表示は、<a href="https://www.google.com/search?q=firefox+fullscr-toggler+%E3%83%95%E3%83%AB%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3" target="_blank">Firefox の設定を編集することで無効化することができます。</a></li>
+                    <li><stb>THINWEB_HELP46</stb></li>
                 </ul>
             </li>
             <li>
-                共通の事項
+                <stb>
+                    THINWEB_HELP47
+                </stb>
                 <ul>
-                    <li>フルスクリーン時にマウスカーソルを画面の上部に移動すると、Web ブラウザによる案内アイコン (フルスクリーン解除ボタン等) が表示される場合があります。<br>これは、Web ブラウザが強制的に表示しているものであり、本システムで表示を消すことはできません。</li>
-                    <li>接続設定の「リモート接続時に自動的にフルスクリーンにする」を ON にしている場合は、リモート接続後にキーボードで最初の 1 文字を打つときにフルスクリーンに遷移します。<br>この場合、Web ブラウザの仕様により、1 回目のフルスクリーン解除キーのみ、Esc キーとなる場合があります。</li>
-                    <li>接続先サーバー端末が「システムモード」の場合、最新の Windows では、フルスクリーン / 解除時にデスクトップサイズが自動的に調整される場合があります。しかし、リモートの Windows ログオン画面では、調整がされません。したがって、ログオン完了後に 1 度フルスクリーン解除 / フルスクリーン化の操作を行なうと快適です。</li>
+                    <li><stb>THINWEB_HELP48</stb></li>
+                    <li><stb>THINWEB_HELP49</stb></li>
+                    <li><stb>THINWEB_HELP50</stb></li>
                 </ul>
             </li>
         </ul>
 
 
-        <h4 class="title is-5"><i class="fas fa-mouse-pointer"></i> マウスカーソルが二重に表示される場合</h4>
+        <h4 class="title is-5"><i class="fas fa-mouse-pointer"></i> <stb>THINWEB_HELP51</stb></h4>
         <ul>
-            <li>接続設定の「ローカルのマウスカーソルを描画」または「リモートのマウスカーソルを描画」を OFF にすると、二重に表示されなくなります。</li>
+            <li><stb>THINWEB_HELP52</stb></li>
         </ul>
 
-        <h4 class="title is-5"><i class="far fa-hand-paper"></i> ご注意</h4>
+        <h4 class="title is-5"><i class="far fa-hand-paper"></i> <stb>THINWEB_HELP53</stb></h4>
         <ul>
-            <li>キーボード操作は、ローカル HTML5 Web ブラウザ、ローカル端末、リモート端末、IME の種類などによってさまざまな影響を受けます。すべてのソフトウェアの組み合わせパターンで、上記が正常に動作することを保証するものではありません。</li>
-            <li>F11 キーおよび F12 キーは、ローカル HTML5 Web ブラウザによっては、フルスクリーン / 解除や開発者モードを起動するコマンドとして割り当てられており、リモート操作に使用できない場合があります。これは Web ブラウザによる強制的な制約であり、本アプリケーションでコントロールするこができません。Web ブラウザによって生じる制約については、その Web ブラウザの開発者にお問い合わせください。</li>
-            <li>一部の OS・Web ブラウザ・端末では、特殊なキーを押した後に、マウスの操作 (特にホイール操作) が適切にリモート端末に伝達しなくなる場合があります。この場合は、一度ブラウザを閉じてから、再接続してみてください。</li>
+            <li><stb>THINWEB_HELP54</stb></li>
+            <li><stb>THINWEB_HELP55</stb></li>
+            <li><stb>THINWEB_HELP56</stb></li>
         </ul>
 
         <p>　</p>
