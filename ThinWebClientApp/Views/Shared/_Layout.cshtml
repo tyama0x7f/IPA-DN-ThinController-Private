@@ -9,6 +9,7 @@
 <body>
     <script src="~/js/strtable.js" asp-append-version="true"></script>
     <script src="~/js/bundle.js" asp-append-version="true"></script>
+    <script>Main.Cores_InitJavaScriptWithPageContext("@Page.GetJavaScriptInitContext()._ObjectToJson()._JavaScriptSafeStrEncode()")</script>
 
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">

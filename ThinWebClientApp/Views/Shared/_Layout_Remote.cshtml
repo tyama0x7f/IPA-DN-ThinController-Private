@@ -14,6 +14,7 @@
 <body>
     <script src="~/js/strtable.js" asp-append-version="true"></script>
     <script src="~/js/bundle.js" asp-append-version="true"></script>
+    <script>Main.Cores_InitJavaScriptWithPageContext("@Page.GetJavaScriptInitContext()._ObjectToJson()._JavaScriptSafeStrEncode()")</script>
 
     <video style="position: fixed; top:0; left:0; height:0;" muted autoplay loop>
         <source src="~/images/prevent_sleep.mp4">

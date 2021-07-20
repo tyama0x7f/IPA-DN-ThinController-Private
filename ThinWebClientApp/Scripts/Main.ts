@@ -26,10 +26,22 @@ import { Secure } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Secure";
 import { Task } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Task";
 import { Axios, Vue, Buefy } from "./submodules/IPA-DN-WebNeko/Scripts/Imports";
 import { Time } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Time";
+import { PageContext, StrTable, StrTableUtil } from "./submodules/IPA-DN-WebNeko/Scripts/Common/Base/Cores";
 
 // --- Common Init ---
 Vue.use(Buefy);
 
+let Page: PageContext;
+let Stb: StrTable;
+
+// ページを初期化 (各ページで共通)
+export function Cores_InitJavaScriptWithPageContext(contextObjStr: string): void
+{
+    const contextObj = Util.JsonToObject(Str.JavaScriptSafeStrDecode(contextObjStr));
+
+    Page = new PageContext(contextObj);
+    Stb = StrTableUtil.LoadStrTable(Page.LanguageKey);
+}
 
 // メイン画面の PCID のテキストが更新されるなど、状態がアップデートされた
 export function Index_UpdateControl(page: Document): void
@@ -153,12 +165,12 @@ export function Index_Load(page: Document, focusPcid: boolean, passwordEasyStrEn
         // WoL エラーまたは WoL OK が発生している場合はエラーメッセージを表示する
         if (Str.IsFilled(wolErrorMessage))
         {
-            await Html.DialogAlertAsync(wolErrorMessage, "Wake on LAN エラー", false, "is-info", "fas fa-exclamation-triangle", undefined, true);
+            await Html.DialogAlertAsync(wolErrorMessage, Stb["THINWEB_JS_WOL_ERROR"], false, "is-info", "fas fa-exclamation-triangle", undefined, true);
         }
 
         if (Str.IsFilled(wolOkMessage))
         {
-            await Html.DialogAlertAsync(wolOkMessage, "Wake on LAN を実行しました", false, "is-primary", "fas fa-power-off", undefined, false);
+            await Html.DialogAlertAsync(wolOkMessage, "THINWEB_JS_WOL_OK", false, "is-primary", "fas fa-power-off", undefined, false);
         }
     }, false);
 
@@ -215,7 +227,7 @@ export function Index_DeleteAllHistory(page: Document): void
 {
     Task.StartAsyncTaskAsync(async function () 
     {
-        if (await Html.DialogConfirmAsync("接続履歴をすべて消去しますか?", "接続履歴の消去", false, "is-primary", undefined, false, "はい", "いいえ"))
+        if (await Html.DialogConfirmAsync(Stb["THINWEB_JS_ERASE"], Stb["THINWEB_JS_ERASE2"], false, "is-primary", undefined, false, Stb["THINWEB_JS_YES"], Stb["THINWEB_JS_NO"]))
         {
             Html.NativateTo("/?deleteall=1");
         }
@@ -292,7 +304,7 @@ async function Remote_ShowDisconnectErrorAsync(pcid?: string): Promise<void>
 
     Remote_ErrorShowOnceFlag = true;
 
-    await Html.DialogAlertAsync("リモート セッションが終了しました。再接続を試行するには、トップページから再接続を行なってください。", "お疲れ様でした", true, "is-success", "fas fa-info-circle");
+    await Html.DialogAlertAsync(Stb["THINWEB_JS_REMOTE_FINISH"], Stb["THINWEB_JS_REMOTE_FINISH_TITLE"], true, "is-success", "fas fa-info-circle");
 
     let gotoUrl = "/";
     if (Str.IsFilled(pcid))
@@ -321,14 +333,14 @@ export function Common_ErrorAlert(page: Document, errorMessage: string, pcid?: s
 
     if (Str.IsEmpty(title))
     {
-        title = "エラーが発生しました";
+        title = Stb["THINWEB_JS_ERROR1"];
     }
 
     Remote_ErrorShowOnceFlag = true;
 
     if (Str.IsEmpty(errorMessage))
     {
-        errorMessage = "不明なエラーが発生しました。";
+        errorMessage = Stb["THINWEB_JS_ERROR2"];
     }
 
     Task.StartAsyncTaskAsync(async function () 
@@ -363,7 +375,7 @@ export async function Remote_ShowImeWarningAsync(): Promise<void>
 
     try
     {
-        await Html.DialogAlertAsync("<b>ローカル コンピュータ側の IME 日本語入力が ON になっています。</b><br>ローカル コンピュータ側の IME を OFF にしてください。<BR><BR>リモート コンピュータ側で IME を ON にするキー操作については、<a href=\"/ThinWebClient/help/\" target=\"_blank\"><b>「キーボード操作の解説」</b></a>を参照してください。", "IME 日本語入力について", true, "is-info", "far fa-keyboard");
+        await Html.DialogAlertAsync(Stb["THINWEB_JS_IME1"], Stb["THINWEB_JS_IME2"], true, "is-info", "far fa-keyboard");
     }
     finally
     {
@@ -379,7 +391,7 @@ export function ThinWebClient_Error_PageLoad(window: Window, page: Document, mes
 
     Task.StartAsyncTaskAsync(async function () 
     {
-        if (await Html.DialogConfirmAsync(message, title, false, "is-info", "fas fa-exclamation-triangle", true, "OK", "詳細", true))
+        if (await Html.DialogConfirmAsync(message, title, false, "is-info", "fas fa-exclamation-triangle", true, Stb["THINWEB_JS_OK"], Stb["THINWEB_JS_DETAIL"], true))
         {
             Html.NativateTo(redirectUrl);
         }
@@ -478,20 +490,20 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
     {
         const code = status.code;
         let msg = status.message;
-        const original = "内部エラー文字列: ";
+        const original = Stb["THINWEB_JS_INTERNAL_ERROR"];
 
         if (code === 519)
         {
-            msg = "HTML5 のリモート画面転送の通信が切断されました。再接続してみてください。<BR><BR>" +
+            msg = Stb["THINWEB_JS_ERR_DISCON"] + "<BR><BR>" +
                 original + msg;
         }
         else if (code === 514)
         {
-            msg = "通信回線の速度が著しく低下したか、またはパケットロスが発生した等の理由で、HTML5 のリモート画面転送の通信がタイムアウトしました。<BR><BR>モバイル回線を利用している場合で、回線速度に原因があると考えられる場合は、、WiFi やブロードバンド回線、LAN などの通常程度の回線を利用して再接続してみてください。<BR><BR>また、接続先のサーバーが「ユーザーモード」で動作している場合は、「システムモード」での動作を検討してください。<BR><BR>" +
+            msg = Stb["THINWEB_JS_ERR_TIMEO"] + "<BR><BR>" +
                 original + msg;
         }
 
-        const str = `Tunnel Error Code: ${code}, Message: "${msg}"`;
+        const str = `${Stb["THINWEB_JS_TUNNEL_ERROR_CODE"]}: ${code}, ${Stb["THINWEB_JS_ERR_MSG"]}:<BR>"${msg}"`;
 
         if (isDebug) Util.Debug(str);
         Html.SetPreventPageUnload(false);
@@ -525,27 +537,24 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
         const code = status.code;
         let msg = status.message;
 
-        const original = "内部エラー文字列: ";
+        const original = Stb["THINWEB_JS_ORIGINAL_ERROR"];
 
         if (Str.InStr(msg, "See logs.", false))
         {
-            msg = "Remote desktop connection aborted. This error can be caused by frequent screen resizing or by a large number of screen drawing instructions. Please kindly reconnect to the server. " +
-                "<BR><BR>この現象が頻繁に発生する場合は、接続設定 (トップページ) の「ブラウザのウインドウサイズを変更したとき、リモート画面の解像度をブラウザのウインドウサイズに応じてダイナミックに変更」機能を OFF にしてみてください。";
+            msg = Stb["THINWEB_JS_RDP_ERR"];
         }
         else if (code === 519)
         {
-            msg = "接続先のサーバー端末の Windows のリモートデスクトップ機能は、「ネットワーク レベル認証を使用したユーザー認証を必要とする」設定またはポリシーが有効になっています。<BR><BR>" +
-                "接続設定 (トップページ) の「Windows ユーザー名 (RDP 自動ログオン)」、「Windows パスワード (RDP 自動ログオン)」でログインに必要なパスワードを指定してください。<BR><BR>" +
+            msg = Stb["THINWEB_JS_519"] +
                 original + msg;
         }
         else if (code === 769)
         {
-            msg = "接続設定 (トップページ) の「Windows ユーザー名 (RDP 自動ログオン)」または「Windows パスワード (RDP 自動ログオン)」が正しくありません。<BR><BR>" +
-                "リモート接続先の Windows 端末のユーザー名とパスワードを指定してください。<BR><BR>" +
+            msg = Stb["THINWEB_JS_769"] + "<BR><BR>" +
                 original + msg;
         }
 
-        const str = `Remote Desktop Error Code: ${code}, Message: "${msg}"`;
+        const str = `${Stb["THINWEB_JS_RDP_ERROR_CODE"]}: ${code}, ${Stb["THINWEB_JS_ERR_MSG"]}:<BR>"${msg}"`;
 
         if (isDebug) Util.Debug(str);
         Html.SetPreventPageUnload(false);
@@ -584,7 +593,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
                     {
                         if (pref.ShowOnceMsg)
                         {
-                            onceMsg += "\r\n\r\nこのメッセージは、接続設定で非表示にすることができます。";
+                            onceMsg += "\r\n\r\n" + Stb["THINWEB_JS_MSG_HIDE"];
 
                             await Html.DialogAlertAsync(onceMsg, onceMsgTitle, false, "is-success is-light", "fas fa-info-circle");
                         }
@@ -904,13 +913,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
                             // 自動フルスクリーンモードが ON のとき、初回にフルスクリーンが解除された場合はメッセージを出す
                             Task.StartAsyncTaskAsync(async function () 
                             {
-                                const msg = "フルスクリーン画面に戻るには、Web ブラウザのアドレスバー部分をクリックしてから、以下のキーを押します。<BR><BR>" +
-                                    "- Windows の場合: 「F11」 キー<BR>" +
-                                    "- Mac の場合: 「⌘Command + Control + F」キー<BR>" +
-                                    "- Chromebook の場合:&nbsp;&nbsp;<i class='fas fa-expand'></i> キー<BR>&nbsp;&nbsp;&nbsp;(または、「<i class='fas fa-search'></i> + <i class='fas fa-expand'></i>」キー)<BR><BR>" +
-                                    "または、Web ブラウザのメニューから「フルスクリーン」や「全画面表示」を選択します。<BR>" +
-                                    "<BR>" +
-                                    "詳しくは、<a href='/ThinWebClient/help/' target='_blank'>リモート画面操作のヘルプ</a> をご参照ください。";
+                                const msg = Stb["THINWEB_JS_FULL_SCREEN_HINT"];
 
                                 await Html.DialogAlertAsync(msg, "", true, "is-success is-light", "far fa-keyboard");
                             }, false);
@@ -995,7 +998,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
                         if (now > (lastInputTick + (idleTimeout * 1000)))
                         {
                             disconnectByTimeout(Str.EncodeHtml(
-                                Str.ReplaceStr("キーボードまたはマウスが __number__ 秒間未操作であったため、アイドルタイムアウトが発生しました。\r\n\r\nアイドルタイムアウトまでの間隔は、接続先サーバーのネットワーク管理者が設置しているポリシーサーバーの「IDLE_TIMEOUT」の値で規定されています。詳しくは、ネットワーク管理者にお問い合わせください。", "__number__", Str.IntToStr(idleTimeout))));
+                                Str.ReplaceStr(Stb["THINWEB_JS_USER_TIMEOUT"], "__number__", Str.IntToStr(idleTimeout))));
                         }
                     }
 
@@ -1022,7 +1025,7 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
             {
                 disconnectedFlagByTimeout = true;
 
-                Common_ErrorAlert(page, msg, pcid, "タイムアウト", "is-primary", "far fa-clock");
+                Common_ErrorAlert(page, msg, pcid, Stb["THINWEB_JS_TIMEOUT"], "is-primary", "far fa-clock");
 
                 try
                 {
