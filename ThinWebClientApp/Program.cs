@@ -85,7 +85,7 @@ namespace IPA.App.ThinWebClientApp
                         MaxRequestBodySize = ThinWebClientConsts.ControllerMaxBodySizeForUsers,
                         KestrelMaxConcurrentConnections = ThinWebClientConsts.ControllerMaxConcurrentKestrelConnectionsForUsers,
                         KestrelMaxUpgradedConnections = ThinWebClientConsts.ControllerMaxConcurrentKestrelConnectionsForUsers,
-                        IPv4Only = true,
+                        IPv4Only = false,
                     };
 
                     // Vars.cs ファイルで Web サーバーオプションを変更可能とする
