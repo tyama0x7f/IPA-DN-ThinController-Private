@@ -3,12 +3,12 @@ name: Coverity Scan
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
     runs-on: ${{ matrix.operating-system }}
-    if: ${{ github.repository_owner == "IPA-CyberLab" }}
+    if: ${{ github.repository_owner == 'IPA-CyberLab' }}
     
     env:
       COVERITY_SCAN_PROJECT_NAME: "IPA-DN-ThinController-Private-210729"
