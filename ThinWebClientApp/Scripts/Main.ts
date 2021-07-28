@@ -926,8 +926,24 @@ export function ThinWebClient_Remote_PageLoad(window: Window, page: Document, we
 
     let autoFullScreenInitiated = false;
 
+
+    //document.addEventListener("keyup", event =>
+    //{
+    //    if (isDebug)
+    //    {
+    //        console.log("--keyup--");
+    //        console.log(event);
+    //    }
+    //});
+
     document.addEventListener("keydown", event =>
     {
+        //if (isDebug)
+        //{
+        //    console.log("--keydown--");
+        //    console.log(event);
+        //}
+
         userInputOccured = true;
 
         let showError = false;

@@ -7,9 +7,6 @@
     <link rel="stylesheet" href="~/css/Main.css" asp-append-version="true" />
 </head>
 <body>
-    <script src="~/js/strtable.js" asp-append-version="true"></script>
-    <script src="~/js/bundle.js" asp-append-version="true"></script>
-    <script>Main.Cores_InitJavaScriptWithPageContext("@Page.GetJavaScriptInitContext()._ObjectToJson()._JavaScriptSafeStrEncode()")</script>
 
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
@@ -34,9 +31,13 @@
 
     <footer class="footer">
         <div class="content has-text-left">
-            <p>@Page.SiteName | <a href="@Page.Stb["SE_COMPANY_URL"]"><stb>$APPFULL$</stb></a> | <a href="https://www.apache.org/licenses/LICENSE-2.0"><stb>THINWEB_FOOTER_TERMS</stb></a><br>Copyright &copy; @DateTime.Now.Year.ToString() <stb>THINWEB_FOOTER_COPYRIGHT</stb></p><br>
+            <p>@Page.SiteName | <a href="@Page.Stb["SE_COMPANY_URL"]"><stb>$APPFULL$</stb></a> | <a href="https://www.apache.org/licenses/LICENSE-2.0"><stb>THINWEB_FOOTER_TERMS</stb></a><br>Copyright &copy; @DateTime.Now.Year.ToString() <stb>THINWEB_FOOTER_COPYRIGHT</stb><br>Version: @IPA.Cores.Basic.Dbg.GetCurrentGitCommitId()</p><br>
         </div>
     </footer>
+
+    <script src="~/js/strtable.js" asp-append-version="true"></script>
+    <script src="~/js/bundle.js" asp-append-version="true"></script>
+    <script>Main.Cores_InitJavaScriptWithPageContext("@Page.GetJavaScriptInitContext()._ObjectToJson()._JavaScriptSafeStrEncode()")</script>
 
     @RenderSection("Scripts", required: false)
 
