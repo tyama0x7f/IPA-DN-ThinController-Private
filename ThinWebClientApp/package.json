@@ -37,7 +37,7 @@
     "node-sass": "^5.0.0",
     "noop-webpack-plugin": "^1.0.1",
     "optimize-css-assets-webpack-plugin": "^5.0.4",
-    "prismjs": "^1.23.0",
+    "prismjs": "^1.24.1",
     "sass-loader": "^11.0.1",
     "stream-browserify": "^3.0.0",
     "string-replace-loader": "^3.0.1",
