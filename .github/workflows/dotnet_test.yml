@@ -29,6 +29,12 @@ jobs:
       - name: Build Debug IPA-DN-ThinController-Private
         run: dotnet build -c Debug IPA-DN-ThinController-Private-VS2019.sln
 
+      - name: Test Debug
+        run: dotnet test -c Debug -v normal --logger:"console;verbosity=detailed" IPA-DN-ThinController-Private-VS2019.sln
+
       - name: Build Release IPA-DN-ThinController-Private
         run: dotnet build -c Release IPA-DN-ThinController-Private-VS2019.sln
+
+      - name: Test Release
+        run: dotnet test -c Release -v normal --logger:"console;verbosity=detailed" IPA-DN-ThinController-Private-VS2019.sln
 
