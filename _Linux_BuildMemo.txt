@@ -1,0 +1,37 @@
+﻿# ThinControllerApp
+
+## 消～す
+cd ~/
+rm -fr ~/IPA-DN-ThinController-Private/
+
+## 初回
+cd ~/
+git clone --recursive https://github.com/IPA-CyberLab/IPA-DN-ThinController-Private.git
+
+## 2 回目以降
+(cd ~/IPA-DN-ThinController-Private/ && (cd $(git rev-parse --show-toplevel) && git pull origin main && git submodule update --init --recursive))
+
+
+### ビルドおよび実行
+(cd ~/IPA-DN-ThinController-Private/ && (cd $(git rev-parse --show-toplevel) && git pull origin main && git submodule update --init --recursive)) && cd ~/IPA-DN-ThinController-Private/ThinControllerApp/ && dotnet run Daemon test
+
+
+# ThinWebClientApp
+
+## 消～す
+cd ~/
+rm -fr ~/IPA-DN-ThinController-Private/
+
+## 初回
+cd ~/
+git clone --recursive https://github.com/IPA-CyberLab/IPA-DN-ThinController-Private.git
+
+## 2 回目以降
+(cd ~/IPA-DN-ThinController-Private/ && (cd $(git rev-parse --show-toplevel) && git pull origin main && git submodule update --init --recursive))
+
+
+### ビルドおよび実行
+(cd ~/IPA-DN-ThinController-Private/ && (cd $(git rev-parse --show-toplevel) && git pull origin main && git submodule update --init --recursive)) && cd ~/IPA-DN-ThinController-Private/ThinWebClientApp/ && dotnet run Daemon test
+
+
+
