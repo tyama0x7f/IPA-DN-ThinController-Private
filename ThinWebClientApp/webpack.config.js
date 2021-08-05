@@ -45,6 +45,10 @@ module.exports = {
                     }],
                 },
             }) : NoOpPlugin(),
+        is_production ?
+            new LicensePack({
+                glob: '{LICENSE,license,License}*'
+            }) : NoOpPlugin(),
         new BomPlugin(true),
     ],
     module: {
