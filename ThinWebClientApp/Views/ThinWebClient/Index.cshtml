@@ -42,23 +42,24 @@
                 </div>
             </div>
 
+            <ul>
+                <li><stb>THINWEB_BEGINNER_NOTE2</stb></li>
+            </ul>
+
             <div class="notification is-warning is-light" id="ie_warning" hidden>
                 <i class="fab fa-internet-explorer"></i> <stb>THINWEB_IE_WARNING</stb>
             </div>
 
             <p>&nbsp;</p>
 
-            <img src="~/images/top.jpg" width="900" height="244" />
-
-            <p>&nbsp;</p>
-
-            <div class="notification">
-                <p><i class="fas fa-info-circle"></i> <stb>THINWEB_BEGINNER_NOTE1</stb></p>
-                <ul>
-                    <li><stb>THINWEB_BEGINNER_NOTE2</stb></li>
-                    <li><stb>THINWEB_BEGINNER_NOTE3</stb></li>
-                </ul>
-            </div>
+            @if (Page.CurrentLanguage.Key._IsSamei("ja"))
+            {
+                <img src="~/images/top.jpg" width="900" height="244" />
+            }
+            else
+            {
+                <img src="~/images/top_en.jpg" width="900" height="244" />
+            }
 
             <hr>
 
@@ -231,6 +232,8 @@
                 </div>
             </div>
 
+            <p><i class="fas fa-exclamation-triangle"></i> <stb>THINWEB_NLA_NOTE</stb></p>
+
             <p>　</p>
 
             <div class="field">
@@ -270,7 +273,14 @@
 
             <h2 class="title is-4" id="wol"><i class="fas fa-plug"></i>&nbsp;<stb>THINWEB_WOL</stb></h2>
 
-            <img src="~/images/wol.jpg" width="660" height="226" />
+            @if (Page.CurrentLanguage.Key._IsSamei("ja"))
+            {
+                <img src="~/images/wol.jpg" width="660" height="226" />
+            }
+            else
+            {
+                <img src="~/images/wol_en.jpg" width="660" height="226" />
+            }
 
             <p>　</p>
 

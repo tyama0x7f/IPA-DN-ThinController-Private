@@ -66,13 +66,13 @@ namespace IPA.App.ThinWebClientApp
                         CodesRes["ThinController/strtable_ja.stb"].String
                         )));
 
-            //this.LanguageList.Add(
-            //    new StrTableLanguage("en", "English", "English", 1033, "en,us,c", "en",
-            //        new StrTable(
-            //            CodesRes["StrTablePatch/strtable_en.patch.stb"].String,
-            //            CodesRes["ThinWebClient/strtable_web_additional_en.stb"].String,
-            //            CodesRes["ThinController/strtable_en.stb"].String
-            //            )));
+            this.LanguageList.Add(
+                new StrTableLanguage("en", "English", "English", 1033, "en,us,c", "en",
+                    new StrTable(
+                        CodesRes["StrTablePatch/strtable_en.patch.stb"].String,
+                        CodesRes["ThinWebClient/strtable_web_additional_en.stb"].String,
+                        CodesRes["ThinController/strtable_en.stb"].String
+                        )));
 
             // HttpServer ヘルパーの初期化
             StartupHelper = new HttpServerStartupHelper(configuration);

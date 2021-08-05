@@ -18,6 +18,10 @@ $APPSHORT_EN$               Thin Telework System Private Version
 
 $APP_ID_PREFIX$				PRIVATE
 
+$THINWEB_WEBPAGE_LINK$		https://telework.cyber.ipa.go.jp/
+$THINWEB_DOWNLOAD_LINK$		https://download.telework.cyber.ipa.go.jp/thin-telework/Public/
+$THINWEB_WEBAPP_TOP_URL$	https://webapp.telework.cyber.ipa.go.jp/
+
 
 SE_COMPANY_URL			http://telework.cyber.ipa.go.jp/
 

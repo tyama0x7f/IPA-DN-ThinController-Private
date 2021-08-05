@@ -11,13 +11,23 @@
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="/">
-                <img src="~/images/logo.jpg" width="318" height="28" asp-append-version="true">
+                @if (Page.CurrentLanguage.Key._IsSamei("ja"))
+                {
+                    <img src="~/images/logo.jpg" width="318" height="28" asp-append-version="true">
+                }
+                else
+                {
+                    <img src="~/images/logo_en.jpg" width="318" height="28" asp-append-version="true">
+                }
             </a>
             <div class="navbar-item">
                 <div class="buttons">
                     <a class="button is-link" style="font-weight: bold" href="/"><i class="fas fa-laptop"></i>&nbsp;<stb>THINWEB_BANNER_NEW</stb></a>
                     <a class="button is-warning is-light" style="font-weight: bold" href="/ThinWebClient/help/" target="_blank"><i class="far fa-question-circle"></i>&nbsp;<stb>THINWEB_BANNER_HELP</stb></a>
-                    <a class="button is-info is-light" style="font-weight: bold" href="@Page.Stb["SE_COMPANY_URL"]" target="_blank"><i class="fas fa-globe"></i>&nbsp;<stb>THINWEB_BANNER_WEB</stb></a>
+                    <a class="button is-info is-light" style="font-weight: bold" href="@Page.Stb["$THINWEB_WEBPAGE_LINK$"]" target="_blank"><i class="fas fa-globe"></i>&nbsp;<stb>THINWEB_BANNER_WEB</stb></a>
+                    <div class="select">
+                        <select class="input is-info" onChange="location.href = value;" asp-items="Page.GetLanguageSelectHtmlBox(this.Context.Request.GetDisplayUrl()._ParseUrl())"></select>
+                    </div>
                 </div>
             </div>
         </div>
@@ -31,7 +41,7 @@
 
     <footer class="footer">
         <div class="content has-text-left">
-            <p>@Page.SiteName | <a href="@Page.Stb["SE_COMPANY_URL"]"><stb>$APPFULL$</stb></a> | <a href="https://www.apache.org/licenses/LICENSE-2.0"><stb>THINWEB_FOOTER_TERMS</stb></a><br>Copyright &copy; @DateTime.Now.Year.ToString() <stb>THINWEB_FOOTER_COPYRIGHT</stb><br>Version: @IPA.Cores.Basic.Dbg.GetCurrentGitCommitId()</p><br>
+            <p>@Page.SiteName | <a href="@Page.Stb["$THINWEB_WEBPAGE_LINK$"]"><stb>$APPFULL$</stb></a> | <a href="https://www.apache.org/licenses/LICENSE-2.0"><stb>THINWEB_FOOTER_TERMS</stb></a><br>Copyright &copy; @DateTime.Now.Year.ToString() <stb>THINWEB_FOOTER_COPYRIGHT</stb><br>Version: App=@IPA.Cores.Basic.Dbg.GetCurrentGitCommitId(), CoresLib=@IPA.Cores.Basic.Dbg.GetCurrentCoresLibGitCommitId()</p><br>
         </div>
     </footer>
 
