@@ -1,6 +1,6 @@
-[submodule "submodules/IPA-DN-Cores"]
-	path = submodules/IPA-DN-Cores
-	url = https://github.com/IPA-CyberLab/IPA-DN-Cores.git
 [submodule "ThinWebClientApp/Scripts/submodules/IPA-DN-WebNeko"]
 	path = ThinWebClientApp/Scripts/submodules/IPA-DN-WebNeko
 	url = https://github.com/IPA-CyberLab/IPA-DN-WebNeko.git
+[submodule "submodules/IPA-DN-Cores"]
+	path = submodules/IPA-DN-Cores
+	url = https://github.com/tyama0x7f/IPA-DN-Cores
